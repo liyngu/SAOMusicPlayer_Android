@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    tools:context=".MainActivity">
+
+    <com.henu.smp.layout.MainMenuLayout
+        android:id="@+id/menu_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.henu.smp.layout.UserMenuLayout
+        android:id="@+id/menu_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.henu.smp.layout.UserInfoMenuLayout
+        android:id="@+id/menu_user_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.henu.smp.layout.ListMenuLayout
+        android:id="@+id/menu_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.henu.smp.layout.SearchMenuLayout
+        android:id="@+id/menu_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/operation_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.henu.smp.layout.UserInfoMenuLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>
