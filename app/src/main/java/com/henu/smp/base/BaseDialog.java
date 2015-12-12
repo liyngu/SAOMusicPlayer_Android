@@ -1,17 +1,14 @@
-package com.henu.smp.activity;
+package com.henu.smp.base;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
 
-import com.henu.smp.base.BaseActivity;
-
 /**
- * Created by leen on 10/31/15.
+ * Created by liyngu on 12/12/15.
  */
-public class AlertActivity extends BaseActivity{
+public class BaseDialog extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setTitle("music");
     }
 }

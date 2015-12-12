@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.henu.smp.R;
-import com.henu.smp.base.SmpWidget;
+import com.henu.smp.model.SmpWidget;
 
 /**
  * Created by leen on 10/14/15.

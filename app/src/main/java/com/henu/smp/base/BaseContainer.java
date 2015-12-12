@@ -6,11 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.NinePatch;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import android.widget.ScrollView;
 import com.henu.smp.MainActivity;
 import com.henu.smp.R;
 import com.henu.smp.layout.MainMenuLayout;
+import com.henu.smp.model.SmpWidget;
 import com.henu.smp.util.WidgetUtil;
 
 /**

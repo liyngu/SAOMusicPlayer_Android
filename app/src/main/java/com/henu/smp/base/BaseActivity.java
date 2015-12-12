@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.henu.smp.model.SmpForest;
-import com.henu.smp.widget.base.BaseButton;
+import com.henu.smp.model.SmpWidget;
 
 import java.util.List;
 
