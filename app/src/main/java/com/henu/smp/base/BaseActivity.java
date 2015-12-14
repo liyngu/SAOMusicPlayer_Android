@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.henu.smp.model.SmpForest;
+import com.henu.smp.model.SmpMenu;
+import com.henu.smp.model.SmpMenuWidget;
 import com.henu.smp.model.SmpWidget;
 
 import java.util.List;
@@ -13,13 +15,13 @@ import java.util.List;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     protected final String LOG_TAG = this.getClass().getSimpleName();
-    protected SmpForest<SmpWidget> menuForest;
+    protected SmpForest<SmpMenuWidget> menuForest;
 
-    protected void setWidgetForest(SmpForest<SmpWidget> widgetForest) {
+    protected void setWidgetForest(SmpForest<SmpMenuWidget> widgetForest) {
         this.menuForest = widgetForest;
     }
 
-    public SmpForest<SmpWidget> getWidgetForest() {
+    public SmpForest<SmpMenuWidget> getWidgetForest() {
         return menuForest;
     }
 

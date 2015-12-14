@@ -1,5 +1,8 @@
 package com.henu.smp.model;
 
+import com.henu.smp.base.BaseContainer;
+import com.henu.smp.widget.base.BaseButton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +12,8 @@ import java.util.List;
  */
 public class SmpForest<E> {
     private HashMap<E, TreeNode> dataMap = new HashMap<>();
-    private E root;
-    private E focus;
+    private BaseContainer rootMenu;
+    private BaseContainer focusMenu;
 
     public void addChild(E parent, E elem) {
         TreeNode parentNode = dataMap.get(parent);
@@ -101,8 +104,8 @@ public class SmpForest<E> {
 
 
     public void rollbackFocus() {
-        TreeNode node = dataMap.get(focus);
-        focus = getParent(getParent(node.getElem()));
+        TreeNode node = dataMap.get(focusMenu);
+        focusMenu = (BaseContainer) getParent(getParent(node.getElem()));
     }
 
     public E getParent(E elem) {
@@ -121,27 +124,46 @@ public class SmpForest<E> {
         return parent.getElem();
     }
 
+    public int getChildCount(E elem) {
+        TreeNode node = dataMap.get(elem);
+        node = node.getLeftChild();
+        int count = 1;
+        while (node.getRightChild() != null) {
+            node = node.getRightChild();
+            count++;
+        }
+        return count;
+    }
+    public E getChildAt(E elem, int index) {
+        TreeNode node = dataMap.get(elem);
+        node = node.getLeftChild();
+        for (int i = 0; i < index - 1; i++) {
+            node = node.getRightChild();
+        }
+        return node.getElem();
+    }
+
     public E getChild(E elem) {
         TreeNode node = dataMap.get(elem);
         return node.getLeftChild().getElem();
     }
 
-    public void setRoot(E elem) {
-        this.root = elem;
-        TreeNode node = new TreeNode(elem);
-        dataMap.put(elem, node);
+    public void setRoot(E root) {
+        this.rootMenu = (BaseContainer) root;
+        TreeNode node = new TreeNode(root);
+        dataMap.put(root, node);
     }
 
-    public E getRoot() {
-        return root;
+    public BaseContainer getRoot() {
+        return rootMenu;
     }
 
     public void setFocus(E focus) {
-        this.focus = focus;
+        this.focusMenu = (BaseContainer) focus;
     }
 
-    public E getFocus() {
-        return focus;
+    public BaseContainer getFocus() {
+        return focusMenu;
     }
 
     /**

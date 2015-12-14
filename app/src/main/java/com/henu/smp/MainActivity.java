@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.henu.smp.activity.AlertActivity;
 import com.henu.smp.base.BaseActivity;
 import com.henu.smp.base.BaseContainer;
+import com.henu.smp.model.SmpMenuWidget;
 import com.henu.smp.model.SmpWidget;
 import com.henu.smp.layout.MainMenuLayout;
 import com.henu.smp.layout.OperationMenuLayout;
@@ -21,8 +22,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private RelativeLayout mainPage;
-    private LinearLayout operationPanel;
-    private boolean isShowOperationMenu;
+    private OperationMenuLayout operationMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +36,12 @@ public class MainActivity extends BaseActivity {
         ScreenListener listener = new ScreenListener(this);
         mainPage.setOnTouchListener(listener);
         mainPage.setLongClickable(true);
-        operationPanel = (LinearLayout) findViewById(R.id.operation_panel);
+
+        operationMenu = (OperationMenuLayout) findViewById(R.id.operation_menu);
+        LinearLayout operationPanel = (LinearLayout) findViewById(R.id.operation_panel);
         operationPanel.setOnTouchListener(listener);
         operationPanel.setLongClickable(true);
+        operationMenu.setParentPanel(operationPanel);
         initWidgetForest();
     }
 
@@ -49,7 +52,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initWidgetForest() {
-        SmpForest<SmpWidget> widgetForest = new SmpForest<>();
+        SmpForest<SmpMenuWidget> widgetForest = new SmpForest<>();
         BaseContainer container = (BaseContainer) findViewById(R.id.menu_main);
         widgetForest.setRoot(container);
         setWidgetForest(widgetForest);
@@ -84,7 +87,7 @@ public class MainActivity extends BaseActivity {
 
     public void moveMenu(int x, int y) {
         //如果并不是操作状态，则只能横向移动
-        if (!isShowOperationMenu) {
+        if (!operationMenu.isShowed()) {
             y = 0;
         }
         //获得主菜单位置并设置其移动后的坐标
@@ -94,26 +97,50 @@ public class MainActivity extends BaseActivity {
         //移动所有显示的子菜单的位置
         List<BaseContainer> containers = getWidgetForest().getChildsByClass(mainMenu, BaseContainer.class);
         for (BaseContainer container: containers) {
-            if (container.getVisibility() == View.VISIBLE) {
-                container.setLocationByView((View) getWidgetForest().getParent(container));
+            if (container.isShowed()) {
+                container.setLocationByView((View) menuForest.getParent(container));
             }
         }
-        if (isShowOperationMenu) {
+        if (operationMenu.isShowed()) {
             //移动操作菜单
-            OperationMenuLayout menuLayout = (OperationMenuLayout) operationPanel.getChildAt(0);
-            menuLayout.setLocationByView(menuLayout.getParentView());
+            operationMenu.resetLocation();
         }
     }
 
 
+    /**
+     * 当菜单启动后调用的取消操作
+     * 即如果有菜单处于启动状态，那么点击出来有按钮的位置，都将调用此方法
+     * 判断的内容包括：操作菜单，主菜单，音乐菜单（暂无）
+     */
+    public void undoOperation() {
+        if (operationMenu.isShowed()) {
+            operationMenu.hidden();
+        } else {
+            BaseContainer focusMenu = menuForest.getFocus();
+            if (focusMenu != null) {
+                focusMenu.hidden();
+                menuForest.rollbackFocus();
+            } else {
+                return;
+            }
+        }
+        BaseContainer container = menuForest.getFocus();
+        if (container != null) {
+            container.resetStyle();
+        }
+    }
 
+    /**
+     * 按钮长按后直接调用的方法
+     * 具有显示操作菜单及关闭其余菜单的功能
+     * @param v
+     */
     public void showOperationMenu(View v) {
-        //设置操作菜单的显示位置
-        operationPanel.setVisibility(View.VISIBLE);
-        OperationMenuLayout menuLayout = (OperationMenuLayout) operationPanel.getChildAt(0);
-        menuLayout.setParentView(v);
-        menuLayout.setLocationByView(v);
-        isShowOperationMenu = true;
+        //设置操作菜单的显示位置以及点击的按钮
+        operationMenu.show();
+        operationMenu.setClickedView(v);
+        operationMenu.setLocationByView(v);
         //关闭多余的子菜单
         if (v instanceof BaseButton) {
             BaseButton btn = (BaseButton) v;
@@ -121,27 +148,6 @@ public class MainActivity extends BaseActivity {
             //设置所有按钮的样式与焦点
             setClickedButtonsStyle(btn);
             menuForest.setFocus(menuForest.getParent(btn));
-        }
-    }
-
-    public void undoOperation() {
-        if (operationPanel.getVisibility() == View.VISIBLE) {
-            operationPanel.setVisibility(View.GONE);
-            isShowOperationMenu = false;
-            BaseContainer container = (BaseContainer) getWidgetForest().getFocus();
-            if (container != null) {
-                container.resetStyle();
-            }
-            return;
-        }
-        BaseContainer container = (BaseContainer) getWidgetForest().getFocus();
-        if (container != null) {
-            container.hidden();
-            getWidgetForest().rollbackFocus();
-            container = (BaseContainer) getWidgetForest().getFocus();
-            if (container != null) {
-                container.resetStyle();
-            }
         }
     }
 
@@ -174,6 +180,10 @@ public class MainActivity extends BaseActivity {
         openChildMenu(childMenu);
     }
 
+    /**
+     * 设置按钮被点击过后父容器及其自身的按钮样式
+     * @param btn
+     */
     public void setClickedButtonsStyle(BaseButton btn) {
         List<BaseButton> buttons = menuForest.getSiblingsByClass(btn, BaseButton.class);
         for (BaseButton sibling : buttons) {

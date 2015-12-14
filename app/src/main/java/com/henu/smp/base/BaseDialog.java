@@ -6,7 +6,7 @@ import android.os.PersistableBundle;
 /**
  * Created by liyngu on 12/12/15.
  */
-public class BaseDialog extends BaseActivity {
+public abstract class BaseDialog extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);

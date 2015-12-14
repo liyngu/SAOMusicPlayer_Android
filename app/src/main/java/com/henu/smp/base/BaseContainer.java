@@ -18,13 +18,13 @@ import android.widget.ScrollView;
 import com.henu.smp.MainActivity;
 import com.henu.smp.R;
 import com.henu.smp.layout.MainMenuLayout;
-import com.henu.smp.model.SmpWidget;
+import com.henu.smp.model.SmpMenuWidget;
 import com.henu.smp.util.WidgetUtil;
 
 /**
  * Created by liyngu on 10/14/15.
  */
-public abstract class BaseContainer extends ScrollView implements SmpWidget {
+public abstract class BaseContainer extends ScrollView implements SmpMenuWidget {
     protected final String LOG_TAG = this.getClass().getSimpleName();
     private static final int MAX_NUM = 6;
     private MainActivity activity;
@@ -51,9 +51,8 @@ public abstract class BaseContainer extends ScrollView implements SmpWidget {
         setBackgroundColor(Color.YELLOW);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
+    public boolean isShowed() {
+        return getVisibility() == View.VISIBLE;
     }
 
     @Override
