@@ -9,14 +9,15 @@ import android.widget.RelativeLayout;
 
 import com.henu.smp.activity.AlertActivity;
 import com.henu.smp.base.BaseActivity;
-import com.henu.smp.base.BaseContainer;
-import com.henu.smp.model.SmpMenuWidget;
-import com.henu.smp.model.SmpWidget;
-import com.henu.smp.layout.MainMenuLayout;
+import com.henu.smp.base.BaseButton;
+import com.henu.smp.base.BaseMenu;
 import com.henu.smp.layout.OperationMenuLayout;
 import com.henu.smp.listener.ScreenListener;
-import com.henu.smp.model.SmpForest;
-import com.henu.smp.widget.base.BaseButton;
+import com.henu.smp.model.SmpWidget;
+import com.henu.smp.model.User;
+import com.henu.smp.widget.MenuTree;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -43,44 +44,64 @@ public class MainActivity extends BaseActivity {
         operationPanel.setLongClickable(true);
         operationMenu.setParentPanel(operationPanel);
         initWidgetForest();
+
+        if(user == null) {
+            user = new User();
+            user.setId(10001);
+            user.setUsername("test");
+            user.setPassword("123");
+            MenuTree menuTree = this.menuTree;
+            user.setMenus(menuTree.parseData());
+            userService.create(user);
+        }
     }
 
     public void showDialog(View v) {
         Intent intent = new Intent();
         intent.setClass(this, AlertActivity.class);
         startActivity(intent);
+//        BaseMenu mainMenu = menuTree.getRoot();
+//        List<BaseButton> btns = menuTree.getChilds(mainMenu);
+//        for(BaseButton btn : btns) {
+//            btn.setIndex(10);
+//            btn.setText("hhhhhhhh");
+//        }
+//        userService.create(user);
+//        MenuTree menuTree = this.menuTree;
+//        user.setMenus(menuTree.parseData());
+//        userService.create(user);
     }
 
     private void initWidgetForest() {
-        SmpForest<SmpMenuWidget> widgetForest = new SmpForest<>();
-        BaseContainer container = (BaseContainer) findViewById(R.id.menu_main);
-        widgetForest.setRoot(container);
-        setWidgetForest(widgetForest);
-        this.findChildContainer(container);
+        BaseMenu mainMenu = (BaseMenu) findViewById(R.id.menu_main);
+        menuTree.setRoot(mainMenu);
+        this.findChildMenu(mainMenu);
     }
 
-    private void findChildContainer(BaseContainer container) {
-        int containerChildCount = container.getLayoutChildCount();
-        for (int i = 0; i < containerChildCount; i++) {
-            BaseButton childBtn = (BaseButton) container.getLayoutChildAt(i);
-            getWidgetForest().addChild(container, childBtn);
-            View childView = findViewById(childBtn.getChildLayoutId());
-            if (childView != null && childView instanceof BaseContainer) {
-                BaseContainer childLayout = (BaseContainer) childView;
-                getWidgetForest().addChild(childBtn, childLayout);
-                findChildContainer(childLayout);
+    private void findChildMenu(BaseMenu menu) {
+        int childCount = menu.getLayoutChildCount();
+        for (int i = 0; i < childCount; i++) {
+            BaseButton btn = (BaseButton) menu.getLayoutChildAt(i);
+            btn.setIndex(i);
+
+            menuTree.addChild(menu, btn);
+            View childView = findViewById(btn.getChildLayoutId());
+            if (childView != null && childView instanceof BaseMenu) {
+                BaseMenu childMenu = (BaseMenu) childView;
+                menuTree.addChild(btn, childMenu);
+                findChildMenu(childMenu);
             }
         }
-        container.setActivity(this);
+        menu.setActivity(this);
     }
 
     public void startMenu(int x, int y) {
-        MainMenuLayout mainMenu = (MainMenuLayout) getWidgetForest().getRoot();
-        if (mainMenu.getVisibility() == View.VISIBLE) {
+        BaseMenu mainMenu = menuTree.getRoot();
+        if (mainMenu.isShowed()) {
             closeMenu(mainMenu);
             mainMenu.hidden();
         }
-        getWidgetForest().setFocus(mainMenu);
+        menuTree.setFocus(mainMenu);
         mainMenu.setLocation(x, y);
         mainMenu.show();
     }
@@ -91,14 +112,14 @@ public class MainActivity extends BaseActivity {
             y = 0;
         }
         //获得主菜单位置并设置其移动后的坐标
-        MainMenuLayout mainMenu = (MainMenuLayout) getWidgetForest().getRoot();
+        BaseMenu mainMenu = menuTree.getRoot();
         mainMenu.setX(mainMenu.getX() - x);
         mainMenu.setY(mainMenu.getY() - y);
         //移动所有显示的子菜单的位置
-        List<BaseContainer> containers = getWidgetForest().getChildsByClass(mainMenu, BaseContainer.class);
-        for (BaseContainer container: containers) {
+        List<BaseMenu> containers = menuTree.getChildsByClass(mainMenu, BaseMenu.class);
+        for (BaseMenu container: containers) {
             if (container.isShowed()) {
-                container.setLocationByView((View) menuForest.getParent(container));
+                container.setLocationByView((View) menuTree.getParent(container));
             }
         }
         if (operationMenu.isShowed()) {
@@ -117,15 +138,15 @@ public class MainActivity extends BaseActivity {
         if (operationMenu.isShowed()) {
             operationMenu.hidden();
         } else {
-            BaseContainer focusMenu = menuForest.getFocus();
+            BaseMenu focusMenu = menuTree.getFocus();
             if (focusMenu != null) {
                 focusMenu.hidden();
-                menuForest.rollbackFocus();
+                menuTree.rollbackFocus();
             } else {
                 return;
             }
         }
-        BaseContainer container = menuForest.getFocus();
+        BaseMenu container = menuTree.getFocus();
         if (container != null) {
             container.resetStyle();
         }
@@ -147,7 +168,7 @@ public class MainActivity extends BaseActivity {
             closeMenu(btn);
             //设置所有按钮的样式与焦点
             setClickedButtonsStyle(btn);
-            menuForest.setFocus(menuForest.getParent(btn));
+            menuTree.setFocus(menuTree.getParent(btn));
         }
     }
 
@@ -159,7 +180,7 @@ public class MainActivity extends BaseActivity {
         if (v instanceof BaseButton) {
             BaseButton btn = (BaseButton) v;
             closeMenu(btn);
-            SmpWidget child = menuForest.getChild(btn);
+            SmpWidget child = menuTree.getChild(btn);
             if (child != null) {
                 openChildMenu(btn);
             }
@@ -175,7 +196,7 @@ public class MainActivity extends BaseActivity {
         //设置所有按钮的样式
         setClickedButtonsStyle(btn);
         //打开子菜单并设置位置
-        BaseContainer childMenu = (BaseContainer) menuForest.getChild(btn);
+        BaseMenu childMenu = (BaseMenu) menuTree.getChild(btn);
         childMenu.setLocationByView(btn);
         openChildMenu(childMenu);
     }
@@ -185,7 +206,7 @@ public class MainActivity extends BaseActivity {
      * @param btn
      */
     public void setClickedButtonsStyle(BaseButton btn) {
-        List<BaseButton> buttons = menuForest.getSiblingsByClass(btn, BaseButton.class);
+        List<BaseButton> buttons = menuTree.getSiblingsByClass(btn, BaseButton.class);
         for (BaseButton sibling : buttons) {
             sibling.setSelected(true);
             sibling.setEnabled(true);
@@ -199,8 +220,8 @@ public class MainActivity extends BaseActivity {
      * 并且设定菜单打开后为获得焦点状态，但不包括其余多余菜单的关闭工作
      * @param menu
      */
-    public void openChildMenu(BaseContainer menu) {
-        menuForest.setFocus(menu);
+    public void openChildMenu(BaseMenu menu) {
+        menuTree.setFocus(menu);
         menu.resetStyle();
         menu.show();
     }
@@ -211,7 +232,7 @@ public class MainActivity extends BaseActivity {
      * @param btn
      */
     public void closeMenu(BaseButton btn) {
-        BaseContainer parentMenu = (BaseContainer) menuForest.getParent(btn);
+        BaseMenu parentMenu = (BaseMenu) menuTree.getParent(btn);
         closeMenu(parentMenu);
     }
 }

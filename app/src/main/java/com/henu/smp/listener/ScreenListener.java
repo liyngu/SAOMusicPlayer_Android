@@ -1,16 +1,13 @@
 package com.henu.smp.listener;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
-import android.view.View.OnClickListener;
 
 import com.henu.smp.MainActivity;
-import com.henu.smp.base.BaseContainer;
 
 /**
  * Created by liyngu on 12/7/15.

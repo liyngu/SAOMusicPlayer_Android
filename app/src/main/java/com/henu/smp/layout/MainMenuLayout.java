@@ -5,29 +5,28 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import com.henu.smp.MainActivity;
 import com.henu.smp.R;
-import com.henu.smp.base.BaseContainer;
-import com.henu.smp.widget.MenuButton;
+import com.henu.smp.base.BaseMenu;
+import com.henu.smp.widget.CircleButton;
 
 /**
  * Created by liyngu on 10/31/15.
  */
-public class MainMenuLayout extends BaseContainer implements OnClickListener, View.OnLongClickListener {
-    private MenuButton userBtn;
-    private MenuButton listBtn;
-    private MenuButton searchBtn;
-    private MenuButton settingBtn;
-    private MenuButton exitBtn;
+public class MainMenuLayout extends BaseMenu implements OnClickListener, View.OnLongClickListener {
+    private CircleButton userBtn;
+    private CircleButton listBtn;
+    private CircleButton searchBtn;
+    private CircleButton settingBtn;
+    private CircleButton exitBtn;
 
     public MainMenuLayout(Context context, AttributeSet attrs) {
         super(context, attrs, R.layout.menu_main);
         // 初始化按钮
-        userBtn = (MenuButton) findViewById(R.id.user_btn);
-        listBtn = (MenuButton) findViewById(R.id.list_btn);
-        searchBtn = (MenuButton) findViewById(R.id.search_btn);
-        settingBtn = (MenuButton) findViewById(R.id.setting_btn);
-        exitBtn = (MenuButton) findViewById(R.id.exit_btn);
+        userBtn = (CircleButton) findViewById(R.id.user_btn);
+        listBtn = (CircleButton) findViewById(R.id.list_btn);
+        searchBtn = (CircleButton) findViewById(R.id.search_btn);
+        settingBtn = (CircleButton) findViewById(R.id.setting_btn);
+        exitBtn = (CircleButton) findViewById(R.id.exit_btn);
         // 设置按钮的事件监听
         userBtn.setOnClickListener(this);
         listBtn.setOnClickListener(this);

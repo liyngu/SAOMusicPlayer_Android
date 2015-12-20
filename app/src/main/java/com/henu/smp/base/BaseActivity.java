@@ -3,10 +3,11 @@ package com.henu.smp.base;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.henu.smp.business.UserService;
 import com.henu.smp.model.SmpForest;
-import com.henu.smp.model.SmpMenu;
 import com.henu.smp.model.SmpMenuWidget;
-import com.henu.smp.model.SmpWidget;
+import com.henu.smp.model.User;
+import com.henu.smp.widget.MenuTree;
 
 import java.util.List;
 
@@ -15,24 +16,21 @@ import java.util.List;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     protected final String LOG_TAG = this.getClass().getSimpleName();
-    protected SmpForest<SmpMenuWidget> menuForest;
-
-    protected void setWidgetForest(SmpForest<SmpMenuWidget> widgetForest) {
-        this.menuForest = widgetForest;
+    protected MenuTree menuTree = MenuTree.getIntance();
+    protected static UserService userService;
+    protected static User user;
+    static {
+        userService = new UserService();
+        user = userService.getLocal();
     }
-
-    public SmpForest<SmpMenuWidget> getWidgetForest() {
-        return menuForest;
-    }
-
     /**
      * 关闭所有已经打开的菜单
      */
     public void closeAllMenu() {
-        BaseContainer rootContainer = (BaseContainer) menuForest.getRoot();
-        closeMenu(rootContainer);
-        rootContainer.hidden();
-        rootContainer.resetStyle();
+        BaseMenu rootMenu = menuTree.getRoot();
+        closeMenu(rootMenu);
+        rootMenu.hidden();
+        rootMenu.resetStyle();
     }
 
     /**
@@ -40,11 +38,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 关闭位于这个Container级别下的所有的菜单，不包括这个Container
      * @param root 为 Container
      */
-    public void closeMenu(BaseContainer root) {
-        List<BaseContainer> containers = menuForest.getChildsByClass(root, BaseContainer.class);
-        for (BaseContainer container : containers) {
-            if (isOpenedMenu(container)) {
-                container.hidden();
+    public void closeMenu(BaseMenu root) {
+        List<BaseMenu> menus = menuTree.getChildsByClass(root, BaseMenu.class);
+        for (BaseMenu menu : menus) {
+            if (isOpenedMenu(menu)) {
+                menu.hidden();
             }
         }
     }
@@ -53,7 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param menu
      * @return 如果被打开，返回true
      */
-    public boolean isOpenedMenu(BaseContainer menu) {
+    public boolean isOpenedMenu(BaseMenu menu) {
         return menu.getVisibility() == View.VISIBLE;
     }
 }

@@ -4,7 +4,7 @@ import android.graphics.Point;
 import android.view.View;
 
 /**
- * Created by leen on 10/31/15.
+ * Created by liyngu on 10/31/15.
  */
 public class WidgetUtil {
     public static Point getViewPoint(View v) {

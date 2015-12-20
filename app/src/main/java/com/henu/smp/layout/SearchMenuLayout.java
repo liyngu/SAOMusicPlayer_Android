@@ -5,12 +5,12 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.henu.smp.R;
-import com.henu.smp.base.BaseContainer;
+import com.henu.smp.base.BaseMenu;
 
 /**
  * Created by leen on 10/31/15.
  */
-public class SearchMenuLayout extends BaseContainer implements View.OnClickListener {
+public class SearchMenuLayout extends BaseMenu implements View.OnClickListener {
 
     public SearchMenuLayout(Context context, AttributeSet attrs) {
         super(context, attrs, R.layout.menu_search);

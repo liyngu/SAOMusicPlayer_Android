@@ -5,22 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.henu.smp.widget.ListButton
+    <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/default_list_btn" />
 
-    <com.henu.smp.widget.ListButton
+    <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/default_list_btn" />
 
-    <com.henu.smp.widget.ListButton
+    <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/default_list_btn" />
 
-    <com.henu.smp.widget.ListButton
+    <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/default_list_btn" />

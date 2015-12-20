@@ -1,8 +1,9 @@
 package com.henu.smp.model;
 
-import com.henu.smp.base.BaseContainer;
-import com.henu.smp.widget.base.BaseButton;
+import com.henu.smp.base.BaseMenu;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +11,10 @@ import java.util.List;
 /**
  * Created by liyngu on 10/31/15.
  */
-public class SmpForest<E> {
+public class SmpForest<E> implements InvocationHandler {
     private HashMap<E, TreeNode> dataMap = new HashMap<>();
-    private BaseContainer rootMenu;
-    private BaseContainer focusMenu;
+    private BaseMenu rootMenu;
+    private BaseMenu focusMenu;
 
     public void addChild(E parent, E elem) {
         TreeNode parentNode = dataMap.get(parent);
@@ -105,7 +106,7 @@ public class SmpForest<E> {
 
     public void rollbackFocus() {
         TreeNode node = dataMap.get(focusMenu);
-        focusMenu = (BaseContainer) getParent(getParent(node.getElem()));
+        focusMenu = (BaseMenu) getParent(getParent(node.getElem()));
     }
 
     public E getParent(E elem) {
@@ -149,21 +150,26 @@ public class SmpForest<E> {
     }
 
     public void setRoot(E root) {
-        this.rootMenu = (BaseContainer) root;
+        this.rootMenu = (BaseMenu) root;
         TreeNode node = new TreeNode(root);
         dataMap.put(root, node);
     }
 
-    public BaseContainer getRoot() {
+    public BaseMenu getRoot() {
         return rootMenu;
     }
 
     public void setFocus(E focus) {
-        this.focusMenu = (BaseContainer) focus;
+        this.focusMenu = (BaseMenu) focus;
     }
 
-    public BaseContainer getFocus() {
+    public BaseMenu getFocus() {
         return focusMenu;
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        return null;
     }
 
     /**

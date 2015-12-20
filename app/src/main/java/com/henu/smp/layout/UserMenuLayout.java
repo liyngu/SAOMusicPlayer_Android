@@ -5,13 +5,13 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.henu.smp.R;
-import com.henu.smp.base.BaseContainer;
-import com.henu.smp.widget.base.BaseButton;
+import com.henu.smp.base.BaseMenu;
+import com.henu.smp.base.BaseButton;
 
 /**
  * Created by liyngu on 10/31/15.
  */
-public class UserMenuLayout extends BaseContainer implements View.OnClickListener {
+public class UserMenuLayout extends BaseMenu implements View.OnClickListener {
 
     public UserMenuLayout(Context context, AttributeSet attrs) {
         super(context, attrs, R.layout.menu_user);

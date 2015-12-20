@@ -18,13 +18,14 @@ import android.widget.ScrollView;
 import com.henu.smp.MainActivity;
 import com.henu.smp.R;
 import com.henu.smp.layout.MainMenuLayout;
+import com.henu.smp.model.Menu;
 import com.henu.smp.model.SmpMenuWidget;
 import com.henu.smp.util.WidgetUtil;
 
 /**
  * Created by liyngu on 10/14/15.
  */
-public abstract class BaseContainer extends ScrollView implements SmpMenuWidget {
+public abstract class BaseMenu extends ScrollView implements SmpMenuWidget {
     protected final String LOG_TAG = this.getClass().getSimpleName();
     private static final int MAX_NUM = 6;
     private MainActivity activity;
@@ -35,7 +36,7 @@ public abstract class BaseContainer extends ScrollView implements SmpMenuWidget 
     private NinePatch indicator;
 
 
-    public BaseContainer(Context context, AttributeSet attrs, int resource) {
+    public BaseMenu(Context context, AttributeSet attrs, int resource) {
         super(context, attrs);
         //获得inflater 对象
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -92,7 +93,7 @@ public abstract class BaseContainer extends ScrollView implements SmpMenuWidget 
     public void addView(View child) {
         super.addView(child);
         child.setVisibility(GONE);
-        if (child instanceof BaseContainer) {
+        if (child instanceof BaseMenu) {
             // activity.addLayout((BaseContainer) child);
         }
     }

@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.henu.smp.R;
-import com.henu.smp.base.BaseContainer;
+import com.henu.smp.base.BaseMenu;
 
 /**
  * Created by liyngu on 12/12/15.
  */
-public class OperationMenuLayout extends BaseContainer {
+public class OperationMenuLayout extends BaseMenu {
     private View clickedView;
     private ViewGroup parentPanel;
 
