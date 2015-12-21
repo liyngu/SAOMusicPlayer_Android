@@ -8,20 +8,20 @@
     <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_list_btn" />
+        android:background="@drawable/default_rect_btn" />
 
     <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_list_btn" />
+        android:background="@drawable/default_rect_btn" />
 
     <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_list_btn" />
+        android:background="@drawable/default_rect_btn" />
 
     <com.henu.smp.widget.RectButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_list_btn" />
+        android:background="@drawable/default_rect_btn" />
 </LinearLayout>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/bg_menu_btn_disabled" android:state_enabled="false"/>
+    <item android:drawable="@mipmap/bg_circle_btn_disabled" android:state_enabled="false"/>
+    <item android:drawable="@mipmap/bg_circle_btn_selected" android:state_selected="true"/>
     <item android:state_pressed="true">
         <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
             <item>
-                <bitmap android:src="@mipmap/bg_menu_btn_press"
+                <bitmap android:src="@mipmap/bg_circle_btn_press"
                     android:gravity="center"/>
             </item>
             <item>
@@ -13,11 +14,10 @@
             </item>
         </layer-list>
     </item>
-    <item android:drawable="@mipmap/bg_menu_btn_selected" android:state_selected="true"/>
     <item>
         <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
             <item>
-                <bitmap android:src="@mipmap/bg_menu_btn_normal"
+                <bitmap android:src="@mipmap/bg_circle_btn_normal"
                     android:gravity="center"/>
             </item>
             <item>

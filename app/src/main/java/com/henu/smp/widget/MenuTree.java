@@ -44,61 +44,23 @@ public class MenuTree {
 
             TreeNode btnNode = btnNodes.get(i);
             BaseButton btn = (BaseButton) btnNode.getElem();
-            Menu menuObj = new Menu();
-            menuObj.setIndex(btn.getIndex());
-            menuObj.setName(btn.getName());
-            menuObj.setText(btn.getText());
+            Menu menuData = btn.getData();
 
             TreeNode childMenuNode = this.getChild(btnNode);
             List<Menu> childMenuList = this.parseData(childMenuNode);
-            menuObj.setMenus(childMenuList);
+            menuData.setMenus(childMenuList);
 
-            menuList.add(menuObj);
+            menuList.add(menuData);
         }
         return menuList;
     }
-//    public JSONArray parseData() {
-//        TreeNode rootNode = this.dataMap.get(this.rootMenu);
-//        JSONArray menuArray = new JSONArray();
-//        try {
-//            menuArray = this.parseData(rootNode);
-//        } catch (JSONException e) {
-//            Log.i(LOG_TAG, e.getMessage());
-//        }
-//        return menuArray;
-//    }
-//
-//    public JSONArray parseData(TreeNode node) throws JSONException {
-//        if (node == null) {
-//            return new JSONArray();
-//        }
-//
-//        List<TreeNode> btnNodes = this.getChilds(node);
-//        int btnNodesCount = btnNodes.size();
-//        JSONArray menuArray = new JSONArray();
-//        for (int i = 0; i < btnNodesCount; i++) {
-//
-//            TreeNode btnNode = btnNodes.get(i);
-//            BaseButton btn = (BaseButton) btnNode.getElem();
-//            // JSON菜单数据的获取
-//            JSONObject menuObj = new JSONObject();
-//            menuObj.put("index", btn.getIndex());
-//            menuObj.put("name", btn.getName());
-//            menuObj.put("displayname", btn.getText());
-//
-//            //JSON子菜单数据大获取
-//            TreeNode childMenuNode = this.getChild(btnNode);
-//            JSONArray childMenuArray = this.parseData(childMenuNode);
-//            menuObj.put(Constants.MENU, childMenuArray);
-//
-//            menuArray.put(menuObj);
-//        }
-//        return menuArray;
-//    }
 
     public BaseMenu getChild(BaseButton button) {
         TreeNode treeNode = this.dataMap.get(button);
         TreeNode childNode = treeNode.getLeftChild();
+        if (childNode == null) {
+            return null;
+        }
         return (BaseMenu) childNode.getElem();
     }
 

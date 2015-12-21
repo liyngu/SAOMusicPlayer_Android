@@ -10,18 +10,21 @@
         android:id="@+id/user_info_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_list_btn"
-        smp:child_layout="@id/menu_user_info"/>
+        android:background="@drawable/default_rect_btn"
+        smp:child_layout="@id/menu_user_info"
+        smp:text = "登录"/>
 
     <com.henu.smp.widget.RectButton
         android:id="@+id/download_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_list_btn" />
+        android:background="@drawable/default_rect_btn"
+        smp:text = "用户信息" />
 
     <com.henu.smp.widget.RectButton
         android:id="@+id/local_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_list_btn" />
+        android:background="@drawable/default_rect_btn"
+        smp:text = "播放历史"/>
 </LinearLayout>

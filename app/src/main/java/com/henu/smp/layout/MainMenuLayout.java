@@ -34,13 +34,10 @@ public class MainMenuLayout extends BaseMenu implements OnClickListener, View.On
         settingBtn.setOnClickListener(this);
         exitBtn.setOnClickListener(this);
 
-        exitBtn.setOnLongClickListener(this);
+        settingBtn.setOnLongClickListener(this);
         userBtn.setOnLongClickListener(this);
         listBtn.setOnLongClickListener(this);
         searchBtn.setOnLongClickListener(this);
-
-        //setId(R.id.menu_main);
-
     }
     @Override
     public void onClick(View v) {
@@ -49,7 +46,6 @@ public class MainMenuLayout extends BaseMenu implements OnClickListener, View.On
         } else {
             getActivity().showLayoutByView(v);
         }
-        //((BaseView) v).setAsClickedStyle();
     }
 
     @Override

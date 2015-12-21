@@ -35,7 +35,8 @@
     <LinearLayout
         android:id="@+id/operation_panel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="invisible">
 
         <com.henu.smp.layout.OperationMenuLayout
             android:id="@+id/operation_menu"

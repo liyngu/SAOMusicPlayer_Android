@@ -2,7 +2,6 @@ package com.henu.smp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +16,11 @@ public class Menu {
     @SerializedName("displayname")
     private String text;
     private List<Menu> menus;
+
+    public Menu() {
+        this.name = "";
+        this.text = "";
+    }
 
 
     public void setName(String name) {

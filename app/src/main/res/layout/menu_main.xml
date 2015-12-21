@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:src="@drawable/default_menu_btn"
+        android:src="@drawable/default_circle_btn"
         smp:child_layout="@id/menu_list"/>
 
     <com.henu.smp.widget.CircleButton
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:src="@drawable/default_menu_btn"
+        android:src="@drawable/default_circle_btn"
         smp:child_layout="@id/menu_search"/>
 
     <com.henu.smp.widget.CircleButton
@@ -36,13 +36,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:src="@drawable/default_menu_btn" />
+        android:src="@drawable/default_circle_btn" />
 
     <com.henu.smp.widget.CircleButton
         android:id="@+id/exit_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:src="@drawable/default_menu_btn" />
+        android:src="@drawable/default_circle_btn" />
 
 </LinearLayout>

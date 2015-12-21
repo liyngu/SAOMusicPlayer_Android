@@ -3,8 +3,25 @@
     android:id="@+id/content_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/default_list_btn">
+    android:background="@drawable/default_rect_btn"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/transparent">
+        <Button
+            android:id="@+id/add_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="add" />
+        <Button
+            android:id="@+id/del_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="del" />
+    </LinearLayout>
 
 
 </LinearLayout>
