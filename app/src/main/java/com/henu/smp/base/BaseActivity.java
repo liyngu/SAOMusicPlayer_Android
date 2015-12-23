@@ -1,5 +1,7 @@
 package com.henu.smp.base;
 
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -21,8 +23,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static User user;
     static {
         userService = new UserService();
-        user = userService.getLocal();
+        //user = userService.getLocal();
     }
+
     /**
      * 关闭所有已经打开的菜单
      */

@@ -7,7 +7,7 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 
-import com.henu.smp.MainActivity;
+import com.henu.smp.activity.MainActivity;
 
 /**
  * Created by liyngu on 12/7/15.

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@mipmap/bg_dialog_alert"
+    android:paddingBottom="15dp">
+
+    <com.henu.smp.widget.CircleButton
+        android:id="@+id/ok_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/dialog_ok_btn" />
+
+    <com.henu.smp.widget.CircleButton
+        android:id="@+id/cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/dialog_cancel_btn" />
+
+</FrameLayout>

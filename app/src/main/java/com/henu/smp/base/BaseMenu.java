@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.NinePatch;
 import android.graphics.Point;
 import android.graphics.RectF;
@@ -15,10 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.henu.smp.MainActivity;
+import com.henu.smp.activity.MainActivity;
 import com.henu.smp.R;
 import com.henu.smp.layout.MainMenuLayout;
-import com.henu.smp.model.Menu;
 import com.henu.smp.model.SmpMenuWidget;
 import com.henu.smp.util.WidgetUtil;
 
@@ -54,7 +52,7 @@ public abstract class BaseMenu extends ScrollView implements SmpMenuWidget,
         indicator = new NinePatch(bmp, bmp.getNinePatchChunk(), null);
         //设置为默认不显示
         setVisibility(View.INVISIBLE);
-        setBackgroundColor(Color.YELLOW);
+        //setBackgroundColor(Color.YELLOW);
     }
 
     public void setLocationByView(View v) {

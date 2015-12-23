@@ -1,32 +1,31 @@
-package com.henu.smp;
+package com.henu.smp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.henu.smp.activity.AlertActivity;
+import com.henu.smp.Constants;
+import com.henu.smp.R;
 import com.henu.smp.base.BaseActivity;
 import com.henu.smp.base.BaseButton;
 import com.henu.smp.base.BaseMenu;
 import com.henu.smp.layout.OperationMenuLayout;
 import com.henu.smp.listener.ScreenListener;
-import com.henu.smp.model.SmpWidget;
 import com.henu.smp.model.User;
 import com.henu.smp.widget.EmptyMenu;
 import com.henu.smp.widget.MenuTree;
+import com.henu.smp.widget.MessagePanel;
 import com.henu.smp.widget.RectButton;
-
-import org.json.JSONArray;
 
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private RelativeLayout mainPage;
     private OperationMenuLayout operationMenu;
+    private MessagePanel messagePanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +48,8 @@ public class MainActivity extends BaseActivity {
         operationMenu.setActivity(this);
         initWidgetForest();
 
+        messagePanel = (MessagePanel) findViewById(R.id.message_panel);
+
         if(user == null) {
             user = new User();
             user.setId(10001);
@@ -62,14 +63,15 @@ public class MainActivity extends BaseActivity {
 
     public void showDialog(View v) {
         Intent intent = new Intent();
-        intent.setClass(this, AlertActivity.class);
+        intent.setClass(MainActivity.this, AlertActivity.class);
         startActivity(intent);
-        BaseMenu mainMenu = menuTree.getRoot();
-        List<BaseButton> btns = menuTree.getChildsByClass(mainMenu, BaseButton.class);
-        for(BaseButton btn : btns) {
-            btn.setText("aaa");
-        }
-        userService.create(user);
+//        BaseMenu mainMenu = menuTree.getRoot();
+//        List<BaseButton> btns = menuTree.getChildsByClass(mainMenu, BaseButton.class);
+//        for(BaseButton btn : btns) {
+//            btn.setText("aaa");
+//        }
+//        userService.create(user);
+        userService.getLocal(this);
     }
 
     private void initWidgetForest() {
@@ -146,6 +148,15 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void showMessagePanel(View v) {
+        this.moveMessagePanelToView(v);
+        messagePanel.show();
+    }
+
+    public void moveMessagePanelToView(View v) {
+        messagePanel.setLocationByView(v);
+    }
+
 
     /**
      * 当菜单启动后调用的取消操作
@@ -202,11 +213,11 @@ public class MainActivity extends BaseActivity {
             MenuTree menuTree = this.menuTree;
             BaseMenu childMenu = menuTree.getChild(btn);
             if (childMenu == null) {
-                showOperationMenu(v);
-                return;
+                this.showOperationMenu(v);
             } else {
                 closeMenu(btn);
-                openChildMenu(btn);
+                this.openChildMenu(btn);
+                this.showMessagePanel(btn);
             }
         }
     }
@@ -222,7 +233,7 @@ public class MainActivity extends BaseActivity {
         //打开子菜单并设置位置
         BaseMenu childMenu = menuTree.getChild(btn);
         childMenu.setLocationByView(btn);
-        openChildMenu(childMenu);
+        this.openChildMenu(childMenu);
     }
 
     /**
