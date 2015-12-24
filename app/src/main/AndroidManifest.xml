@@ -22,6 +22,9 @@
         <activity
             android:name=".activity.AlertActivity"
             android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".activity.AutoSearchActivity"
+            android:theme="@style/TransparentTheme" />
     </application>
 
 </manifest>

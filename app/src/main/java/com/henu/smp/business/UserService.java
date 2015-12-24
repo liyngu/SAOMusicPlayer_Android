@@ -1,11 +1,16 @@
 package com.henu.smp.business;
 
 import android.content.Context;
+import android.os.Message;
 import android.util.Log;
 
+import com.henu.smp.base.BaseAsyncResult;
 import com.henu.smp.dao.LocalDao;
+import com.henu.smp.model.Song;
 import com.henu.smp.model.User;
 import com.henu.smp.util.JSONUtil;
+
+import java.util.List;
 
 /**
  * Created by liyngu on 12/20/15.
@@ -27,5 +32,15 @@ public class UserService {
 
     public void getById(int id) {
 
+    }
+
+    public void loadMusicByLocal(final BaseAsyncResult<List<Song>> result, final Context context) {
+        result.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Song> songs = dao.getSongs(context);
+                result.sendData(songs);
+            }
+        });
     }
 }

@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity {
 
     public void showDialog(View v) {
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this, AlertActivity.class);
+        intent.setClass(MainActivity.this, AutoSearchActivity.class);
         startActivity(intent);
 //        BaseMenu mainMenu = menuTree.getRoot();
 //        List<BaseButton> btns = menuTree.getChildsByClass(mainMenu, BaseButton.class);
@@ -71,7 +71,14 @@ public class MainActivity extends BaseActivity {
 //            btn.setText("aaa");
 //        }
 //        userService.create(user);
-        userService.getLocal(this);
+//        userService.loadMusicByLocal(new BaseAsyncResult<List<Song>>() {
+//            @Override
+//            public void onSuccess(List<Song> result) {
+//                for (Song song : result) {
+//                    Log.i(LOG_TAG, song.getName());
+//                }
+//            }
+//        }, MainActivity.this);
     }
 
     private void initWidgetForest() {
