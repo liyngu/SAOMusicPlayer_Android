@@ -2,7 +2,7 @@ package com.henu.smp.proxy;
 
 import android.content.Context;
 
-import com.henu.smp.business.MusicService;
+import com.henu.smp.service.MusicService;
 import com.henu.smp.dao.LocalDao;
 
 /**

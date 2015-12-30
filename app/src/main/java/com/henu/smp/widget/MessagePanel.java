@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.henu.smp.R;
 import com.henu.smp.model.SmpWidget;
@@ -17,6 +18,7 @@ import com.henu.smp.util.WidgetUtil;
  * Created by liyngu on 12/12/15.
  */
 public class MessagePanel extends RelativeLayout implements SmpWidget {
+    private TextView titleTxt;
 
     public MessagePanel(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -24,9 +26,14 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //通过resource在container中填充组件
         inflater.inflate(R.layout.message_panel, this);
+
+        titleTxt = (TextView) findViewById(R.id.title_txt);
         setVisibility(View.INVISIBLE);
     }
 
+    public void setTitle(String title) {
+        this.titleTxt.setText(title);
+    }
     public void setLocationByView(View v) {
         // 获得v的起始坐标点
         Point vp = WidgetUtil.getViewPoint(v);

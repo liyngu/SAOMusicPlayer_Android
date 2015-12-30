@@ -1,20 +1,15 @@
 package com.henu.smp.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.henu.smp.R;
 import com.henu.smp.base.BaseActivity;
 import com.henu.smp.base.BaseAsyncResult;
-import com.henu.smp.business.UserService;
+import com.henu.smp.service.UserService;
 import com.henu.smp.model.Song;
 
-import java.io.File;
 import java.util.List;
 
 /**

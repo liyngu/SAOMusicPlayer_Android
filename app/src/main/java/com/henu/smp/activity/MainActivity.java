@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        mainPage = (RelativeLayout) findViewById(R.id.main_page);
+        mainPage = (RelativeLayout) findViewById(R.id.background);
         // 设置屏幕事件监听
         ScreenListener listener = new ScreenListener(this);
         mainPage.setOnTouchListener(listener);
@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity {
 
     public void showDialog(View v) {
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this, AutoSearchActivity.class);
+        intent.setClass(MainActivity.this, MusicControlActivity.class);
         startActivity(intent);
 //        BaseMenu mainMenu = menuTree.getRoot();
 //        List<BaseButton> btns = menuTree.getChildsByClass(mainMenu, BaseButton.class);
@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void menuOperation(View v, int operateState) {
-        if (operateState == Constants.MENU_ADD) {
+        if (operateState == Constants.MENU_OPERATION_ADD) {
             BaseButton btn = (BaseButton) v;
             BaseMenu baseMenu = menuTree.getChild(btn);
             if (baseMenu == null) {
@@ -276,5 +276,17 @@ public class MainActivity extends BaseActivity {
     public void closeMenu(BaseButton btn) {
         BaseMenu parentMenu = (BaseMenu) menuTree.getParent(btn);
         closeMenu(parentMenu);
+    }
+
+    @Override
+    public void onReceivedData(Bundle bundle) {
+        int operation = bundle.getInt(Constants.ACTION_OPERATION);
+        if (operation == Constants.ACTION_PLAYED) {
+            this.messagePanel.setTitle("暂停");
+            //startBtn.setText("暂停");
+        } else if (operation == Constants.ACTION_PAUSED) {
+            this.messagePanel.setTitle("开始");
+            //startBtn.setText("开始");
+        }
     }
 }

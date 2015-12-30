@@ -25,6 +25,10 @@
         <activity
             android:name=".activity.AutoSearchActivity"
             android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".activity.MusicControlActivity"
+            android:theme="@style/TransparentTheme" />
+        <service android:name=".background.PlayerService" />
     </application>
 
 </manifest>

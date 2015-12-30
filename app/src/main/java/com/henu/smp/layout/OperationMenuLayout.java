@@ -28,7 +28,7 @@ public class OperationMenuLayout extends BaseMenu {
         addBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                getActivity().menuOperation(clickedView, Constants.MENU_ADD);
+                getActivity().menuOperation(clickedView, Constants.MENU_OPERATION_ADD);
             }
         });
         delBtn.setOnClickListener(new View.OnClickListener(){

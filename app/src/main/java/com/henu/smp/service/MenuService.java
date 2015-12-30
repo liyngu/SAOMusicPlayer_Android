@@ -1,4 +1,4 @@
-package com.henu.smp.business;
+package com.henu.smp.service;
 
 /**
  * Created by liyngu on 12/20/15.

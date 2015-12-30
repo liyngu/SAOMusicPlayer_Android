@@ -1,13 +1,15 @@
 package com.henu.smp.base;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.henu.smp.business.UserService;
-import com.henu.smp.model.SmpForest;
-import com.henu.smp.model.SmpMenuWidget;
+import com.henu.smp.Constants;
+import com.henu.smp.service.UserService;
 import com.henu.smp.model.User;
 import com.henu.smp.widget.MenuTree;
 
@@ -24,6 +26,28 @@ public abstract class BaseActivity extends AppCompatActivity {
     static {
         userService = new UserService();
         //user = userService.getLocal();
+    }
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action.equals(Constants.ACTION_NAME)){
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    onReceivedData(bundle);
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册广播
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_NAME);
+        registerReceiver(mReceiver, filter);
     }
 
     /**
@@ -48,6 +72,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 menu.hidden();
             }
         }
+    }
+
+    public void onReceivedData(Bundle bundle) {
+
     }
     /**
      * 判断这个菜单是否已经被打开

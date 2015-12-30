@@ -1,7 +1,6 @@
-package com.henu.smp.business;
+package com.henu.smp.service;
 
 import android.content.Context;
-import android.os.Message;
 import android.util.Log;
 
 import com.henu.smp.base.BaseAsyncResult;
