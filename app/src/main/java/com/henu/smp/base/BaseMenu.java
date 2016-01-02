@@ -1,6 +1,7 @@
 package com.henu.smp.base;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -14,26 +15,29 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.henu.smp.activity.MainActivity;
 import com.henu.smp.R;
-import com.henu.smp.layout.MainMenuLayout;
+import com.henu.smp.activity.MenuTreeActivity;
 import com.henu.smp.model.SmpMenuWidget;
 import com.henu.smp.util.WidgetUtil;
 
 /**
  * Created by liyngu on 10/14/15.
  */
-public abstract class BaseMenu extends ScrollView implements SmpMenuWidget,
-        View.OnClickListener, View.OnLongClickListener {
+public abstract class BaseMenu extends ScrollView implements SmpMenuWidget, View.OnClickListener,
+        View.OnLongClickListener {
     protected final String LOG_TAG = this.getClass().getSimpleName();
     private static final int MAX_NUM = 6;
-    private MainActivity activity;
-    private LinearLayout layout;
+    private MenuTreeActivity mActivity;
+    private LinearLayout mLayout;
     /**
      * 指针的图片
      */
-    private NinePatch indicator;
+    private NinePatch mIndicatorImg;
+    private boolean isShowIndicator;
 
+    public void setIndicatorVisibility(boolean isShowIndicator) {
+        this.isShowIndicator = isShowIndicator;
+    }
 
     public BaseMenu(Context context, int resource) {
         this(context, null, resource);
@@ -47,9 +51,14 @@ public abstract class BaseMenu extends ScrollView implements SmpMenuWidget,
         inflater.inflate(resource, this);
         //隐藏滚动条
         setVerticalScrollBarEnabled(false);
-        this.layout = (LinearLayout) findViewById(R.id.content_layout);
+        mLayout = (LinearLayout) findViewById(R.id.content_layout);
+
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.bg_indicator);
-        indicator = new NinePatch(bmp, bmp.getNinePatchChunk(), null);
+        mIndicatorImg = new NinePatch(bmp, bmp.getNinePatchChunk(), null);
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.smp);
+        isShowIndicator = typedArray.getBoolean(R.styleable.smp_show_indicator, true);
+        typedArray.recycle();
         //设置为默认不显示
         setVisibility(View.INVISIBLE);
         //setBackgroundColor(Color.YELLOW);
@@ -91,21 +100,25 @@ public abstract class BaseMenu extends ScrollView implements SmpMenuWidget,
         return getVisibility() == View.VISIBLE;
     }
 
-    public void setActivity(MainActivity activity) {
-        this.activity = activity;
+    public void setActivity(MenuTreeActivity activity) {
+        mActivity = activity;
     }
 
     public View getLayoutChildAt(int index) {
-        return layout.getChildAt(index);
+        return mLayout.getChildAt(index);
     }
 
     public int getLayoutChildCount() {
-        return layout.getChildCount();
+        return mLayout.getChildCount();
+    }
+
+    public void setLocation(float x, float y) {
+        setX(x);
+        setY(y);
     }
 
     public void setLocation(int x, int y) {
-        setX(x);
-        setY(y);
+        this.setLocation((float) x, (float) y);
     }
 
     public void show() {
@@ -117,8 +130,17 @@ public abstract class BaseMenu extends ScrollView implements SmpMenuWidget,
         setVisibility(View.GONE);
     }
 
-    protected MainActivity getActivity() {
-        return activity;
+    protected MenuTreeActivity getActivity() {
+        return mActivity;
+    }
+
+    private void addViewToLayout(View view) {
+        this.mLayout.addView(view);
+        if (view instanceof BaseButton) {
+            BaseButton btn = (BaseButton) view;
+            btn.setOnClickListener(this);
+            btn.setOnLongClickListener(this);
+        }
     }
 
     @Override
@@ -142,35 +164,50 @@ public abstract class BaseMenu extends ScrollView implements SmpMenuWidget,
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (!(this instanceof MainMenuLayout)) {
-            RectF location = new RectF(0, getScrollY(), indicator.getWidth(), getHeight() + getScrollY());
-            indicator.draw(canvas, location);
+        if (isShowIndicator) {
+            RectF location = new RectF(0, getScrollY(), mIndicatorImg.getWidth(), getHeight() + getScrollY());
+            mIndicatorImg.draw(canvas, location);
         }
         invalidate();
     }
 
     @Override
+    public void addView(View child, ViewGroup.LayoutParams params) {
+        if (getChildCount() > 0) {
+            this.addViewToLayout(child);
+        } else {
+            super.addView(child, params);
+        }
+    }
+
+    @Override
     public void addView(View child) {
         if (getChildCount() > 0) {
-            this.layout.addView(child);
-            if (child instanceof BaseButton) {
-                BaseButton btn = (BaseButton) child;
-                btn.setOnClickListener(this);
-                btn.setOnLongClickListener(this);
-            }
+            this.addViewToLayout(child);
         } else {
             super.addView(child);
         }
     }
 
+    /**
+     * 每一个菜单按钮都会调用此方法
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
-        this.activity.showLayoutByView(v);
+        mActivity.showMenuByView(v);
     }
 
+    /**
+     * 每一个菜单按钮都会调用此方法
+     *
+     * @param v
+     */
     @Override
     public boolean onLongClick(View v) {
-        this.activity.showOperationMenu(v);
+        mActivity.showOperationMenu(v);
         return true;
     }
+
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="smp">
-        <attr name="child_layout" format="reference" />
+        <attr name="child_menu_id" format="reference" />
+        <attr name="show_indicator" format="boolean" />
         <attr name="text" format="string" />
     </declare-styleable>
 </resources>

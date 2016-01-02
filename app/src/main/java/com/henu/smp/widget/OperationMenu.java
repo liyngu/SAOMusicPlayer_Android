@@ -1,4 +1,4 @@
-package com.henu.smp.layout;
+package com.henu.smp.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -15,27 +15,27 @@ import com.henu.smp.widget.RectButton;
 /**
  * Created by liyngu on 12/12/15.
  */
-public class OperationMenuLayout extends BaseMenu {
-    private View clickedView;
-    private ViewGroup parentPanel;
+public class OperationMenu extends BaseMenu {
+    private BaseButton mClickedBtn;
+    private ViewGroup mParentPanel;
     private Button addBtn;
     private Button delBtn;
 
-    public OperationMenuLayout(Context context, AttributeSet attrs) {
+    public OperationMenu(Context context, AttributeSet attrs) {
         super(context, attrs, R.layout.menu_operation);
         addBtn = (Button) findViewById(R.id.add_btn);
         delBtn = (Button) findViewById(R.id.del_btn);
-        addBtn.setOnClickListener(new View.OnClickListener(){
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().menuOperation(clickedView, Constants.MENU_OPERATION_ADD);
+                getActivity().menuOperation(mClickedBtn, Constants.MENU_OPERATION_ADD);
             }
         });
-        delBtn.setOnClickListener(new View.OnClickListener(){
+        delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewGroup viewGroup = (ViewGroup) clickedView.getParent();
-                viewGroup.removeView(clickedView);
+                ViewGroup viewGroup = (ViewGroup) mClickedBtn.getParent();
+                viewGroup.removeView(mClickedBtn);
                 hidden();
             }
         });
@@ -43,28 +43,27 @@ public class OperationMenuLayout extends BaseMenu {
 
     @Override
     public void show() {
-        parentPanel.setVisibility(View.VISIBLE);
+        mParentPanel.setVisibility(View.VISIBLE);
         super.show();
     }
 
     @Override
     public void hidden() {
-        parentPanel.setVisibility(View.GONE);
+        mParentPanel.setVisibility(View.GONE);
         super.hidden();
     }
 
     public void resetLocation() {
-        if (clickedView != null) {
-            setLocationByView(clickedView);
+        if (mClickedBtn != null) {
+            setLocationByView(mClickedBtn);
         }
     }
 
-    public void setParentPanel(ViewGroup parentPanel) {
-        this.parentPanel = parentPanel;
+    public void setClickedView(BaseButton clickedBtn) {
+        this.mClickedBtn = clickedBtn;
     }
 
-    public void setClickedView(View clickedView) {
-        this.clickedView = clickedView;
+    public void setParentPanel(ViewGroup ParentPanel) {
+        mParentPanel = ParentPanel;
     }
-
 }

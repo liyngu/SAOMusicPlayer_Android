@@ -3,6 +3,7 @@ package com.henu.smp.base;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -20,12 +21,12 @@ import com.henu.smp.model.SmpWidget;
 public abstract class BaseButton extends ImageButton implements SmpMenuWidget {
     protected final String LOG_TAG = this.getClass().getSimpleName();
     private Menu data = new Menu();
-    private int childLayoutId;
+    private int childMenuId;
 
     public BaseButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.smp);
-        this.childLayoutId = typedArray.getResourceId(R.styleable.smp_child_layout, Constants.EMPTY_LAYOUT_ID);
+        this.childMenuId = typedArray.getResourceId(R.styleable.smp_child_menu_id, Constants.EMPTY_MENU_ID);
         String text = typedArray.getString(R.styleable.smp_text);
         typedArray.recycle();
 
@@ -65,7 +66,7 @@ public abstract class BaseButton extends ImageButton implements SmpMenuWidget {
         return data;
     }
 
-    public int getChildLayoutId() {
-        return childLayoutId;
+    public int getChildMenuId() {
+        return childMenuId;
     }
 }
