@@ -145,11 +145,14 @@
             android:id="@+id/exit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            smp:dialog_activity="AlertActivity"
+            smp:dialog_params="确定要退出吗？"
             android:background="@drawable/default_circle_btn" />
     </com.henu.smp.widget.EmptyMenu>
 
     <com.henu.smp.widget.MessagePanel
         android:id="@+id/message_panel"
+        smp:dialog_activity="MusicControlActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

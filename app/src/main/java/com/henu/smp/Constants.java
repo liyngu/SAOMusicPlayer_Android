@@ -5,11 +5,18 @@ package com.henu.smp;
  */
 public class Constants {
     public static final int EMPTY_MENU_ID = 0;
-    public static final int EMPTY_ACTION = 0;
+    public static final int EMPTY_INTEGER = 0;
     public static final int EMPTY_OPERATION = 0;
+    public static final String EMPTY_STRING = "";
+    public static final String CONNECTOR = ",";
 
-    public static final String MENU_START_POINT_X = "MENU_START_POINT_X";
-    public static final String MENU_START_POINT_Y = "MENU_START_POINT_Y";
+    public static final String ACTIVITY_PACKAGE = "com.henu.smp.activity";
+    public static final String ALERT_DIALOG_PARAMS = "ALERT_DIALOG_PARAMS";
+    public static final String ALERT_DIALOG_TYPE = "ALERT_DIALOG_TYPE";
+    public static final int ALERT_DIALOG_TYPE_EXIT = 1;
+
+    public static final String CLICKED_POINT_X = "CLICKED_POINT_X";
+    public static final String CLICKED_POINT_Y = "CLICKED_POINT_Y";
 
     public static final int MENU_OPERATION_ADD = 1;
     public static final int MENU_OPERATION_DEL = 2;
@@ -35,4 +42,5 @@ public class Constants {
     public static final String ACTION_OPERATION = "ACTION_OPERATION";
     public static final int ACTION_PLAYED = 1;
     public static final int ACTION_PAUSED = 2;
+    public static final int ACTION_EXIT = 3;
 }

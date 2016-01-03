@@ -8,8 +8,8 @@ import android.widget.FrameLayout;
 import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.base.BaseActivity;
-import com.henu.smp.base.BaseMenu;
 import com.henu.smp.listener.SimpleScreenListener;
+import com.henu.smp.util.IntentUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -41,25 +41,15 @@ public class MainActivity extends BaseActivity {
     }
 
     public void startMenu(int x, int y) {
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, MenuTreeActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.MENU_START_POINT_X, x);
-        bundle.putInt(Constants.MENU_START_POINT_Y, y);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        bundle.putInt(Constants.CLICKED_POINT_X, x);
+        bundle.putInt(Constants.CLICKED_POINT_Y, y);
+        IntentUtil.startActivity(this, MenuTreeActivity.class, bundle);
     }
 
 
     @Override
-    public void onReceivedData(Bundle bundle) {
-        int operation = bundle.getInt(Constants.ACTION_OPERATION);
-        if (operation == Constants.ACTION_PLAYED) {
-            //this.messagePanel.setTitle("暂停");
-            //startBtn.setText("暂停");
-        } else if (operation == Constants.ACTION_PAUSED) {
-            //this.messagePanel.setTitle("开始");
-            //startBtn.setText("开始");
-        }
+    public void onReceivedData(Bundle bundle, int operation) {
+
     }
 }

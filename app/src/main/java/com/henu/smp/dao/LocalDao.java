@@ -4,9 +4,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import android.util.Log;
 
-import com.henu.smp.model.Song;
+import com.henu.smp.entity.Song;
 
 import java.util.ArrayList;
 import java.util.List;

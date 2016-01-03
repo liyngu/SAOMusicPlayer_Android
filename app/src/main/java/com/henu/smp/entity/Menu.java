@@ -1,4 +1,4 @@
-package com.henu.smp.model;
+package com.henu.smp.entity;
 
 import com.google.gson.annotations.SerializedName;
 

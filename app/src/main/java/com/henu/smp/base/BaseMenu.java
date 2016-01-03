@@ -17,7 +17,7 @@ import android.widget.ScrollView;
 
 import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
-import com.henu.smp.model.SmpMenuWidget;
+import com.henu.smp.entity.SmpMenuWidget;
 import com.henu.smp.util.WidgetUtil;
 
 /**

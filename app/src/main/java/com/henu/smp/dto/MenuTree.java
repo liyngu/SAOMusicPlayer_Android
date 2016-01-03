@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.henu.smp.base.BaseButton;
 import com.henu.smp.base.BaseMenu;
-import com.henu.smp.model.Menu;
-import com.henu.smp.model.SmpWidget;
+import com.henu.smp.entity.Menu;
+import com.henu.smp.entity.SmpWidget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -202,17 +202,6 @@ public class MenuTree {
         List<BaseButton> btnList = this.parseToList(nodeList, BaseButton.class);
         btnList.add(btn);
         return btnList;
-    }
-
-    public static MenuTree getInstance() {
-        if (menuTree == null) {
-            menuTree = new MenuTree();
-        }
-        return menuTree;
-    }
-
-    public static void destoryInstance() {
-        menuTree = null;
     }
 
     public void rollbackFocus() {

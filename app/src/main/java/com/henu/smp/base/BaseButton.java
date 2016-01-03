@@ -2,18 +2,14 @@ package com.henu.smp.base;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageButton;
 
 import com.henu.smp.Constants;
 import com.henu.smp.R;
-import com.henu.smp.model.Menu;
-import com.henu.smp.model.SmpMenuWidget;
-import com.henu.smp.model.SmpWidget;
+import com.henu.smp.entity.Menu;
+import com.henu.smp.entity.SmpMenuWidget;
+import com.henu.smp.util.StringUtil;
 
 /**
  * Created by leen on 10/14/15.
@@ -22,12 +18,18 @@ public abstract class BaseButton extends ImageButton implements SmpMenuWidget {
     protected final String LOG_TAG = this.getClass().getSimpleName();
     private Menu data = new Menu();
     private int childMenuId;
+    private String dialogClassName;
+    private String dialogParams;
 
     public BaseButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.smp);
         this.childMenuId = typedArray.getResourceId(R.styleable.smp_child_menu_id, Constants.EMPTY_MENU_ID);
         String text = typedArray.getString(R.styleable.smp_text);
+        String dialogClassName = typedArray.getString(R.styleable.smp_dialog_activity);
+        this.dialogClassName = StringUtil.format(dialogClassName);
+        String dialogParams = typedArray.getString(R.styleable.smp_dialog_params);
+        this.dialogParams = StringUtil.format(dialogParams);
         typedArray.recycle();
 
         this.data.setText(text);
@@ -35,6 +37,14 @@ public abstract class BaseButton extends ImageButton implements SmpMenuWidget {
             this.setText("列表");
         }
         this.setName("list");
+    }
+
+    public String getDialogParams() {
+        return dialogParams;
+    }
+
+    public String getDialogClassName() {
+        return dialogClassName;
     }
 
     public void setName(String name) {

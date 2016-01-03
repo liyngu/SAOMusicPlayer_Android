@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.henu.smp.Constants;
+import com.henu.smp.util.IntentUtil;
 
 /**
  * Created by liyngu on 12/15/15.
@@ -42,10 +43,7 @@ public class PlayerService extends Service {
                 }
                 isPlayed = !isPlayed;
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(Constants.ACTION_NAME);
-                broadcastIntent.putExtras(bundle);
-                sendBroadcast(broadcastIntent);
+                IntentUtil.sendBroadcast(PlayerService.this, bundle);
             }
         }
         return super.onStartCommand(intent, flags, startId);

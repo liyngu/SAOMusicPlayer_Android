@@ -4,10 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.henu.smp.R;
-import com.henu.smp.model.SmpWidget;
+import com.henu.smp.entity.SmpWidget;
 
 /**
  * Created by liyngu on 12/23/15.

@@ -1,6 +1,6 @@
 package com.henu.smp.dao;
 
-import com.henu.smp.model.User;
+import com.henu.smp.entity.User;
 
 import org.json.JSONObject;
 

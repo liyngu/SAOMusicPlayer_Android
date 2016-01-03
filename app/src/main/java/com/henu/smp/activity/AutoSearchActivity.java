@@ -8,7 +8,7 @@ import com.henu.smp.R;
 import com.henu.smp.base.BaseActivity;
 import com.henu.smp.base.BaseAsyncResult;
 import com.henu.smp.service.UserService;
-import com.henu.smp.model.Song;
+import com.henu.smp.entity.Song;
 
 import java.util.List;
 

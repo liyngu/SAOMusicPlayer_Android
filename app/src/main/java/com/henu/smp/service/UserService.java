@@ -5,8 +5,8 @@ import android.util.Log;
 
 import com.henu.smp.base.BaseAsyncResult;
 import com.henu.smp.dao.LocalDao;
-import com.henu.smp.model.Song;
-import com.henu.smp.model.User;
+import com.henu.smp.entity.Song;
+import com.henu.smp.entity.User;
 import com.henu.smp.util.JSONUtil;
 
 import java.util.List;

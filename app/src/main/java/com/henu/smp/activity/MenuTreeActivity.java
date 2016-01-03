@@ -13,6 +13,7 @@ import com.henu.smp.base.BaseButton;
 import com.henu.smp.base.BaseMenu;
 import com.henu.smp.dto.MenuTree;
 import com.henu.smp.listener.SimpleScreenListener;
+import com.henu.smp.util.StringUtil;
 import com.henu.smp.widget.EmptyMenu;
 import com.henu.smp.widget.MessagePanel;
 import com.henu.smp.widget.OperationMenu;
@@ -70,10 +71,11 @@ public class MenuTreeActivity extends BaseActivity {
         background.setLongClickable(true);
         operationPanel.setOnTouchListener(screenListener);
         operationPanel.setLongClickable(true);
+        messagePanel.setActivity(this);
 
         Bundle bundle = getIntent().getExtras();
-        int startPointX = bundle.getInt(Constants.MENU_START_POINT_X);
-        int startPointY = bundle.getInt(Constants.MENU_START_POINT_Y);
+        int startPointX = bundle.getInt(Constants.CLICKED_POINT_X);
+        int startPointY = bundle.getInt(Constants.CLICKED_POINT_Y);
         startMenu(startPointX, startPointY);
 
     }
@@ -245,9 +247,15 @@ public class MenuTreeActivity extends BaseActivity {
         if (v instanceof BaseButton) {
             MenuTree menuTree = mMenuTree;
             BaseButton btn = (BaseButton) v;
+            String dialogClassName = btn.getDialogClassName();
+            // 如果这个按钮和一个菜单关联的话，则不进行显示菜单的操作
+            if (!StringUtil.isEmpty(dialogClassName)) {
+                showDialog(dialogClassName, btn.getDialogParams());
+                return;
+            }
             BaseMenu childMenu = menuTree.getChild(btn);
             if (childMenu == null) {
-                this.showOperationMenu(v);
+                this.showOperationMenu(btn);
             } else {
                 closeMenu(btn);
                 this.openChildMenu(btn);
@@ -342,5 +350,14 @@ public class MenuTreeActivity extends BaseActivity {
      */
     public boolean isOpenedMenu(BaseMenu menu) {
         return menu.getVisibility() == View.VISIBLE;
+    }
+
+    @Override
+    protected void onReceivedData(Bundle bundle, int operation) {
+        if (operation == Constants.ACTION_PLAYED) {
+            this.messagePanel.setTitle("暂停");
+        } else if (operation == Constants.ACTION_PAUSED) {
+            this.messagePanel.setTitle("开始");
+        }
     }
 }
