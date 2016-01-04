@@ -1,6 +1,11 @@
 package com.henu.smp.entity;
 
 import com.google.gson.annotations.SerializedName;
+import com.lidroid.xutils.db.annotation.Column;
+import com.lidroid.xutils.db.annotation.Id;
+import com.lidroid.xutils.db.annotation.Table;
+import com.lidroid.xutils.db.annotation.Transient;
+import com.lidroid.xutils.db.annotation.Unique;
 
 import java.util.List;
 
@@ -9,12 +14,23 @@ import java.util.List;
  * JSON基本形式
  * {"user":{"id":10001,"username":"test","password":"123","menu":[{"index":0,"name":"user","displayname":"","menu":[{"index":0,"name":"userinfo","displayname":"用户信息","menu":[]},{"index":1,"name":"userhistory","displayname":"播放历史","menu":[]}]},{"index":1,"name":"list","displayname":"","menu":[{"index":0,"name":"collection","displayname":"我的收藏","menu":[]}]}]}}
  */
+@Table(name = "menu")
 public class Menu {
-    private int index;
+
+    @Id(column = "id")
+    private int id;
+
+    @Column(column = "name")
     private String name;
 
+    @Transient
+    private int index;
+
+    @Transient
     @SerializedName("displayname")
     private String text;
+
+    @Transient
     private List<Menu> menus;
 
     public Menu() {
@@ -22,7 +38,13 @@ public class Menu {
         this.text = "";
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public int getId() {
+        return id;
+    }
     public void setName(String name) {
         this.name = name;
     }

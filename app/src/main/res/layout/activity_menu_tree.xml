@@ -52,24 +52,13 @@
         android:layout_height="wrap_content">
 
         <com.henu.smp.widget.RectButton
+            android:id="@+id/default_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn" />
-
-        <com.henu.smp.widget.RectButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn" />
-
-        <com.henu.smp.widget.RectButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn" />
-
-        <com.henu.smp.widget.RectButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn" />
+            android:background="@drawable/default_rect_btn"
+            smp:dialog_activity="ShowSongsActivity"
+            smp:dialog_params="1"
+            smp:text="默认列表"/>
 
     </com.henu.smp.widget.EmptyMenu>
 
@@ -81,7 +70,9 @@
         <com.henu.smp.widget.RectButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn" />
+            android:background="@drawable/default_rect_btn"
+            smp:dialog_activity="AutoSearchActivity"
+            smp:text="本地歌曲"/>
 
         <com.henu.smp.widget.RectButton
             android:layout_width="wrap_content"
@@ -105,6 +96,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
+        <com.henu.smp.widget.RectButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn" />
 
     </com.henu.smp.widget.EmptyMenu>
 
@@ -139,7 +134,8 @@
             android:id="@+id/setting_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/default_circle_btn" />
+            android:background="@drawable/default_circle_btn"
+            smp:child_menu_id="@id/setting_menu"/>
 
         <com.henu.smp.widget.CircleButton
             android:id="@+id/exit_btn"

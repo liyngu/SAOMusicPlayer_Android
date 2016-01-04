@@ -29,6 +29,9 @@ import java.util.List;
 public class MenuTreeActivity extends BaseActivity {
     private MenuTree mMenuTree;
 
+    @ViewInject(R.id.background)
+    private FrameLayout background;
+
     @ViewInject(R.id.operation_menu)
     private OperationMenu operationMenu;
 
@@ -40,9 +43,6 @@ public class MenuTreeActivity extends BaseActivity {
 
     @ViewInject(R.id.main_menu)
     private BaseMenu mainMenu;
-
-    @ViewInject(R.id.background)
-    private FrameLayout background;
 
     private SimpleScreenListener screenListener = new SimpleScreenListener() {
         @Override

@@ -18,19 +18,22 @@ public class Constants {
     public static final String CLICKED_POINT_X = "CLICKED_POINT_X";
     public static final String CLICKED_POINT_Y = "CLICKED_POINT_Y";
 
+    public static final String SHOW_SONGS_MENU_ID = "SHOW_SONGS_MENU_ID";
     public static final int MENU_OPERATION_ADD = 1;
     public static final int MENU_OPERATION_DEL = 2;
     public static final int MENU_OPERATION_UPPER = 3;
     public static final int MENU_OPERATION_LOWER = 4;
 
-    public static final int MUSIC_MODE_ORDER = 1;
-    public static final int MUSIC_MODE_SINGLE = 2;
-    public static final int MUSIC_MODE_CIRCLE = 3;
-    public static final int MUSIC_MODE_RANDOM = 4;
+    public static final String[] PLAY_MODE_MAPPING = new String[] {"顺序", "单曲", "循环", "随机"};
+    public static final String MUSIC_PLAY_MODE = "MUSIC_PLAY_MODE";
+    public static final int MUSIC_MODE_ORDER = 0;
+    public static final int MUSIC_MODE_SINGLE = 1;
+    public static final int MUSIC_MODE_CIRCLE = 2;
+    public static final int MUSIC_MODE_RANDOM = 3;
     public static final int MUSIC_MODE_FIRST = MUSIC_MODE_ORDER;
-    public static final int MUSIC_MODE_END = MUSIC_MODE_RANDOM;
-    public static final int MUSIC_MODE_NEXT = 1;
+    public static final int MUSIC_MODE_COUNT = 4;
 
+    public static final int MUSIC_MODE_NEXT = 1;
     public static final String MUSIC_OPERATION = "MUSIC_OPERATION";
     public static final int MUSIC_START = 1;
     public static final int MUSIC_STOP = 2;
@@ -42,5 +45,7 @@ public class Constants {
     public static final String ACTION_OPERATION = "ACTION_OPERATION";
     public static final int ACTION_PLAYED = 1;
     public static final int ACTION_PAUSED = 2;
-    public static final int ACTION_EXIT = 3;
+    public static final int ACTION_STOPPED = 3;
+    public static final int ACTION_MODE_CHANGED = 4;
+    public static final int ACTION_EXIT = 10;
 }

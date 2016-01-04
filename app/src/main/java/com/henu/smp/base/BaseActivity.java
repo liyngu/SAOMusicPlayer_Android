@@ -1,6 +1,7 @@
 package com.henu.smp.base;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,26 +9,27 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.henu.smp.Constants;
+import com.henu.smp.R;
 import com.henu.smp.activity.AlertActivity;
 import com.henu.smp.activity.MainActivity;
+import com.henu.smp.activity.MusicControlActivity;
+import com.henu.smp.activity.ShowSongsActivity;
 import com.henu.smp.service.UserService;
 import com.henu.smp.entity.User;
 import com.henu.smp.util.IntentUtil;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 
 /**
  * Created by liyngu on 10/31/15.
  */
 public abstract class BaseActivity extends Activity {
     protected final String LOG_TAG = this.getClass().getSimpleName();
-    protected static UserService userService;
-    protected static User user;
+    protected static UserService userService = new UserService();
 
-    static {
-        userService = new UserService();
-        //user = userService.getLocal();
-    }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -38,7 +40,8 @@ public abstract class BaseActivity extends Activity {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     int operation = bundle.getInt(Constants.ACTION_OPERATION);
-                    if (operation == Constants.ACTION_EXIT) {
+                    if (operation == Constants.ACTION_EXIT &&
+                            !this.getClass().isAssignableFrom(MainActivity.class)) {
                         finish();
                     } else {
                         onReceivedData(bundle, operation);
@@ -47,6 +50,12 @@ public abstract class BaseActivity extends Activity {
             }
         }
     };
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        ViewUtils.inject(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +73,8 @@ public abstract class BaseActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mReceiver);
         super.onDestroy();
+        unregisterReceiver(mReceiver);
     }
 
     public void showDialog(Class<?> cls, String params) {
@@ -73,10 +82,12 @@ public abstract class BaseActivity extends Activity {
         if (cls.isAssignableFrom(AlertActivity.class)) {
             bundle.putString(Constants.ALERT_DIALOG_PARAMS, params);
             bundle.putInt(Constants.ALERT_DIALOG_TYPE, Constants.ALERT_DIALOG_TYPE_EXIT);
-        } else if (cls.isAssignableFrom(AlertActivity.class)) {
+        } else if (cls.isAssignableFrom(MusicControlActivity.class)) {
             String[] point = params.split(Constants.CONNECTOR);
             bundle.putInt(Constants.CLICKED_POINT_X, Integer.parseInt(point[0]));
             bundle.putInt(Constants.CLICKED_POINT_Y, Integer.parseInt(point[1]));
+        } else if (cls.isAssignableFrom(ShowSongsActivity.class)) {
+            bundle.putInt(Constants.SHOW_SONGS_MENU_ID, Integer.parseInt(params));
         }
         IntentUtil.startActivity(this, cls, bundle);
     }
