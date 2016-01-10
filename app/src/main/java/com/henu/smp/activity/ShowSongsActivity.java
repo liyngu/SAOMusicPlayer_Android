@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.background.PlayerService;
 import com.henu.smp.base.BaseAsyncResult;
@@ -46,7 +47,12 @@ public class ShowSongsActivity extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_songs);
-        this.setAdapterData();
+        Bundle bundle = getBundle();
+        int menuId = bundle.getInt(Constants.SHOW_SONGS_MENU_ID);
+        Menu menu = new Menu();
+        menu.setId(menuId);
+        this.setAdapterData(menu);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -64,13 +70,13 @@ public class ShowSongsActivity extends BaseDialog {
         unbindService(serviceConnection);
     }
 
-    public void setAdapterData(){
-        UserService service = new UserService();
-        Menu menu = new Menu();
-        menu.setId(1);
-        service.getSongsByMenu(new BaseAsyncResult<List<Song>>() {
+    public void setAdapterData(Menu menu){
+        mMusicService.getLocalSongs(new BaseAsyncResult<List<Song>>() {
             @Override
             public void onSuccess(List<Song> result) {
+                if (result == null || result.size() == 0) {
+                    return;
+                }
                 mSongList = result;
                 ArrayAdapter<Song> adapter = new ArrayAdapter<>(ShowSongsActivity.this,
                         android.R.layout.simple_list_item_1, result);

@@ -46,6 +46,12 @@ public class MusicControlActivity extends BaseActivity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mPlayerBinder = (PlayerService.PlayerBinder) service;
+            if (mPlayerBinder.isPlaying()) {
+                startBtn.setText("暂停");
+            } else {
+                startBtn.setText("开始");
+            }
+            modeBtn.setText(Constants.PLAY_MODE_MAPPING[mPlayerBinder.getPlayMode()]);
         }
 
         @Override
@@ -80,24 +86,13 @@ public class MusicControlActivity extends BaseActivity {
         setContentView(R.layout.activity_music_control);
         ViewUtils.inject(this);
 
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getBundle();
         int startX = bundle.getInt(Constants.CLICKED_POINT_X);
         int startY = bundle.getInt(Constants.CLICKED_POINT_Y);
         controlPanel.setX(startX);
         controlPanel.setY(startY);
 
-//        startBtn = (Button) findViewById(R.id.start_btn);
-//        startBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_START);
-//                Intent intent = new Intent(MusicControlActivity.this, PlayerService.class);
-//                intent.putExtras(bundle);
-//                startService(intent);
-//            }
-//        });
-        background.setOnClickListener(new View.OnClickListener(){
+        background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -111,8 +106,10 @@ public class MusicControlActivity extends BaseActivity {
     public void onReceivedData(Bundle bundle, int operation) {
         if (operation == Constants.ACTION_PLAYED) {
             startBtn.setText("暂停");
+            isPlayed = true;
         } else if (operation == Constants.ACTION_PAUSED) {
             startBtn.setText("开始");
+            isPlayed = false;
         } else  if (Constants.ACTION_MODE_CHANGED == operation) {
             mPlayMode = bundle.getInt(Constants.MUSIC_PLAY_MODE, mPlayMode);
             modeBtn.setText(Constants.PLAY_MODE_MAPPING[mPlayMode]);

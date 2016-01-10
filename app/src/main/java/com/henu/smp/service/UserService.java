@@ -3,11 +3,12 @@ package com.henu.smp.service;
 import android.content.Context;
 import android.util.Log;
 
-import com.henu.smp.base.BaseAsyncResult;
-import com.henu.smp.dao.LocalDao;
+import com.henu.smp.dao.UserDao;
+import com.henu.smp.dao.impl.UserDaoImpl;
+import com.henu.smp.dto.MenuTree;
 import com.henu.smp.entity.Menu;
-import com.henu.smp.entity.Song;
 import com.henu.smp.entity.User;
+import com.henu.smp.proxy.DaoProxy;
 import com.henu.smp.util.JSONUtil;
 
 import java.util.List;
@@ -16,17 +17,33 @@ import java.util.List;
  * Created by liyngu on 12/20/15.
  */
 public class UserService {
-    private LocalDao dao = new LocalDao();
     public void login(String username, String password) {
 
     }
 
-    public void save(Menu menu, Context context) {
-        dao.save(context, menu);
+    public void deleteLocal(Context context) {
+        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
+        userDao.deleteAll();
     }
 
-    public void save(List<Song> songs, Context context) {
-        dao.createSongList(context, songs);
+    public void saveMenu(Menu menu, Context context) {
+        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
+        userDao.saveMenu(menu);
+    }
+
+    public List<Menu> getMusicMenus(Context context) {
+        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
+        return userDao.getMusicMenus();
+    }
+
+    public void saveMenuTree(MenuTree menuTree, Context context) {
+        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
+        userDao.saveMenuTree(menuTree);
+    }
+
+    public void save(User user, Context context) {
+        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
+        userDao.save(user);
     }
 
     public void create(User user) {
@@ -34,36 +51,11 @@ public class UserService {
     }
 
     public User getLocal(Context context) {
-        dao.getSongs(context);
-        return null;
-    }
-
-    public void getSongsByMenu(final BaseAsyncResult<List<Song>> result, final Menu menu, final Context context) {
-        result.execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Song> songs = dao.getSongsByMenuId(menu.getId(), context);
-                result.sendData(songs);
-            }
-        });
-
-    }
-
-    public void getById(int id) {
-
-    }
-
-    public void loadMusicByLocal(final BaseAsyncResult<List<Song>> result, final Context context) {
-        result.execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Song> songs = dao.getSongs(context);
-                result.sendData(songs);
-            }
-        });
-    }
-
-    public User getLocalUser() {
-        return null;
+        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
+        User user = userDao.getLocal();
+        if (user != null) {
+            user.setMenus(userDao.getMenuTreeData());
+        }
+        return user;
     }
 }

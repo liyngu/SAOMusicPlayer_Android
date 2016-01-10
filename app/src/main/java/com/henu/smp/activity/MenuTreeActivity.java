@@ -12,8 +12,11 @@ import com.henu.smp.base.BaseActivity;
 import com.henu.smp.base.BaseButton;
 import com.henu.smp.base.BaseMenu;
 import com.henu.smp.dto.MenuTree;
+import com.henu.smp.entity.Menu;
+import com.henu.smp.entity.User;
 import com.henu.smp.listener.SimpleScreenListener;
 import com.henu.smp.util.StringUtil;
+import com.henu.smp.widget.CircleButton;
 import com.henu.smp.widget.EmptyMenu;
 import com.henu.smp.widget.MessagePanel;
 import com.henu.smp.widget.OperationMenu;
@@ -28,6 +31,7 @@ import java.util.List;
  */
 public class MenuTreeActivity extends BaseActivity {
     private MenuTree mMenuTree;
+    private boolean isDeleteAll = false;
 
     @ViewInject(R.id.background)
     private FrameLayout background;
@@ -43,6 +47,9 @@ public class MenuTreeActivity extends BaseActivity {
 
     @ViewInject(R.id.main_menu)
     private BaseMenu mainMenu;
+
+    @ViewInject(R.id.list_btn)
+    private BaseButton listBtn;
 
     private SimpleScreenListener screenListener = new SimpleScreenListener() {
         @Override
@@ -66,6 +73,7 @@ public class MenuTreeActivity extends BaseActivity {
 
         this.initMenuTree();
         operationMenu.setParentPanel(operationPanel);
+        operationMenu.setActivity(this);
         screenListener.setContext(this);
         background.setOnTouchListener(screenListener);
         background.setLongClickable(true);
@@ -127,25 +135,31 @@ public class MenuTreeActivity extends BaseActivity {
     }
 
     public void moveMessagePanelToView(View v) {
-        messagePanel.setLocationByView(v);
+        if (v instanceof CircleButton) {
+            messagePanel.setLocationByView(v);
+        }
     }
 
-    public void menuOperation(View v, int operateState) {
-        if (operateState == Constants.MENU_OPERATION_ADD) {
-            MenuTree menuTree = mMenuTree;
-            BaseButton btn = (BaseButton) v;
-            BaseMenu baseMenu = menuTree.getChild(btn);
-            if (baseMenu == null) {
-                BaseMenu emptyMenu = new EmptyMenu(this);
-                menuTree.addChild(btn, emptyMenu);
-                background.addView(emptyMenu);
-                // emptyMenu.setActivity(this);
-                emptyMenu.show();
-            } else {
-                RectButton rb = new RectButton(this);
-                baseMenu.addView(rb);
-                menuTree.addChild(baseMenu, rb);
-            }
+    @Override
+    protected void onDestroy() {
+        if (!isDeleteAll) {
+            mUserService.saveMenuTree(mMenuTree, this);
+        }
+        super.onDestroy();
+    }
+
+    public void createListMenu(View v, String displayName, int type) {
+        BaseButton btn = (BaseButton) v;
+        Menu menu = new Menu();
+        menu.setText(displayName);
+        menu.setType(Constants.CREATE_TYPE_MUSIC_LIST);
+        menu.setName("customlist");
+        BaseButton btnWidget = this.createMenu(btn, menu);
+        if (Constants.CREATE_TYPE_MUSIC_LIST == type) {
+            menu.setType(Constants.CREATE_TYPE_MUSIC_LIST);
+            mUserService.saveMenu(menu, this);
+            btnWidget.setDialogClassName("ShowSongsActivity");
+            btnWidget.setDialogParams(String.valueOf(menu.getId()));
         }
     }
 
@@ -157,6 +171,76 @@ public class MenuTreeActivity extends BaseActivity {
         mMenuTree = new MenuTree();
         mMenuTree.setRoot(mainMenu);
         this.findChildMenu(mainMenu);
+        mUserService.saveMenu(listBtn.getData(), this);
+
+        User user = mUserService.getLocal(this);
+        // 目前只有歌曲列表可以动态创建
+        if (user.getMenus() != null) {
+            for (Menu menu : user.getMenus()) {
+                if (menu.getName().equals("list")) {
+                    List<Menu> listMenu = menu.getMenus();
+                    // 不再进行第一个收藏列表的初始化
+                    if (listMenu != null && listMenu.size() != 0) {
+                        listMenu.remove(0);
+                        this.createMenuTree(listMenu, listBtn);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 创建一个拥有Menu数据的按钮并添加，首先此菜单的父元素按钮不能为空
+     * 如果这个按钮还没有所对应的菜单，则创建新的空菜单并添加一个按钮
+     * 如果这个按钮已经有了菜单，则获得这个菜单并添加一个按钮
+     * 返回值则为创建的这个按钮
+     */
+    public BaseButton createMenu(BaseButton btn, Menu menuData) {
+        MenuTree menuTree = mMenuTree;
+        // 首先获得这个按钮所对应的菜单
+        BaseMenu menuWidget = menuTree.getChild(btn);
+        //如果这个这个按钮没有对应的菜单
+        if (menuWidget == null) {
+            // 首先要创建一个空的菜单
+            menuWidget = new EmptyMenu(this);
+            background.addView(menuWidget);
+            // 添加上一个按钮与这个菜单之间的关系
+            menuTree.addChild(btn, menuWidget);
+            // 设置这样一个菜单的显示状态
+            menuWidget.setActivity(this);
+        }
+        // 然后创建一个按钮并
+        RectButton rb = new RectButton(this);
+        // 最后为这个菜单添加一个按钮
+        menuWidget.addView(rb);
+//        int index = menuWidget.indexOfChild(rb);
+//        menuData.setIndex(index);
+        // 设置数据
+        rb.setData(menuData);
+        // 创建菜单树之间的联系
+        menuTree.addChild(menuWidget, rb);
+        return rb;
+    }
+
+    public void createMenuTree(List<Menu> menus, BaseButton btn) {
+        int childCount = menus.size();
+        if (childCount == 0) {
+            return;
+        }
+        // 接下来需要遍历这个菜单中的按钮，菜单数据是存放在按钮中的
+        for (int i = 0; i < childCount; i++) {
+            Menu menuData = menus.get(i);
+            // 创建按钮并设置数据
+            BaseButton btnWidget = this.createMenu(btn, menuData);
+            if (Constants.CREATE_TYPE_MUSIC_LIST == menuData.getType()) {
+                btnWidget.setDialogClassName("ShowSongsActivity");
+                btnWidget.setDialogParams(String.valueOf(menuData.getId()));
+            }
+            List<Menu> childMenuData = menuData.getMenus();
+            if (childMenuData != null && childMenuData.size() > 0) {
+                this.createMenuTree(menuData.getMenus(), btnWidget);
+            }
+        }
     }
 
     /**
@@ -358,6 +442,11 @@ public class MenuTreeActivity extends BaseActivity {
             this.messagePanel.setTitle("暂停");
         } else if (operation == Constants.ACTION_PAUSED) {
             this.messagePanel.setTitle("开始");
+        } else if (Constants.ACTION_CREATE_LIST == operation) {
+            String displayName = bundle.getString(Constants.CREATE_LIST_NAME);
+            this.createListMenu(operationMenu.getClickedBtn(), displayName, Constants.CREATE_TYPE_MUSIC_LIST);
+        } else if (Constants.ACTION_DELETE_ALL == operation) {
+            isDeleteAll = true;
         }
     }
 }

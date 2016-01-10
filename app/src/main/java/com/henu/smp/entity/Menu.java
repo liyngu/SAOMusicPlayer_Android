@@ -23,15 +23,26 @@ public class Menu {
     @Column(column = "name")
     private String name;
 
-    @Transient
-    private int index;
-
-    @Transient
+    @Column(column = "text")
     @SerializedName("displayname")
     private String text;
 
     @Transient
+    private int index;
+
+    @Transient
     private List<Menu> menus;
+
+    @Transient
+    private int type;
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
+    }
 
     public Menu() {
         this.name = "";
@@ -45,6 +56,7 @@ public class Menu {
     public int getId() {
         return id;
     }
+
     public void setName(String name) {
         this.name = name;
     }

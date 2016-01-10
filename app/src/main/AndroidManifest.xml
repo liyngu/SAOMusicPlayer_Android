@@ -35,6 +35,9 @@
         <activity
             android:name=".activity.ShowSongsActivity"
             android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".activity.CreateListActivity"
+            android:theme="@style/TransparentTheme" />
 
         <service android:name=".background.PlayerService" />
     </application>

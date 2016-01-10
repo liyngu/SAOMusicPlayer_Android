@@ -17,14 +17,14 @@ import android.widget.ScrollView;
 
 import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
-import com.henu.smp.entity.SmpMenuWidget;
+import com.henu.smp.widget.SmpWidget;
 import com.henu.smp.util.WidgetUtil;
 
 /**
  * Created by liyngu on 10/14/15.
  */
-public abstract class BaseMenu extends ScrollView implements SmpMenuWidget, View.OnClickListener,
-        View.OnLongClickListener {
+public abstract class BaseMenu extends ScrollView implements View.OnClickListener,
+        View.OnLongClickListener, SmpWidget {
     protected final String LOG_TAG = this.getClass().getSimpleName();
     private static final int MAX_NUM = 6;
     private MenuTreeActivity mActivity;

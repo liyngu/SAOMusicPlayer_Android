@@ -13,7 +13,8 @@ public class Constants {
     public static final String ACTIVITY_PACKAGE = "com.henu.smp.activity";
     public static final String ALERT_DIALOG_PARAMS = "ALERT_DIALOG_PARAMS";
     public static final String ALERT_DIALOG_TYPE = "ALERT_DIALOG_TYPE";
-    public static final int ALERT_DIALOG_TYPE_EXIT = 1;
+    public static final int ALERT_DIALOG_TYPE_EXIT = 0;
+    public static final int ALERT_DIALOG_TYPE_DELETE_ALL = 1;
 
     public static final String CLICKED_POINT_X = "CLICKED_POINT_X";
     public static final String CLICKED_POINT_Y = "CLICKED_POINT_Y";
@@ -48,4 +49,15 @@ public class Constants {
     public static final int ACTION_STOPPED = 3;
     public static final int ACTION_MODE_CHANGED = 4;
     public static final int ACTION_EXIT = 10;
+    public static final int ACTION_CREATE_LIST = 11;
+    public static final int ACTION_DELETE_ALL = 12;
+
+    public static final String CREATE_LIST_NAME = "CREATE_LIST_NAME";
+    public static final String CREATE_LIST_POSITION = "CREATE_LIST_POSITION";
+    public static final String CREATE_LIST_TYPE = "CREATE_LIST_TYPE";
+    public static final int CREATE_TYPE_MENU_LIST = 0;
+    public static final int CREATE_TYPE_MUSIC_LIST = 1;
+
+    public static final String DB_NAME = "DB_SAOMusicPlayer";
+    public static final String SP_NAME = "SP_SAOMusicPlayer";
 }

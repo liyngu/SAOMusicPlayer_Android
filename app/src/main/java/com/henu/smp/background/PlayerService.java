@@ -28,24 +28,17 @@ public class PlayerService extends Service {
     private MediaPlayer mMediaPlayer;
     private List<Song> mSongList;
 
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        if (intent != null) {
-//            Bundle bundle = intent.getExtras();
-//            int operation = bundle.getInt(Constants.MUSIC_OPERATION);
-//            if (operation == Constants.MUSIC_START) {
-//                if (isPlaying) {
-//                    bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_PAUSED);
-//                } else {
-//                    bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_PLAYED);
-//                }
-//                isPlaying = !isPlaying;
-//
-//                IntentUtil.sendBroadcast(PlayerService.this, bundle);
-//            }
-//        }
-//        return super.onStartCommand(intent, flags, startId);
-//    }
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Bundle bundle = intent.getExtras();
+        int operation = bundle.getInt(Constants.MUSIC_OPERATION);
+        if (operation == Constants.MUSIC_START) {
+            if (mMediaPlayer == null) {
+                this.initMediaPlayer();
+            }
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
 
 
     private void initMediaPlayer() {
@@ -79,16 +72,9 @@ public class PlayerService extends Service {
         return mPlayerBinder;
     }
 
-    @Override
-    public void onCreate() {
-        if (mMediaPlayer == null) {
-            this.initMediaPlayer();
-        }
-    }
-
     private void reStart() {
         if (mMediaPlayer.isPlaying()) {
-            mMediaPlayer.pause();
+            mMediaPlayer.stop();
         }
         isPlayed = false;
         this.start();
@@ -98,6 +84,10 @@ public class PlayerService extends Service {
         List<Song> songList = mSongList;
         if (songList == null) {
             return;
+        }
+
+        for (Song song : songList) {
+            Log.i("SONG", song.getTitle());
         }
 
         Bundle bundle = new Bundle();
@@ -163,7 +153,7 @@ public class PlayerService extends Service {
         } else if (Constants.MUSIC_MODE_CIRCLE == mPlayMode
                 || Constants.MUSIC_MODE_SINGLE == mPlayMode) {
             mPlayingIndex--;
-            mPlayingIndex = mPlayingIndex < 0 ? Constants.MUSIC_MODE_COUNT : mPlayingIndex;
+            mPlayingIndex = mPlayingIndex < 0 ? Constants.MUSIC_MODE_COUNT - 1 : mPlayingIndex;
         } else if (Constants.MUSIC_MODE_RANDOM == mPlayMode) {
             mPlayingIndex = (int) (Math.random() * songsCount);
         }
@@ -203,6 +193,14 @@ public class PlayerService extends Service {
 
         public void changePlayMode() {
             PlayerService.this.changePlayMode();
+        }
+
+        public boolean isPlaying() {
+            return mMediaPlayer.isPlaying();
+        }
+
+        public int getPlayMode() {
+            return mPlayMode;
         }
     }
 }

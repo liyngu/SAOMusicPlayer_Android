@@ -6,8 +6,8 @@ import android.widget.FrameLayout;
 
 import com.henu.smp.Constants;
 import com.henu.smp.R;
+import com.henu.smp.background.PlayerService;
 import com.henu.smp.base.BaseActivity;
-import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.User;
 import com.henu.smp.listener.SimpleScreenListener;
 import com.henu.smp.util.IntentUtil;
@@ -41,14 +41,15 @@ public class MainActivity extends BaseActivity {
         background.setOnTouchListener(screenListener);
         background.setLongClickable(true);
 
-        mUser = userService.getLocalUser();
+        mUser = mUserService.getLocal(this);
         if (mUser == null) {
             mUser = new User();
-            Menu menu = new Menu();
-            menu.setId(1);
-            menu.setName("default");
-            userService.save(menu, this);
+            mUserService.save(mUser, this);
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_START);
+        IntentUtil.startService(this, PlayerService.class, bundle);
     }
 
     public void startMenu(int x, int y) {
@@ -64,5 +65,10 @@ public class MainActivity extends BaseActivity {
         if (Constants.ACTION_EXIT == operation) {
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -17,5 +17,12 @@
 
     </com.henu.smp.widget.EmptyDialog>
 
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/choose_list_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </com.henu.smp.widget.EmptyMenu>
+
 
 </FrameLayout>

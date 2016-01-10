@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.henu.smp.R;
 import com.henu.smp.base.BaseButton;
@@ -14,6 +16,9 @@ import com.henu.smp.base.BaseButton;
 public class RectButton extends BaseButton {
     public RectButton(Context context) {
         super(context, null);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        setLayoutParams(params);
         setBackgroundResource(R.drawable.default_rect_btn);
     }
 

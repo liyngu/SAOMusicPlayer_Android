@@ -1,4 +1,4 @@
-package com.henu.smp.entity;
+package com.henu.smp.widget;
 
 /**
  * Created by leen on 10/14/15.

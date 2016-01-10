@@ -6,5 +6,6 @@
         <attr name="dialog_activity" format="string" />
         <attr name="dialog_params" format="string" />
         <attr name="text" format="string" />
+        <attr name="name" format="string" />
     </declare-styleable>
 </resources>

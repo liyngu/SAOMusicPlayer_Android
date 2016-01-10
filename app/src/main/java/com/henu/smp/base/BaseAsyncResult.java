@@ -6,7 +6,7 @@ import android.os.Message;
 /**
  * Created by liyngu on 12/23/15.
  */
-public abstract class BaseAsyncResult<T> {
+public class BaseAsyncResult<T> {
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -25,7 +25,9 @@ public abstract class BaseAsyncResult<T> {
         mHandler.post(mRunnable);
     }
 
-    public abstract void onSuccess(T result);
+    public void onSuccess(T result) {
+
+    }
 
     //    public BaseAsyncResult() {
 //        mHandler = new SafeHandler<T>(this);

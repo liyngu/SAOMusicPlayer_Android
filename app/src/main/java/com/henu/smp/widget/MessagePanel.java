@@ -13,7 +13,6 @@ import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
 import com.henu.smp.activity.MusicControlActivity;
-import com.henu.smp.entity.SmpWidget;
 import com.henu.smp.util.WidgetUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;

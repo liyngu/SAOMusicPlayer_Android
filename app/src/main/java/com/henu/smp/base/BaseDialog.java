@@ -35,7 +35,7 @@ public abstract class BaseDialog extends BaseActivity {
         okBtn = (BaseButton) findViewById(R.id.ok_btn);
     }
 
-    protected void setOnButtonOnclickListener(View.OnClickListener listener) {
+    protected void setOkButtonOnclickListener(View.OnClickListener listener) {
         okBtn.setOnClickListener(listener);
     }
 }

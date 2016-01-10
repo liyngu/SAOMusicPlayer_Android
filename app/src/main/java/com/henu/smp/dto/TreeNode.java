@@ -4,7 +4,7 @@ package com.henu.smp.dto;
  * Created by liyngu on 1/2/16.
  */
 
-import com.henu.smp.entity.SmpWidget;
+import com.henu.smp.widget.SmpWidget;
 
 import java.util.ArrayList;
 import java.util.List;

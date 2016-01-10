@@ -18,17 +18,17 @@ import com.henu.smp.widget.RectButton;
 public class OperationMenu extends BaseMenu {
     private BaseButton mClickedBtn;
     private ViewGroup mParentPanel;
-    private Button addBtn;
-    private Button delBtn;
+    private BaseButton addBtn;
+    private BaseButton delBtn;
 
     public OperationMenu(Context context, AttributeSet attrs) {
         super(context, attrs, R.layout.menu_operation);
-        addBtn = (Button) findViewById(R.id.add_btn);
-        delBtn = (Button) findViewById(R.id.del_btn);
+        addBtn = (BaseButton) findViewById(R.id.add_btn);
+        delBtn = (BaseButton) findViewById(R.id.del_btn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().menuOperation(mClickedBtn, Constants.MENU_OPERATION_ADD);
+                getActivity().showDialog(addBtn.getDialogClassName(), Constants.EMPTY_STRING);
             }
         });
         delBtn.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +61,10 @@ public class OperationMenu extends BaseMenu {
 
     public void setClickedView(BaseButton clickedBtn) {
         this.mClickedBtn = clickedBtn;
+    }
+
+    public BaseButton getClickedBtn() {
+        return mClickedBtn;
     }
 
     public void setParentPanel(ViewGroup ParentPanel) {

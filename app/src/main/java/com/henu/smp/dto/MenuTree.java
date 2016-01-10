@@ -5,7 +5,7 @@ import android.util.Log;
 import com.henu.smp.base.BaseButton;
 import com.henu.smp.base.BaseMenu;
 import com.henu.smp.entity.Menu;
-import com.henu.smp.entity.SmpWidget;
+import com.henu.smp.widget.SmpWidget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,14 +16,12 @@ import java.util.List;
  */
 public class MenuTree {
     private static final String LOG_TAG = MenuTree.class.toString();
-    private static MenuTree menuTree;
     private HashMap<SmpWidget, TreeNode> mDataMap = new HashMap<>();
-    private BaseMenu rootMenu;
+    private BaseMenu mRootMenu;
     private BaseMenu focusMenu;
 
-
     public List<Menu> parseData() {
-        TreeNode rootNode = this.mDataMap.get(this.rootMenu);
+        TreeNode rootNode = mDataMap.get(mRootMenu);
         return this.parseData(rootNode);
     }
 
@@ -36,7 +34,6 @@ public class MenuTree {
         int btnNodesCount = btnNodes.size();
         List<Menu> menuList = new ArrayList<>();
         for (int i = 0; i < btnNodesCount; i++) {
-
             TreeNode btnNode = btnNodes.get(i);
             BaseButton btn = (BaseButton) btnNode.getElem();
             Menu menuData = btn.getData();
@@ -210,13 +207,13 @@ public class MenuTree {
     }
 
     public void setRoot(SmpWidget root) {
-        this.rootMenu = (BaseMenu) root;
+        mRootMenu = (BaseMenu) root;
         TreeNode node = new TreeNode(root);
         mDataMap.put(root, node);
     }
 
     public BaseMenu getRoot() {
-        return rootMenu;
+        return mRootMenu;
     }
 
     public void setFocus(SmpWidget focus) {
