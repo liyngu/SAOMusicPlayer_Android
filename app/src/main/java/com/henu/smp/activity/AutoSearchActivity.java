@@ -14,7 +14,9 @@ import com.henu.smp.base.BaseMenu;
 import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.Song;
 import com.henu.smp.widget.RectButton;
-import com.lidroid.xutils.view.annotation.ViewInject;
+
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,13 @@ import java.util.List;
 /**
  * Created by liyngu on 12/23/15.
  */
+@ContentView(R.layout.activity_auto_search)
 public class AutoSearchActivity extends BaseDialog {
-    private ListView mListView;
     private List<Song> mSongList;
     private Song mSelectedSong;
+
+    @ViewInject(R.id.songs_list_view)
+    private ListView mSongsListView;
 
     @ViewInject(R.id.choose_list_menu)
     private BaseMenu mChooseListMenu;
@@ -45,8 +50,7 @@ public class AutoSearchActivity extends BaseDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auto_search);
-        List<Menu> menuList = mUserService.getMusicMenus(this);
+        List<Menu> menuList = mUserService.getSongListMenus();
         for (Menu menu : menuList) {
             RectButton rb = new RectButton(this);
             rb.setData(menu);
@@ -54,8 +58,8 @@ public class AutoSearchActivity extends BaseDialog {
             rb.setOnClickListener(mChooseMenuListener);
         }
 
-        mListView = (ListView) findViewById(R.id.listView);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mSongsListView = (ListView) findViewById(R.id.listView);
+        mSongsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mSelectedSong = mSongList.get(position);
@@ -79,7 +83,7 @@ public class AutoSearchActivity extends BaseDialog {
                 mSongList = result;
                 ArrayAdapter<Song> adapter = new ArrayAdapter<>(AutoSearchActivity.this,
                         android.R.layout.simple_list_item_1, result);
-                mListView.setAdapter(adapter);
+                mSongsListView.setAdapter(adapter);
             }
         }, this);
     }

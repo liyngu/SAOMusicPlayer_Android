@@ -1,39 +1,35 @@
 package com.henu.smp.entity;
 
-import com.lidroid.xutils.db.annotation.Column;
-import com.lidroid.xutils.db.annotation.Id;
-import com.lidroid.xutils.db.annotation.Table;
-import com.lidroid.xutils.db.annotation.Unique;
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
 
 /**
  * Created by liyngu on 12/23/15.
  */
 @Table(name = "song")
 public class Song {
-
-    @Unique
-    @Id(column = "id")
+    @Column(name = "id", isId = true)
     private int id;
 
-    @Column(column = "song_id")
+    @Column(name = "song_id")
     private int songId;
 
-    @Column(column = "menu_id")
+    @Column(name = "menu_id")
     private int menuId;
 
-    @Column(column = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column(column = "title")
+    @Column(name = "title")
     private String title;
 
-    @Column(column = "path")
+    @Column(name = "path")
     private String path;
 
-    @Column(column = "size")
+    @Column(name = "size")
     private long size;
 
-    @Column(column = "time")
+    @Column(name = "time")
     private long time;
 
     public void setSongId(int songId) {

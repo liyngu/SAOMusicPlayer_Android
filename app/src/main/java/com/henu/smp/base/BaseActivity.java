@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.henu.smp.Constants;
@@ -13,18 +14,21 @@ import com.henu.smp.activity.AlertActivity;
 import com.henu.smp.activity.MainActivity;
 import com.henu.smp.activity.MusicControlActivity;
 import com.henu.smp.activity.ShowSongsActivity;
-import com.henu.smp.service.MusicService;
 import com.henu.smp.service.UserService;
+import com.henu.smp.service.impl.MusicServiceImpl;
+import com.henu.smp.service.impl.UserServiceImpl;
 import com.henu.smp.util.IntentUtil;
-import com.lidroid.xutils.ViewUtils;
+
+import org.xutils.x;
 
 /**
  * Created by liyngu on 10/31/15.
  */
 public abstract class BaseActivity extends Activity {
     protected final String LOG_TAG = this.getClass().getSimpleName();
-    protected static UserService mUserService = new UserService();
-    protected static MusicService mMusicService = new MusicService();
+    protected static UserService mUserService = new UserServiceImpl();
+    protected static MusicServiceImpl mMusicService = new MusicServiceImpl();
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
@@ -34,22 +38,11 @@ public abstract class BaseActivity extends Activity {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     int operation = bundle.getInt(Constants.ACTION_OPERATION);
-                    if (operation == Constants.ACTION_EXIT &&
-                            !this.getClass().isAssignableFrom(MainActivity.class)) {
-                        finish();
-                    } else {
-                        onReceivedData(bundle, operation);
-                    }
+                    onReceivedData(bundle, operation);
                 }
             }
         }
     };
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        ViewUtils.inject(this);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +51,8 @@ public abstract class BaseActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.ACTION_NAME);
         registerReceiver(mReceiver, filter);
+        // 注册控件
+        x.view().inject(this);
     }
 
     protected void onReceivedData(Bundle bundle, int operation) {
@@ -66,8 +61,8 @@ public abstract class BaseActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         unregisterReceiver(mReceiver);
+        super.onDestroy();
     }
 
     public void showDialog(Class<?> cls, String params) {
@@ -101,5 +96,9 @@ public abstract class BaseActivity extends Activity {
 
     protected Bundle getBundle() {
         return getIntent().getExtras();
+    }
+
+    public void onBindService(IBinder binder) {
+
     }
 }

@@ -10,7 +10,7 @@
         android:layout_gravity="center">
 
         <ListView
-            android:id="@+id/listView"
+            android:id="@+id/songs_list_view"
             android:layout_width="120dp"
             android:layout_height="240dp"
             android:layout_gravity="center" />

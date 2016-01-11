@@ -14,9 +14,10 @@ import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
 import com.henu.smp.activity.MusicControlActivity;
 import com.henu.smp.util.WidgetUtil;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
+
+import org.xutils.view.annotation.Event;
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 /**
  * Created by liyngu on 12/12/15.
@@ -33,8 +34,8 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
     @ViewInject(R.id.info_image)
     private ImageView infoImage;
 
-    @OnClick(R.id.info_image)
-    private void showMusicController(View v) {
+    @Event(R.id.info_image)
+    private void showMusicControllerEvent(View v) {
         int x = (int) v.getX();
         int y = (int) v.getY();
         String params = String.valueOf(x) + Constants.CONNECTOR + String.valueOf(y);
@@ -47,7 +48,7 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //通过resource在container中填充组件
         inflater.inflate(R.layout.message_panel, this);
-        ViewUtils.inject(this);
+        x.view().inject(this);
 
         titleTxt = (TextView) findViewById(R.id.title_txt);
         setVisibility(View.INVISIBLE);

@@ -48,6 +48,10 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
         this.dialogClassName = dialogClassName;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public void setDialogParams(String dialogParams) {
         this.dialogParams = dialogParams;
     }

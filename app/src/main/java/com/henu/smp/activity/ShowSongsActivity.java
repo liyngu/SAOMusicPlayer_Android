@@ -17,36 +17,33 @@ import com.henu.smp.base.BaseAsyncResult;
 import com.henu.smp.base.BaseDialog;
 import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.Song;
-import com.henu.smp.service.UserService;
-import com.lidroid.xutils.view.annotation.ViewInject;
+import com.henu.smp.util.IntentUtil;
+
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
 /**
  * Created by liyngu on 12/23/15.
  */
+@ContentView(R.layout.activity_show_songs)
 public class ShowSongsActivity extends BaseDialog {
+    private PlayerService.PlayerBinder mPlayerBinder;
+    private ServiceConnection mServiceConnection;
+    private List<Song> mSongList;
+
     @ViewInject(R.id.listView)
     private ListView mListView;
-    private List<Song> mSongList;
-    private PlayerService.PlayerBinder mPlayerBinder;
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mPlayerBinder = (PlayerService.PlayerBinder) service;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
+    @Override
+    public void onBindService(IBinder binder) {
+        mPlayerBinder = (PlayerService.PlayerBinder) binder;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_songs);
         Bundle bundle = getBundle();
         int menuId = bundle.getInt(Constants.SHOW_SONGS_MENU_ID);
         Menu menu = new Menu();
@@ -60,14 +57,13 @@ public class ShowSongsActivity extends BaseDialog {
             }
         });
 
-        Intent intent = new Intent(this, PlayerService.class);
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+        mServiceConnection = IntentUtil.bindService(this, PlayerService.class);
     }
 
     @Override
     protected void onDestroy() {
+        unbindService(mServiceConnection);
         super.onDestroy();
-        unbindService(serviceConnection);
     }
 
     public void setAdapterData(Menu menu){

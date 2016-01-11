@@ -1,10 +1,8 @@
 package com.henu.smp.entity;
 
 
-import com.lidroid.xutils.db.annotation.Column;
-import com.lidroid.xutils.db.annotation.Id;
-import com.lidroid.xutils.db.annotation.Table;
-import com.lidroid.xutils.db.annotation.Transient;
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
 
 import java.util.List;
 
@@ -13,16 +11,15 @@ import java.util.List;
  */
 @Table(name = "user")
 public class User {
-    @Id(column = "id")
+    @Column(name = "id")
     private int id;
 
-    @Column(column = "username")
+    @Column(name = "username")
     private String username;
 
-    @Column(column = "password")
+    @Column(name = "password")
     private String password;
 
-    @Transient
     private List<Menu> menus;
 
     public void setId(int id) {

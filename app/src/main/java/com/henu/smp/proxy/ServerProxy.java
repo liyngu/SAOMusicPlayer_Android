@@ -68,8 +68,9 @@ public class ServerProxy {
 //            HttpResponse response = httpClient.execute(request);
 //            HttpEntity entity=response.getEntity();
 //            result =EntityUtils.toString(entity);
-            URL url = new URL("http://localhost:8080/SAOMusicPlayer_Api/user/login");
+            URL url = new URL("http://192.168.1.117:8080/SAOMusicPlayer_Api/ws/user/login");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
             try {
                 InputStream is = new BufferedInputStream(urlConnection.getInputStream());
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));

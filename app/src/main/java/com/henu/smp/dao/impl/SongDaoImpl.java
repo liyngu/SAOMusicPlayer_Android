@@ -1,16 +1,16 @@
 package com.henu.smp.dao.impl;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.henu.smp.base.BaseDao;
 import com.henu.smp.dao.SongDao;
 import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.Song;
-import com.henu.smp.proxy.DaoProxyHandler;
-import com.lidroid.xutils.db.sqlite.Selector;
-import com.lidroid.xutils.exception.DbException;
+
+import org.xutils.db.sqlite.WhereBuilder;
+import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +18,12 @@ import java.util.List;
 /**
  * Created by liyngu on 1/7/16.
  */
-public class SongDaoImpl extends DaoProxyHandler implements SongDao {
-    public SongDaoImpl(Context context) {
-        super(context);
-    }
-
+public class SongDaoImpl extends BaseDao implements SongDao {
+    
     @Override
     public void save(Song song) {
         try {
-            getDbUtils().save(song);
+            getDbManager().saveOrUpdate(song);
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -35,7 +32,7 @@ public class SongDaoImpl extends DaoProxyHandler implements SongDao {
     @Override
     public void delete(Song song) {
         try {
-            getDbUtils().delete(song);
+            getDbManager().delete(song);
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -43,21 +40,21 @@ public class SongDaoImpl extends DaoProxyHandler implements SongDao {
 
     @Override
     public void saveAll(List<Song> songList) {
-        for (Song song : songList) {
-            try {
+        try {
+            for (Song song : songList) {
                 if (!this.exist(song)) {
-                    getDbUtils().save(song);
+                    getDbManager().save(song);
                 }
-            } catch (DbException e) {
-                throw new RuntimeException(e.getMessage());
             }
+        } catch (DbException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public void deleteAll() {
         try {
-            getDbUtils().dropTable(Song.class);
+            getDbManager().dropTable(Song.class);
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -65,9 +62,13 @@ public class SongDaoImpl extends DaoProxyHandler implements SongDao {
 
     @Override
     public void deleteAll(Menu menu) {
+        this.deleteAll(menu.getId());
+    }
+
+    @Override
+    public void deleteAll(int menuId) {
         try {
-            getDbUtils().delete(Selector.from(Song.class)
-                    .where("menu_id", "=", menu.getId()));
+            getDbManager().delete(Menu.class, WhereBuilder.b("menu_id", "=", menuId));
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -75,23 +76,28 @@ public class SongDaoImpl extends DaoProxyHandler implements SongDao {
 
     @Override
     public List<Song> getByMenu(Menu menu) {
+        return this.getByMenuId(menu.getId());
+    }
+
+    @Override
+    public List<Song> getByMenuId(int menuId) {
         try {
-            return getDbUtils().findAll(Selector.from(Song.class)
-                    .where("menu_id", "=", menu.getId()));
+            return getDbManager().selector(Song.class)
+                    .where("menu_id", "=", menuId).findAll();
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     private boolean exist(Song song) throws DbException {
-        return getDbUtils().findFirst(Selector.from(Song.class)
+        return getDbManager().selector(Song.class)
                 .where("song_id", "=", song.getSongId())
-                .and("menu_id", "=", song.getMenuId())) != null;
+                .and("menu_id", "=", song.getMenuId()).findFirst() != null;
     }
 
     @Override
-    public List<Song> localGetAll() {
-        ContentResolver contentResolver = getContext().getApplicationContext().getContentResolver();
+    public List<Song> findAll() {
+        ContentResolver contentResolver = getContentResolver();
         List<Song> songs = new ArrayList<>();
         if (contentResolver == null) {
             return songs;

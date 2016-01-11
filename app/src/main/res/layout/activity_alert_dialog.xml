@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.henu.smp.widget.EmptyDialog
-        android:id="@+id/dialog"
+        android:id="@+id/empty_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
@@ -14,6 +14,8 @@
             android:id="@+id/content_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:textColor="@android:color/black" />
     </com.henu.smp.widget.EmptyDialog>
+
 </FrameLayout>

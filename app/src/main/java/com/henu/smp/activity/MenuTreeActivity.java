@@ -1,5 +1,6 @@
 package com.henu.smp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,14 +22,16 @@ import com.henu.smp.widget.EmptyMenu;
 import com.henu.smp.widget.MessagePanel;
 import com.henu.smp.widget.OperationMenu;
 import com.henu.smp.widget.RectButton;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
+
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
 /**
  * Created by liyngu on 12/30/15.
  */
+@ContentView(R.layout.activity_menu_tree)
 public class MenuTreeActivity extends BaseActivity {
     private MenuTree mMenuTree;
     private boolean isDeleteAll = false;
@@ -51,7 +54,7 @@ public class MenuTreeActivity extends BaseActivity {
     @ViewInject(R.id.list_btn)
     private BaseButton listBtn;
 
-    private SimpleScreenListener screenListener = new SimpleScreenListener() {
+    private SimpleScreenListener mScreenListener = new SimpleScreenListener() {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             MenuTreeActivity.this.moveMenu((int) distanceX, (int) distanceY);
@@ -68,16 +71,14 @@ public class MenuTreeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_tree);
-        ViewUtils.inject(this);
-
         this.initMenuTree();
+
         operationMenu.setParentPanel(operationPanel);
         operationMenu.setActivity(this);
-        screenListener.setContext(this);
-        background.setOnTouchListener(screenListener);
+        mScreenListener.setContext(this);
+        background.setOnTouchListener(mScreenListener);
         background.setLongClickable(true);
-        operationPanel.setOnTouchListener(screenListener);
+        operationPanel.setOnTouchListener(mScreenListener);
         operationPanel.setLongClickable(true);
         messagePanel.setActivity(this);
 
@@ -143,7 +144,7 @@ public class MenuTreeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         if (!isDeleteAll) {
-            mUserService.saveMenuTree(mMenuTree, this);
+            mUserService.saveMenuTree(mMenuTree);
         }
         super.onDestroy();
     }
@@ -157,7 +158,7 @@ public class MenuTreeActivity extends BaseActivity {
         BaseButton btnWidget = this.createMenu(btn, menu);
         if (Constants.CREATE_TYPE_MUSIC_LIST == type) {
             menu.setType(Constants.CREATE_TYPE_MUSIC_LIST);
-            mUserService.saveMenu(menu, this);
+            mUserService.saveSongListMenu(menu);
             btnWidget.setDialogClassName("ShowSongsActivity");
             btnWidget.setDialogParams(String.valueOf(menu.getId()));
         }
@@ -171,9 +172,10 @@ public class MenuTreeActivity extends BaseActivity {
         mMenuTree = new MenuTree();
         mMenuTree.setRoot(mainMenu);
         this.findChildMenu(mainMenu);
-        mUserService.saveMenu(listBtn.getData(), this);
+        listBtn.setType(Constants.CREATE_TYPE_MUSIC_LIST);
+        mUserService.saveSongListMenu(listBtn.getData());
 
-        User user = mUserService.getLocal(this);
+        User user = mUserService.getLocal();
         // 目前只有歌曲列表可以动态创建
         if (user.getMenus() != null) {
             for (Menu menu : user.getMenus()) {
@@ -447,6 +449,15 @@ public class MenuTreeActivity extends BaseActivity {
             this.createListMenu(operationMenu.getClickedBtn(), displayName, Constants.CREATE_TYPE_MUSIC_LIST);
         } else if (Constants.ACTION_DELETE_ALL == operation) {
             isDeleteAll = true;
+        } else if (Constants.ACTION_EXIT == operation) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1) {
+            finish();
         }
     }
 }

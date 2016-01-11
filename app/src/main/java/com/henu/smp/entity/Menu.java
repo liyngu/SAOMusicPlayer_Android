@@ -1,11 +1,10 @@
 package com.henu.smp.entity;
 
 import com.google.gson.annotations.SerializedName;
-import com.lidroid.xutils.db.annotation.Column;
-import com.lidroid.xutils.db.annotation.Id;
-import com.lidroid.xutils.db.annotation.Table;
-import com.lidroid.xutils.db.annotation.Transient;
-import com.lidroid.xutils.db.annotation.Unique;
+
+
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
 
 import java.util.List;
 
@@ -17,23 +16,20 @@ import java.util.List;
 @Table(name = "menu")
 public class Menu {
 
-    @Id(column = "id")
+    @Column(name = "id", isId = true)
     private int id;
 
-    @Column(column = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column(column = "text")
+    @Column(name = "text")
     @SerializedName("displayname")
     private String text;
 
-    @Transient
     private int index;
 
-    @Transient
     private List<Menu> menus;
 
-    @Transient
     private int type;
 
     public void setType(int type) {

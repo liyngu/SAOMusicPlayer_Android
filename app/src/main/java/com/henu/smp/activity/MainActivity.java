@@ -11,9 +11,11 @@ import com.henu.smp.base.BaseActivity;
 import com.henu.smp.entity.User;
 import com.henu.smp.listener.SimpleScreenListener;
 import com.henu.smp.util.IntentUtil;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
+
+@ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
     private User mUser = null;
 
@@ -35,16 +37,15 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ViewUtils.inject(this);
+
         screenListener.setContext(this);
         background.setOnTouchListener(screenListener);
         background.setLongClickable(true);
 
-        mUser = mUserService.getLocal(this);
+        mUser = mUserService.getLocal();
         if (mUser == null) {
             mUser = new User();
-            mUserService.save(mUser, this);
+            mUserService.save(mUser);
         }
 
         Bundle bundle = new Bundle();

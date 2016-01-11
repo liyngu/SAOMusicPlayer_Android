@@ -60,4 +60,5 @@ public class Constants {
 
     public static final String DB_NAME = "DB_SAOMusicPlayer";
     public static final String SP_NAME = "SP_SAOMusicPlayer";
+    public static final String SP_ITEM_MENUS = "menus";
 }

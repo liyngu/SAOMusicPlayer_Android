@@ -1,61 +1,47 @@
 package com.henu.smp.service;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.henu.smp.dao.UserDao;
-import com.henu.smp.dao.impl.UserDaoImpl;
 import com.henu.smp.dto.MenuTree;
 import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.User;
-import com.henu.smp.proxy.DaoProxy;
-import com.henu.smp.util.JSONUtil;
 
 import java.util.List;
 
 /**
- * Created by liyngu on 12/20/15.
+ * Created by liyngu on 1/11/16.
+ * 包含用户以及菜单的本地操作以及联网操作
  */
-public class UserService {
-    public void login(String username, String password) {
+public interface UserService {
+    /**
+     * 保存一个歌曲列表，验证菜单是不是歌曲列表菜单
+     * @param menu
+     */
+    void saveSongListMenu(Menu menu);
 
-    }
+    /**
+     * 获得所有的歌曲列表菜单
+     * @return
+     */
+    List<Menu> getSongListMenus();
 
-    public void deleteLocal(Context context) {
-        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
-        userDao.deleteAll();
-    }
+    /**
+     * 保存所有的菜单信息到本地
+     */
+    void saveMenuTree(MenuTree menuTree);
 
-    public void saveMenu(Menu menu, Context context) {
-        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
-        userDao.saveMenu(menu);
-    }
+    /**
+     * 获得本地存储的用户，并且组装用户信息与菜单列表信息
+     * @return
+     */
+    User getLocal();
 
-    public List<Menu> getMusicMenus(Context context) {
-        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
-        return userDao.getMusicMenus();
-    }
+    /**
+     * 保存用户到本地，不保存菜单信息
+     * @param user
+     */
+    void save(User user);
 
-    public void saveMenuTree(MenuTree menuTree, Context context) {
-        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
-        userDao.saveMenuTree(menuTree);
-    }
-
-    public void save(User user, Context context) {
-        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
-        userDao.save(user);
-    }
-
-    public void create(User user) {
-        Log.i("UserService", JSONUtil.parseToString(user));
-    }
-
-    public User getLocal(Context context) {
-        UserDao userDao = DaoProxy.getInstance(UserDaoImpl.class, context);
-        User user = userDao.getLocal();
-        if (user != null) {
-            user.setMenus(userDao.getMenuTreeData());
-        }
-        return user;
-    }
+    /**
+     * 删除本地数据
+     */
+    void deleteAll();
 }
