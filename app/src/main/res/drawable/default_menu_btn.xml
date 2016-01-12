@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/bg_menu_btn_disabled" android:state_enabled="false"/>
-    <item android:drawable="@mipmap/bg_menu_btn_press" android:state_pressed="true" />
-    <item android:drawable="@mipmap/bg_menu_btn_selected" android:state_selected="true"/>
-    <item android:drawable="@mipmap/bg_menu_btn_normal"/>
-</selector>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:smp="http://schemas.android.com/apk/res/com.henu.smp"
+    android:id="@+id/content_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/default_rect_btn"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/transparent">
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/add_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            smp:dialog_activity="CreateListActivity"
+            android:background="@drawable/dialog_ok_btn" />
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/del_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/dialog_cancel_btn"/>
+    </LinearLayout>
+
+
+</LinearLayout>

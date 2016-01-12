@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:smp="http://schemas.android.com/apk/res/com.henu.smp"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/user_info_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.henu.smp.widget.RectButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:name="default"/>
+
+    </com.henu.smp.widget.EmptyMenu>
+
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/user_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.henu.smp.widget.RectButton
+            android:id="@+id/user_info_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:child_menu_id="@id/user_info_menu"
+            smp:name="login"
+            smp:text="登录" />
+
+        <com.henu.smp.widget.RectButton
+            android:id="@+id/download_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:name="userinfo"
+            smp:text="用户信息" />
+
+        <com.henu.smp.widget.RectButton
+            android:id="@+id/local_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:name="history"
+            smp:text="播放历史" />
+
+    </com.henu.smp.widget.EmptyMenu>
+
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/list_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.henu.smp.widget.RectButton
+            android:id="@+id/default_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:dialog_activity="ShowSongsActivity"
+            smp:dialog_params="1"
+            smp:name="lovelist"
+            smp:text="我的收藏" />
+
+    </com.henu.smp.widget.EmptyMenu>
+
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/search_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.henu.smp.widget.RectButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:dialog_activity="AutoSearchActivity"
+            smp:name="local"
+            smp:text="本地歌曲" />
+
+        <com.henu.smp.widget.RectButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:name="default"/>
+
+        <com.henu.smp.widget.RectButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:name="default"/>
+
+        <com.henu.smp.widget.RectButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:name="default"/>
+
+    </com.henu.smp.widget.EmptyMenu>
+
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/setting_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.henu.smp.widget.RectButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:dialog_activity="AlertActivity"
+            smp:dialog_params="确定要清除缓存吗？,1"
+            smp:name="clear"
+            smp:text="清除缓存" />
+
+    </com.henu.smp.widget.EmptyMenu>
+
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/main_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        smp:show_indicator="false">
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/user_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/user_menu_btn"
+            smp:name="user"
+            smp:child_menu_id="@id/user_menu" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/list_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_circle_btn"
+            smp:name="list"
+            smp:child_menu_id="@id/list_menu" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_circle_btn"
+            smp:name="search"
+            smp:child_menu_id="@id/search_menu" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/setting_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_circle_btn"
+            smp:name="setting"
+            smp:child_menu_id="@id/setting_menu" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/exit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_circle_btn"
+            smp:name="exit"
+            smp:dialog_activity="AlertActivity"
+            smp:dialog_params="确定要退出吗？,0" />
+    </com.henu.smp.widget.EmptyMenu>
+
+    <com.henu.smp.widget.MessagePanel
+        android:id="@+id/message_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        smp:dialog_activity="MusicControlActivity" />
+
+    <LinearLayout
+        android:id="@+id/operation_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <com.henu.smp.widget.OperationMenu
+            android:id="@+id/operation_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</FrameLayout>

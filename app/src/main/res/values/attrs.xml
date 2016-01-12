@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="smp">
-        <attr name="child_layout" format="reference" />
+        <attr name="child_menu_id" format="reference" />
+        <attr name="show_indicator" format="boolean" />
+        <attr name="dialog_activity" format="string" />
+        <attr name="dialog_params" format="string" />
+        <attr name="text" format="string" />
+        <attr name="name" format="string" />
     </declare-styleable>
 </resources>
