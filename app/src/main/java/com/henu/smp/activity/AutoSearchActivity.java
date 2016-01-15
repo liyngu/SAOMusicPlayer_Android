@@ -18,7 +18,6 @@ import com.henu.smp.widget.RectButton;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,10 +38,7 @@ public class AutoSearchActivity extends BaseDialog {
         @Override
         public void onClick(View v) {
             BaseButton btn = (BaseButton) v;
-            List<Song> songs = new ArrayList<>();
-            mSelectedSong.setMenuId(btn.getMenuId());
-            songs.add(mSelectedSong);
-            mMusicService.saveSongs(songs, AutoSearchActivity.this);
+            mMusicService.save(mSelectedSong, btn.getMenuId());
             AutoSearchActivity.this.finish();
         }
     };
@@ -73,7 +69,7 @@ public class AutoSearchActivity extends BaseDialog {
         if (mSongList != null) {
             return;
         }
-        mMusicService.getAllLocalSongs(new BaseAsyncResult<List<Song>>() {
+        mMusicService.findAllLocal(new BaseAsyncResult<List<Song>>() {
             @Override
             public void onSuccess(List<Song> result) {
                 if (result == null || result.size() == 0 ){
@@ -84,6 +80,6 @@ public class AutoSearchActivity extends BaseDialog {
                         android.R.layout.simple_list_item_1, result);
                 mSongsListView.setAdapter(adapter);
             }
-        }, this);
+        });
     }
 }

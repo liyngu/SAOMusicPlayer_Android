@@ -1,10 +1,19 @@
 package com.henu.smp.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.NinePatch;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,6 +22,7 @@ import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
 import com.henu.smp.activity.MusicControlActivity;
+import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.util.WidgetUtil;
 
 import org.xutils.view.annotation.Event;
@@ -24,6 +34,9 @@ import org.xutils.x;
  */
 public class MessagePanel extends RelativeLayout implements SmpWidget {
     private MenuTreeActivity mActivity;
+    private Animation mStartAnimation;
+    private View mLastClickedView;
+    private boolean isShowDetail;
 
     public void setActivity(MenuTreeActivity Activity) {
         mActivity = Activity;
@@ -36,9 +49,8 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
 
     @Event(R.id.info_image)
     private void showMusicControllerEvent(View v) {
-        int x = (int) v.getX();
-        int y = (int) v.getY();
-        String params = String.valueOf(x) + Constants.CONNECTOR + String.valueOf(y);
+        Point vp = WidgetUtil.getViewPoint(v);
+        String params = String.valueOf(vp.x) + Constants.CONNECTOR + String.valueOf(vp.y);
         mActivity.showDialog(MusicControlActivity.class, params);
     }
 
@@ -52,6 +64,9 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
 
         titleTxt = (TextView) findViewById(R.id.title_txt);
         setVisibility(View.INVISIBLE);
+
+        isShowDetail = true;
+
     }
 
     public void setTitle(String title) {
@@ -67,7 +82,32 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         int y = vp.y + v.getHeight() / 2;
         // 设置菜单坐标
         this.setLocationByIndicator(x, y);
+        if (this.isShowed()) {
+            mStartAnimation = new TranslateAnimation(0, 0, this.getOffsetY(vp), 0);
+        } else {
+            mStartAnimation = new ScaleAnimation(0, 1, 0, 1, x, y);
+//            if (isShowDetail) {
+//                final Animation showDetailAnimation = new ScaleAnimation(1, 1, 1, 1.3f, x, y);
+//                showDetailAnimation.setDuration(1000);
+//                showDetailAnimation.setFillAfter(true);
+//                mStartAnimation.setAnimationListener(new SimpleAnimationListener() {
+//                    @Override
+//                    public void onAnimationEnd(Animation animation) {
+//                        startAnimation(showDetailAnimation);
+//                    }
+//                });
+//            }
+        }
+        mStartAnimation.setDuration(100);
+        mLastClickedView = v;
+    }
+    private int getOffsetY(Point nowPoint) {
+        Point oldPoint = WidgetUtil.getViewPoint(mLastClickedView);
+        return oldPoint.y - nowPoint.y;
+    }
 
+    public boolean isShowed() {
+        return View.VISIBLE == getVisibility();
     }
 
     public void setLocationByIndicator(int x, int y) {
@@ -77,17 +117,26 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
             // 重新获得高度
             width = getMeasuredWidth();
         }
-        setLocation(x - width, y - 300);
+
+        setLocation(x - width, y - WidgetUtil.getResourceDimen(R.dimen.message_panel_position_offset));
     }
 
-    public void setLocation(int x, int y) {
+    public void setLocation(float x, float y) {
         setX(x);
         setY(y);
     }
 
+    public void setLocation(int x, int y) {
+        this.setLocation((float) x, (float) y);
+    }
+
     public void show() {
+        if (mStartAnimation == null) {
+            return;
+        }
+        startAnimation(mStartAnimation);
         setVisibility(View.VISIBLE);
-        invalidate();
+        mStartAnimation = null;
     }
 
     public void hidden() {

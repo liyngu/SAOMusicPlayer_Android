@@ -10,13 +10,12 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.henu.smp.Constants;
+import com.henu.smp.MyApplication;
 import com.henu.smp.activity.AlertActivity;
-import com.henu.smp.activity.MainActivity;
 import com.henu.smp.activity.MusicControlActivity;
 import com.henu.smp.activity.ShowSongsActivity;
+import com.henu.smp.service.MusicService;
 import com.henu.smp.service.UserService;
-import com.henu.smp.service.impl.MusicServiceImpl;
-import com.henu.smp.service.impl.UserServiceImpl;
 import com.henu.smp.util.IntentUtil;
 
 import org.xutils.x;
@@ -26,8 +25,9 @@ import org.xutils.x;
  */
 public abstract class BaseActivity extends Activity {
     protected final String LOG_TAG = this.getClass().getSimpleName();
-    protected static UserService mUserService = new UserServiceImpl();
-    protected static MusicServiceImpl mMusicService = new MusicServiceImpl();
+    private MyApplication myApplication;
+    protected UserService mUserService;
+    protected MusicService mMusicService;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -53,6 +53,16 @@ public abstract class BaseActivity extends Activity {
         registerReceiver(mReceiver, filter);
         // 注册控件
         x.view().inject(this);
+
+        mUserService = getMyApplication().getUserService();
+        mMusicService = getMyApplication().getMusicService();
+    }
+
+    protected MyApplication getMyApplication() {
+        if (myApplication == null) {
+            myApplication = (MyApplication) getApplication();
+        }
+        return myApplication;
     }
 
     protected void onReceivedData(Bundle bundle, int operation) {

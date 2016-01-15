@@ -22,6 +22,9 @@ public class Menu {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "type")
+    private int type;
+
     @Column(name = "text")
     @SerializedName("displayname")
     private String text;
@@ -30,19 +33,12 @@ public class Menu {
 
     private List<Menu> menus;
 
-    private int type;
-
     public void setType(int type) {
         this.type = type;
     }
 
     public int getType() {
         return type;
-    }
-
-    public Menu() {
-        this.name = "";
-        this.text = "";
     }
 
     public void setId(int id) {

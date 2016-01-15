@@ -3,28 +3,28 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@mipmap/bg_dialog_alert"
-    android:paddingBottom="15dp">
+    android:background="@drawable/bg_dialog_alert"
+    android:paddingBottom="20dp">
+
     <TextView
         android:id="@+id/title_txt"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.henu.smp.widget.CircleButton
-        android:id="@+id/ok_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|bottom"
-        android:layout_marginLeft="30dp"
-        android:background="@drawable/dialog_ok_btn" />
+        android:layout_gravity="top|center_horizontal" />
 
     <com.henu.smp.widget.CircleButton
         android:id="@+id/cancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="40dp"
         android:background="@drawable/dialog_cancel_btn" />
 
+    <com.henu.smp.widget.CircleButton
+        android:id="@+id/ok_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/dialog_ok_btn" />
 </FrameLayout>

@@ -61,22 +61,12 @@ public class SongDaoImpl extends BaseDao implements SongDao {
     }
 
     @Override
-    public void deleteAll(Menu menu) {
-        this.deleteAll(menu.getId());
-    }
-
-    @Override
     public void deleteAll(int menuId) {
         try {
             getDbManager().delete(Menu.class, WhereBuilder.b("menu_id", "=", menuId));
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    @Override
-    public List<Song> getByMenu(Menu menu) {
-        return this.getByMenuId(menu.getId());
     }
 
     @Override

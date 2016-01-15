@@ -6,42 +6,43 @@
 
     <FrameLayout
         android:id="@+id/control_panel"
-        android:layout_width="200dp"
-        android:layout_height="200dp">
+        android:padding="10dp"
+        android:layout_width="@dimen/message_panel_image_size"
+        android:layout_height="@dimen/message_panel_image_size">
 
-        <Button
+        <com.henu.smp.widget.CircleButton
             android:id="@+id/mode_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="顺序" />
+            android:background="@drawable/music_order_btn" />
 
-        <Button
+        <com.henu.smp.widget.CircleButton
             android:id="@+id/start_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="暂停"/>
+            android:background="@drawable/music_start_btn"
+            android:layout_gravity="center" />
 
-        <Button
+        <com.henu.smp.widget.CircleButton
             android:id="@+id/collect_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|top"
-            android:text="收藏" />
+            android:background="@drawable/music_collection_btn"
+            android:layout_gravity="end|top" />
 
-        <Button
+        <com.henu.smp.widget.CircleButton
             android:id="@+id/previous_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|bottom"
-            android:text="上一首" />
+            android:background="@drawable/music_previous_btn" />
 
-        <Button
+        <com.henu.smp.widget.CircleButton
             android:id="@+id/next_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:text="下一首" />
+            android:background="@drawable/music_next_btn" />
     </FrameLayout>
 
 </FrameLayout>

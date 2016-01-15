@@ -40,7 +40,7 @@ public class AlertActivity extends BaseDialog {
             IntentUtil.sendBroadcast(AlertActivity.this, bundle);
         } else if (Constants.ALERT_DIALOG_TYPE_DELETE_ALL == mDialogConfirmType) {
             mUserService.deleteAll();
-            mMusicService.deleteAll(AlertActivity.this);
+            mMusicService.deleteAll();
             bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_DELETE_ALL);
             IntentUtil.sendBroadcast(AlertActivity.this, bundle);
         }

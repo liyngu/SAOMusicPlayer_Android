@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
-            smp:name="default"/>
+            smp:name="default" />
 
     </com.henu.smp.widget.EmptyMenu>
 
@@ -84,19 +84,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
-            smp:name="default"/>
+            smp:name="default" />
 
         <com.henu.smp.widget.RectButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
-            smp:name="default"/>
+            smp:name="default" />
 
         <com.henu.smp.widget.RectButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
-            smp:name="default"/>
+            smp:name="default" />
 
     </com.henu.smp.widget.EmptyMenu>
 
@@ -127,41 +127,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/user_menu_btn"
-            smp:name="user"
-            smp:child_menu_id="@id/user_menu" />
+            smp:child_menu_id="@id/user_menu"
+            smp:name="user" />
 
         <com.henu.smp.widget.CircleButton
             android:id="@+id/list_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/circle_button_margin"
             android:background="@drawable/default_circle_btn"
-            smp:name="list"
-            smp:child_menu_id="@id/list_menu" />
+            smp:child_menu_id="@id/list_menu"
+            smp:name="list" />
 
         <com.henu.smp.widget.CircleButton
             android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/circle_button_margin"
             android:background="@drawable/default_circle_btn"
-            smp:name="search"
-            smp:child_menu_id="@id/search_menu" />
+            smp:child_menu_id="@id/search_menu"
+            smp:name="search" />
 
         <com.henu.smp.widget.CircleButton
             android:id="@+id/setting_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/circle_button_margin"
             android:background="@drawable/default_circle_btn"
-            smp:name="setting"
-            smp:child_menu_id="@id/setting_menu" />
+            smp:child_menu_id="@id/setting_menu"
+            smp:name="setting" />
 
         <com.henu.smp.widget.CircleButton
             android:id="@+id/exit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/circle_button_margin"
             android:background="@drawable/default_circle_btn"
-            smp:name="exit"
             smp:dialog_activity="AlertActivity"
-            smp:dialog_params="确定要退出吗？,0" />
+            smp:dialog_params="确定要退出吗？,0"
+            smp:name="exit" />
     </com.henu.smp.widget.EmptyMenu>
 
     <com.henu.smp.widget.MessagePanel

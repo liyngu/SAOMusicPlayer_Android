@@ -1,5 +1,9 @@
 package com.henu.smp.base;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -12,11 +16,15 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
+import com.henu.smp.widget.CircleButton;
 import com.henu.smp.widget.SmpWidget;
 import com.henu.smp.util.WidgetUtil;
 
@@ -62,6 +70,12 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
         //设置为默认不显示
         setVisibility(View.INVISIBLE);
         //setBackgroundColor(Color.YELLOW);
+
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.circle_menu_start);
+        LayoutAnimationController animationController = new LayoutAnimationController(animation);
+        animationController.setDelay(0.3f);
+        animationController.setOrder(LayoutAnimationController.ORDER_REVERSE);
+        mLayout.setLayoutAnimation(animationController);
     }
 
     public void setLocationByView(View v) {
@@ -89,11 +103,19 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
     }
 
     public void resetStyle() {
-        for (int i = 0; i < ((ViewGroup) getChildAt(0)).getChildCount(); i++) {
-            View item = ((ViewGroup) getChildAt(0)).getChildAt(i);
-            item.setEnabled(true);
-            item.setSelected(false);
+        LinearLayout layout = mLayout;
+        this.setIndicatorVisibility(true);
+        int childCount = layout.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = layout.getChildAt(i);
+            child.setEnabled(true);
+            child.setSelected(false);
         }
+    }
+
+    @Override
+    public void setLayoutAnimationListener(Animation.AnimationListener animationListener) {
+        mLayout.setLayoutAnimationListener(animationListener);
     }
 
     public boolean isShowed() {
@@ -122,8 +144,10 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
     }
 
     public void show() {
+
+
+        mLayout.startLayoutAnimation();
         setVisibility(View.VISIBLE);
-        invalidate();
     }
 
     public void hidden() {
@@ -206,6 +230,7 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
      */
     @Override
     public boolean onLongClick(View v) {
+        mActivity.showMessagePanel(v);
         mActivity.showOperationMenu(v);
         return true;
     }

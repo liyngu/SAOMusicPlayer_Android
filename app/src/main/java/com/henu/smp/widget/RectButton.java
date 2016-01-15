@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.henu.smp.R;
 import com.henu.smp.base.BaseButton;
+import com.henu.smp.util.WidgetUtil;
 
 /**
  * Created by leen on 10/14/15.
@@ -31,7 +32,9 @@ public class RectButton extends BaseButton {
         String text = this.getText();
         Paint paint = new Paint();
         paint.setTextSize(40);
-        canvas.drawText(text, 80, 40, paint);
+        int offsetX = WidgetUtil.getResourceDimen(R.dimen.rect_button_text_offset_x);
+        int offsetY = WidgetUtil.getResourceDimen(R.dimen.rect_button_text_offset_y);
+        canvas.drawText(text, offsetX, offsetY, paint);
         super.onDraw(canvas);
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Table(name = "user")
 public class User {
-    @Column(name = "id")
+    @Column(name = "id", isId = true)
     private int id;
 
     @Column(name = "username")

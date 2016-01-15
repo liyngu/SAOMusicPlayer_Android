@@ -17,8 +17,6 @@ import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
-    private User mUser = null;
-
     @ViewInject(R.id.background)
     private FrameLayout background;
 
@@ -42,10 +40,11 @@ public class MainActivity extends BaseActivity {
         background.setOnTouchListener(screenListener);
         background.setLongClickable(true);
 
-        mUser = mUserService.getLocal();
-        if (mUser == null) {
-            mUser = new User();
-            mUserService.save(mUser);
+        User user = getMyApplication().getUser();
+        if (user == null) {
+            user = new User();
+            mUserService.save(user);
+            getMyApplication().setUser(user);
         }
 
         Bundle bundle = new Bundle();

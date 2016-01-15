@@ -1,7 +1,5 @@
 package com.henu.smp.activity;
 
-import android.content.ComponentName;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -13,7 +11,6 @@ import android.widget.ListView;
 import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.background.PlayerService;
-import com.henu.smp.base.BaseAsyncResult;
 import com.henu.smp.base.BaseDialog;
 import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.Song;
@@ -46,9 +43,7 @@ public class ShowSongsActivity extends BaseDialog {
         super.onCreate(savedInstanceState);
         Bundle bundle = getBundle();
         int menuId = bundle.getInt(Constants.SHOW_SONGS_MENU_ID);
-        Menu menu = new Menu();
-        menu.setId(menuId);
-        this.setAdapterData(menu);
+        this.setAdapterData(menuId);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,18 +61,13 @@ public class ShowSongsActivity extends BaseDialog {
         super.onDestroy();
     }
 
-    public void setAdapterData(Menu menu){
-        mMusicService.getLocalSongs(new BaseAsyncResult<List<Song>>() {
-            @Override
-            public void onSuccess(List<Song> result) {
-                if (result == null || result.size() == 0) {
-                    return;
-                }
-                mSongList = result;
-                ArrayAdapter<Song> adapter = new ArrayAdapter<>(ShowSongsActivity.this,
-                        android.R.layout.simple_list_item_1, result);
-                mListView.setAdapter(adapter);
-            }
-        }, menu, this);
+    public void setAdapterData(int menuId){
+        mSongList = mMusicService.getByMenuId(menuId);
+        if (mSongList == null || mSongList.size() == 0) {
+            return;
+        }
+        ArrayAdapter<Song> adapter = new ArrayAdapter<>(ShowSongsActivity.this,
+                android.R.layout.simple_list_item_1, mSongList);
+        mListView.setAdapter(adapter);
     }
 }

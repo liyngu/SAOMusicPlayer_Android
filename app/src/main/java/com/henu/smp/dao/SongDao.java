@@ -34,23 +34,10 @@ public interface SongDao {
     void deleteAll();
 
     /**
-     * 删除某个菜单存储的歌曲信息
-     * @param menu
-     */
-    void deleteAll(Menu menu);
-
-    /**
      * 通过一个菜单id去删除这个菜单的歌曲信息
      * @param menuId
      */
     void deleteAll(int menuId);
-
-    /**
-     * 通过一个菜单去获得这个菜单里的歌曲列表
-     * @param menu
-     * @return
-     */
-    List<Song> getByMenu(Menu menu);
 
     /**
      * 通过一个菜单id去获得这个菜单里的歌曲列表

@@ -41,6 +41,12 @@ public interface UserService {
     void save(User user);
 
     /**
+     * 保存用户到本地，不保存菜单信息
+     * @param user
+     */
+    void saveAndMergeMenuTree(User user, MenuTree menuTree);
+
+    /**
      * 删除本地数据
      */
     void deleteAll();

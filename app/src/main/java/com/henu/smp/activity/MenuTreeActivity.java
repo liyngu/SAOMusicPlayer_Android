@@ -1,10 +1,13 @@
 package com.henu.smp.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.FrameLayout;
 
 import com.henu.smp.Constants;
@@ -15,6 +18,7 @@ import com.henu.smp.base.BaseMenu;
 import com.henu.smp.dto.MenuTree;
 import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.User;
+import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.listener.SimpleScreenListener;
 import com.henu.smp.util.StringUtil;
 import com.henu.smp.widget.CircleButton;
@@ -87,6 +91,13 @@ public class MenuTreeActivity extends BaseActivity {
         int startPointY = bundle.getInt(Constants.CLICKED_POINT_Y);
         startMenu(startPointX, startPointY);
 
+        mainMenu.setLayoutAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showMenuByView(mainMenu.getLayoutChildAt(0));
+            }
+        });
+
     }
 
     public void moveMenu(int x, int y) {
@@ -112,6 +123,9 @@ public class MenuTreeActivity extends BaseActivity {
                 menu.setLocation(pointX, pointY);
             }
         }
+        float pointX = messagePanel.getX() - x;
+        float pointY = messagePanel.getY() - y;
+        messagePanel.setLocation(pointX, pointY);
         if (operationMenu.isShowed()) {
             //移动操作菜单
             operationMenu.resetLocation();
@@ -144,7 +158,11 @@ public class MenuTreeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         if (!isDeleteAll) {
-            mUserService.saveMenuTree(mMenuTree);
+            User user = getMyApplication().getUser();
+            mUserService.saveAndMergeMenuTree(user, mMenuTree);
+        } else {
+            User user = getMyApplication().getUser();
+            user.setMenus(null);
         }
         super.onDestroy();
     }
@@ -153,14 +171,17 @@ public class MenuTreeActivity extends BaseActivity {
         BaseButton btn = (BaseButton) v;
         Menu menu = new Menu();
         menu.setText(displayName);
-        menu.setType(Constants.CREATE_TYPE_MUSIC_LIST);
         menu.setName("customlist");
         BaseButton btnWidget = this.createMenu(btn, menu);
         if (Constants.CREATE_TYPE_MUSIC_LIST == type) {
             menu.setType(Constants.CREATE_TYPE_MUSIC_LIST);
             mUserService.saveSongListMenu(menu);
+
+            btnWidget.setData(menu);
             btnWidget.setDialogClassName("ShowSongsActivity");
             btnWidget.setDialogParams(String.valueOf(menu.getId()));
+        } else {
+            menu.setType(Constants.CREATE_TYPE_MENU_LIST);
         }
     }
 
@@ -173,19 +194,21 @@ public class MenuTreeActivity extends BaseActivity {
         mMenuTree.setRoot(mainMenu);
         this.findChildMenu(mainMenu);
         listBtn.setType(Constants.CREATE_TYPE_MUSIC_LIST);
-        mUserService.saveSongListMenu(listBtn.getData());
 
-        User user = mUserService.getLocal();
+        User user = getMyApplication().getUser();
         // 目前只有歌曲列表可以动态创建
-        if (user.getMenus() != null) {
-            for (Menu menu : user.getMenus()) {
-                if (menu.getName().equals("list")) {
-                    List<Menu> listMenu = menu.getMenus();
-                    // 不再进行第一个收藏列表的初始化
-                    if (listMenu != null && listMenu.size() != 0) {
-                        listMenu.remove(0);
-                        this.createMenuTree(listMenu, listBtn);
-                    }
+        List<Menu> menuList = user.getMenus();
+        if (menuList == null) {
+            mUserService.saveSongListMenu(listBtn.getData());
+            return;
+        }
+        for (Menu menu : menuList) {
+            if (menu.getName().equals("list")) {
+                List<Menu> listMenu = menu.getMenus();
+                // 不再进行第一个收藏列表的初始化
+                if (listMenu != null && listMenu.size() != 0) {
+                    listMenu.remove(0);
+                    this.createMenuTree(listMenu, listBtn);
                 }
             }
         }
@@ -281,19 +304,26 @@ public class MenuTreeActivity extends BaseActivity {
         MenuTree menuTree = mMenuTree;
         OperationMenu operationMenu = this.operationMenu;
         // 如果没有显示操作菜单，则向上回滚焦点
+        BaseMenu focusMenu = menuTree.getFocus();
         if (!operationMenu.isShowed()) {
-            BaseMenu focusMenu = menuTree.getFocus();
             if (focusMenu != null) {
-                focusMenu.hidden();
                 menuTree.rollbackFocus();
+                BaseMenu currentMenu = menuTree.getFocus();
+                if (currentMenu != mainMenu) {
+                    focusMenu.hidden();
+                }
             }
         } else {
             // 否则取消操作菜单，因为操作菜单不存在焦点之中
             operationMenu.hidden();
+            BaseButton focusBtn = menuTree.getParent(focusMenu);
+            focusMenu.setLocationByView(focusBtn);
+            focusMenu.show();
         }
+
+        // 如果回滚后的焦点为主菜单，则结束activity
         BaseMenu currentFocusMenu = menuTree.getFocus();
-        // 判断焦点是否为空，如果为空则证明没有菜单被打开，即结束activity
-        if (currentFocusMenu != null) {
+        if (currentFocusMenu != null &&currentFocusMenu != mainMenu) {
             currentFocusMenu.resetStyle();
         } else {
             MenuTreeActivity.this.finish();
@@ -320,7 +350,11 @@ public class MenuTreeActivity extends BaseActivity {
             //设置所有按钮的样式与焦点
             setClickedButtonsStyle(btn);
             MenuTree menuTree = mMenuTree;
-            menuTree.setFocus(menuTree.getParent(btn));
+            BaseMenu lastMenu = menuTree.getChild(btn);
+            if (lastMenu == null) {
+                lastMenu = menuTree.getParent(btn);
+            }
+            menuTree.setFocus(lastMenu);
         }
     }
 
@@ -335,11 +369,11 @@ public class MenuTreeActivity extends BaseActivity {
             BaseButton btn = (BaseButton) v;
             String dialogClassName = btn.getDialogClassName();
             // 如果这个按钮和一个菜单关联的话，则不进行显示菜单的操作
+            BaseMenu childMenu = menuTree.getChild(btn);
             if (!StringUtil.isEmpty(dialogClassName)) {
                 showDialog(dialogClassName, btn.getDialogParams());
                 return;
             }
-            BaseMenu childMenu = menuTree.getChild(btn);
             if (childMenu == null) {
                 this.showOperationMenu(btn);
             } else {
@@ -371,6 +405,8 @@ public class MenuTreeActivity extends BaseActivity {
      * @param btn
      */
     public void setClickedButtonsStyle(BaseButton btn) {
+        BaseMenu menu = mMenuTree.getParent(btn);
+        menu.setIndicatorVisibility(false);
         List<BaseButton> buttons = mMenuTree.getSiblings(btn);
         for (BaseButton sibling : buttons) {
             sibling.setSelected(true);
