@@ -44,6 +44,6 @@ public class AlertActivity extends BaseDialog {
             bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_DELETE_ALL);
             IntentUtil.sendBroadcast(AlertActivity.this, bundle);
         }
-        AlertActivity.this.finish();
+        finishActivity();
     }
 }

@@ -22,10 +22,6 @@ import org.xutils.view.annotation.ViewInject;
  */
 public abstract class BaseDialog extends BaseActivity {
     private Animation mEndAnimation;
-
-    @ViewInject(R.id.background)
-    private FrameLayout mBackground;
-
     @ViewInject(R.id.ok_btn)
     private BaseButton mOkBtn;
 
@@ -40,7 +36,7 @@ public abstract class BaseDialog extends BaseActivity {
 
     @Event({R.id.background, R.id.cancel_btn})
     private void finishActivityEvent(View v) {
-        mBackground.startAnimation(mEndAnimation);
+        finishActivity();
     }
 
     @Event(R.id.ok_btn)
@@ -53,15 +49,10 @@ public abstract class BaseDialog extends BaseActivity {
         super.onCreate(savedInstanceState);
         Animation startAnimation = AnimationUtils.loadAnimation(this, R.anim.dialog_start);
         mDialog.startAnimation(startAnimation);
-        mEndAnimation = new TranslateAnimation(0, -1000, 0, -300);
-        mEndAnimation.setDuration(200);
-        mEndAnimation.setFillAfter(true);
-        mEndAnimation.setAnimationListener(new SimpleAnimationListener() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                finish();
-            }
-        });
+    }
+
+    protected EmptyDialog getDialog () {
+        return mDialog;
     }
 
     protected void okBtnOnclickListener(View v) {

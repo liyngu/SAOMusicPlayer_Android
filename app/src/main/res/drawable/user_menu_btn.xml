@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/bg_circle_btn_disabled" android:state_enabled="false"/>
-    <item android:drawable="@mipmap/bg_circle_btn_selected" android:state_selected="true"/>
+    <item android:state_enabled="false">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item>
+                <bitmap android:src="@mipmap/bg_circle_btn_disabled"
+                    android:gravity="center"/>
+            </item>
+            <item>
+                <bitmap android:src="@mipmap/icon_user_press"
+                    android:gravity="center"/>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_selected="true">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item>
+                <bitmap android:src="@mipmap/bg_circle_btn_selected"
+                    android:gravity="center"/>
+            </item>
+            <item>
+                <bitmap android:src="@mipmap/icon_user_normal"
+                    android:gravity="center"/>
+            </item>
+        </layer-list>
+    </item>
     <item android:state_pressed="true">
         <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
             <item>

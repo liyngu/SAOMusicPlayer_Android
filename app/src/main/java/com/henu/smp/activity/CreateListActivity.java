@@ -2,6 +2,8 @@ package com.henu.smp.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 
 import com.henu.smp.Constants;
@@ -9,6 +11,7 @@ import com.henu.smp.R;
 import com.henu.smp.base.BaseButton;
 import com.henu.smp.base.BaseDialog;
 import com.henu.smp.base.BaseMenu;
+import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.util.IntentUtil;
 import com.henu.smp.util.StringUtil;
 
@@ -39,7 +42,19 @@ public class CreateListActivity extends BaseDialog {
         if (StringUtil.isEmpty(text)) {
             return;
         }
-        mCreateOperationMenu.show();
+        final int offsetX = mCreateOperationMenu.getWidth();
+        Animation animation = new TranslateAnimation(0, -offsetX, 0, 0);
+        animation.setDuration(100);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mCreateOperationMenu.setLocationByView(getDialog());
+                mCreateOperationMenu.setX(mCreateOperationMenu.getX() - offsetX);
+                mCreateOperationMenu.show();
+            }
+        });
+        getDialog().startAnimation(animation);
     }
 
     @Override
@@ -48,7 +63,7 @@ public class CreateListActivity extends BaseDialog {
         mCreateMenuListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishActivity();
             }
         });
         mCreateMusicListBtn.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +73,7 @@ public class CreateListActivity extends BaseDialog {
                 bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_CREATE_LIST);
                 bundle.putString(Constants.CREATE_LIST_NAME, mContentInput.getText().toString());
                 IntentUtil.sendBroadcast(CreateListActivity.this, bundle);
-                finish();
+                finishActivity();
             }
         });
 

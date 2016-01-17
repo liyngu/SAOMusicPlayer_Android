@@ -7,7 +7,7 @@
     <dimen name="message_panel_image_size">130dp</dimen>
     <dimen name="message_panel_position_offset">135dp</dimen>
     <dimen name="music_control_anim_offset">65dp</dimen>
-    <dimen name="circle_button_margin">20dp</dimen>
+    <dimen name="circle_button_margin">5dp</dimen>
     <dimen name="rect_button_text_offset_x">40dp</dimen>
     <dimen name="rect_button_text_offset_y">20dp</dimen>
 </resources>

@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.NinePatch;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.support.v4.util.LogWriter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,15 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
     public void setIndicatorVisibility(boolean isShowIndicator) {
         this.isShowIndicator = isShowIndicator;
     }
-
+    public void addLayoutView(View v, int index) {
+        mLayout.addView(v, index);
+    }
+    public int indexOfLayout(View v) {
+        return mLayout.indexOfChild(v);
+    }
+    public void removeLayoutView(View v) {
+        mLayout.removeView(v);
+    }
     public BaseMenu(Context context, int resource) {
         this(context, null, resource);
     }
@@ -144,8 +153,6 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
     }
 
     public void show() {
-
-
         mLayout.startLayoutAnimation();
         setVisibility(View.VISIBLE);
     }
@@ -159,7 +166,13 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
     }
 
     private void addViewToLayout(View view) {
-        this.mLayout.addView(view);
+        if (view instanceof CircleButton) {
+            CircleButton cBtn = (CircleButton) view;
+            mLayout.addView(view, cBtn.getParams());
+            mLayout.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+        } else {
+            mLayout.addView(view);
+        }
         if (view instanceof BaseButton) {
             BaseButton btn = (BaseButton) view;
             btn.setOnClickListener(this);
@@ -174,15 +187,24 @@ public abstract class BaseMenu extends ScrollView implements View.OnClickListene
         if (childCount == 0) {
             return;
         }
-        View childItem = getLayoutChildAt(0);
+        View firstChild = getLayoutChildAt(0);
         int count = MAX_NUM < childCount ? MAX_NUM : childCount;
-        // 设置此子菜单大小
-        int width = childItem.getWidth();
-        int height = childItem.getHeight();
-        if (width == 0 || height == 0) {
-            childItem.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+        int height = 0;
+        for (int i = 0; i < count; i++) {
+            View child = this.getLayoutChildAt(i);
+            if (child.getWidth() == 0 || child.getHeight() == 0) {
+                child.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+            }
+            height += child.getHeight();
+            if (child instanceof CircleButton) {
+                LinearLayout.LayoutParams params = ((CircleButton) child).getParams();
+                if (params != null) {
+                    height += params.topMargin;
+                }
+            }
         }
-        setMeasuredDimension(childItem.getWidth(), childItem.getHeight() * count);
+        int width = firstChild.getWidth();
+        setMeasuredDimension(width, height);
     }
 
     @Override

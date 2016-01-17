@@ -3,10 +3,14 @@ package com.henu.smp.activity;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.henu.smp.Constants;
 import com.henu.smp.R;
@@ -30,8 +34,8 @@ public class ShowSongsActivity extends BaseDialog {
     private ServiceConnection mServiceConnection;
     private List<Song> mSongList;
 
-    @ViewInject(R.id.listView)
-    private ListView mListView;
+    @ViewInject(R.id.songs_list_view)
+    private ListView mSongsListView;
 
     @Override
     public void onBindService(IBinder binder) {
@@ -45,10 +49,11 @@ public class ShowSongsActivity extends BaseDialog {
         int menuId = bundle.getInt(Constants.SHOW_SONGS_MENU_ID);
         this.setAdapterData(menuId);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mSongsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mPlayerBinder.start(position, mSongList);
+                finish();
             }
         });
 
@@ -61,13 +66,59 @@ public class ShowSongsActivity extends BaseDialog {
         super.onDestroy();
     }
 
-    public void setAdapterData(int menuId){
+    public void setAdapterData(int menuId) {
         mSongList = mMusicService.getByMenuId(menuId);
         if (mSongList == null || mSongList.size() == 0) {
             return;
         }
-        ArrayAdapter<Song> adapter = new ArrayAdapter<>(ShowSongsActivity.this,
-                android.R.layout.simple_list_item_1, mSongList);
-        mListView.setAdapter(adapter);
+//        ArrayAdapter<Song> adapter = new ArrayAdapter<>(ShowSongsActivity.this,
+//                android.R.layout.simple_list_item_1, mSongList);
+        ListViewAdapter adapter = new ListViewAdapter(mSongList);
+        mSongsListView.setAdapter(adapter);
+    }
+
+    private class ListViewAdapter extends BaseAdapter {
+        private LayoutInflater mLayoutInflater;
+        private List<Song> mItems;
+
+        public ListViewAdapter(List<Song> items) {
+            mItems = items;
+            mLayoutInflater = LayoutInflater.from(ShowSongsActivity.this);
+        }
+
+        @Override
+        public int getCount() {
+            return mItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mItems.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Item item;
+            if (convertView == null) {
+                item = new Item();
+                convertView = mLayoutInflater.inflate(R.layout.auto_search_list_item, null);
+                item.contentTxt = (TextView) convertView.findViewById(R.id.content_txt);
+                convertView.setTag(item);
+            } else {
+                item = (Item) convertView.getTag();
+            }
+
+            item.contentTxt.setText(mItems.get(position).getTitle());
+            return convertView;
+        }
+
+        private class Item {
+            public TextView contentTxt;
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 
 import com.henu.smp.Constants;
@@ -40,9 +41,6 @@ public class MenuTreeActivity extends BaseActivity {
     private MenuTree mMenuTree;
     private boolean isDeleteAll = false;
 
-    @ViewInject(R.id.background)
-    private FrameLayout background;
-
     @ViewInject(R.id.operation_menu)
     private OperationMenu operationMenu;
 
@@ -57,6 +55,9 @@ public class MenuTreeActivity extends BaseActivity {
 
     @ViewInject(R.id.list_btn)
     private BaseButton listBtn;
+
+    @ViewInject(R.id.user_btn)
+    private BaseButton mUserBtn;
 
     private SimpleScreenListener mScreenListener = new SimpleScreenListener() {
         @Override
@@ -80,6 +81,7 @@ public class MenuTreeActivity extends BaseActivity {
         operationMenu.setParentPanel(operationPanel);
         operationMenu.setActivity(this);
         mScreenListener.setContext(this);
+        FrameLayout background = getBackground();
         background.setOnTouchListener(mScreenListener);
         background.setLongClickable(true);
         operationPanel.setOnTouchListener(mScreenListener);
@@ -94,7 +96,7 @@ public class MenuTreeActivity extends BaseActivity {
         mainMenu.setLayoutAnimationListener(new SimpleAnimationListener() {
             @Override
             public void onAnimationEnd(Animation animation) {
-                showMenuByView(mainMenu.getLayoutChildAt(0));
+                showMenuByView(mUserBtn);
             }
         });
 
@@ -221,6 +223,7 @@ public class MenuTreeActivity extends BaseActivity {
      * 返回值则为创建的这个按钮
      */
     public BaseButton createMenu(BaseButton btn, Menu menuData) {
+        FrameLayout background = getBackground();
         MenuTree menuTree = mMenuTree;
         // 首先获得这个按钮所对应的菜单
         BaseMenu menuWidget = menuTree.getChild(btn);
@@ -326,7 +329,7 @@ public class MenuTreeActivity extends BaseActivity {
         if (currentFocusMenu != null &&currentFocusMenu != mainMenu) {
             currentFocusMenu.resetStyle();
         } else {
-            MenuTreeActivity.this.finish();
+            finishActivity();
         }
 
     }
@@ -394,9 +397,33 @@ public class MenuTreeActivity extends BaseActivity {
         //设置所有按钮的样式
         setClickedButtonsStyle(btn);
         //打开子菜单并设置位置
+
+        final BaseMenu menu = mMenuTree.getParent(btn);
+        //this.moveButtonForIndex(btn, menu.indexOfLayout(btn), 0);
         BaseMenu childMenu = mMenuTree.getChild(btn);
         childMenu.setLocationByView(btn);
-        this.openChildMenu(childMenu);
+        openChildMenu(childMenu);
+
+    }
+    public void moveButtonForIndex(final BaseButton btn, final int index, final int targetIndex) {
+        if (index < targetIndex) {
+            BaseMenu childMenu = mMenuTree.getChild(btn);
+            childMenu.setLocationByView(btn);
+            openChildMenu(childMenu);
+            return;
+        }
+        final BaseMenu menu = mMenuTree.getParent(btn);
+        Animation animation = new TranslateAnimation(0,0,0,0);
+        animation.setDuration(30);
+        animation.setAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                menu.removeLayoutView(btn);
+                menu.addLayoutView(btn, index);
+                moveButtonForIndex(btn, index - 1, targetIndex);
+            }
+        });
+        btn.startAnimation(animation);
     }
 
     /**

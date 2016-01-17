@@ -8,16 +8,24 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 
 import com.henu.smp.Constants;
 import com.henu.smp.MyApplication;
+import com.henu.smp.R;
 import com.henu.smp.activity.AlertActivity;
+import com.henu.smp.activity.CreateListActivity;
 import com.henu.smp.activity.MusicControlActivity;
 import com.henu.smp.activity.ShowSongsActivity;
+import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.service.MusicService;
 import com.henu.smp.service.UserService;
 import com.henu.smp.util.IntentUtil;
 
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 /**
@@ -25,9 +33,13 @@ import org.xutils.x;
  */
 public abstract class BaseActivity extends Activity {
     protected final String LOG_TAG = this.getClass().getSimpleName();
-    private MyApplication myApplication;
+    protected Animation mActivityExitAnimation;
     protected UserService mUserService;
     protected MusicService mMusicService;
+    private MyApplication myApplication;
+
+    @ViewInject(R.id.background)
+    private FrameLayout mBackground;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -44,6 +56,14 @@ public abstract class BaseActivity extends Activity {
         }
     };
 
+    protected FrameLayout getBackground() {
+        return mBackground;
+    }
+
+    protected void finishActivity() {
+        mBackground.startAnimation(mActivityExitAnimation);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +76,15 @@ public abstract class BaseActivity extends Activity {
 
         mUserService = getMyApplication().getUserService();
         mMusicService = getMyApplication().getMusicService();
+
+        mActivityExitAnimation = AnimationUtils.loadAnimation(this, R.anim.activity_exit);
+        mActivityExitAnimation.setFillAfter(true);
+        mActivityExitAnimation.setAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                finish();
+            }
+        });
     }
 
     protected MyApplication getMyApplication() {

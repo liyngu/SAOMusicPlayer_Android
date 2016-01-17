@@ -28,13 +28,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
-            smp:text="添加音乐列表" />
+            smp:text="歌曲列表" />
 
         <com.henu.smp.widget.RectButton
             android:id="@+id/create_menu_list_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
-            smp:text="添加菜单" />
+            smp:text="新建菜单" />
     </com.henu.smp.widget.EmptyMenu>
 </FrameLayout>
