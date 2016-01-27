@@ -104,30 +104,30 @@ public abstract class BaseActivity extends Activity {
         super.onDestroy();
     }
 
-    public void showDialog(Class<?> cls, String params) {
-        Bundle bundle = new Bundle();
-        if (cls.isAssignableFrom(AlertActivity.class)) {
-            String[] paramsStr = params.split(Constants.CONNECTOR);
-            bundle.putString(Constants.ALERT_DIALOG_PARAMS, paramsStr[0]);
-            bundle.putInt(Constants.ALERT_DIALOG_TYPE, Integer.parseInt(paramsStr[1]));
-        } else if (cls.isAssignableFrom(MusicControlActivity.class)) {
-            String[] point = params.split(Constants.CONNECTOR);
-            bundle.putInt(Constants.CLICKED_POINT_X, Integer.parseInt(point[0]));
-            bundle.putInt(Constants.CLICKED_POINT_Y, Integer.parseInt(point[1]));
-        } else if (cls.isAssignableFrom(ShowSongsActivity.class)) {
-            bundle.putInt(Constants.SHOW_SONGS_MENU_ID, Integer.parseInt(params));
-        }
+    public void showDialog(Class<?> cls, Bundle bundle) {
+//        Bundle bundle = new Bundle();
+//        if (cls.isAssignableFrom(AlertActivity.class)) {
+//            String[] paramsStr = params.split(Constants.CONNECTOR);
+//            bundle.putString(Constants.ALERT_DIALOG_PARAMS, paramsStr[0]);
+//            bundle.putInt(Constants.ALERT_DIALOG_TYPE, Integer.parseInt(paramsStr[1]));
+//        } else if (cls.isAssignableFrom(MusicControlActivity.class)) {
+//            String[] point = params.split(Constants.CONNECTOR);
+//            bundle.putInt(Constants.CLICKED_POINT_X, Integer.parseInt(point[0]));
+//            bundle.putInt(Constants.CLICKED_POINT_Y, Integer.parseInt(point[1]));
+//        } else if (cls.isAssignableFrom(ShowSongsActivity.class)) {
+//            bundle.putInt(Constants.SHOW_SONGS_MENU_ID, Integer.parseInt(params));
+//        }
         IntentUtil.startActivity(this, cls, bundle);
     }
 
-    public void showDialog(String dialogClassName, String params) {
+    public void showDialog(String dialogClassName, Bundle bundle) {
         if (!dialogClassName.contains("Activity")) {
             Log.i(LOG_TAG, "class error: incorrect class name, it isn't an activity");
             return;
         }
         try {
             Class<?> cls = Class.forName(Constants.ACTIVITY_PACKAGE + "." + dialogClassName);
-            this.showDialog(cls, params);
+            this.showDialog(cls, bundle);
         } catch (ClassNotFoundException e) {
             Log.e(LOG_TAG, e.getMessage());
         }

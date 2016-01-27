@@ -12,4 +12,16 @@ public class StringUtil {
     public static String format(String str) {
         return str == null ? Constants.EMPTY_STRING : str.trim();
     }
+    public static String formatToTitle(String name) {
+        if (StringUtil.isEmpty(name)) {
+            return Constants.EMPTY_STRING;
+        }
+        StringBuilder title = new StringBuilder();
+        title.append(name.substring(0, 1).toUpperCase());
+        title.append(name.substring(1));
+        if (name.endsWith("list")) {
+            title.replace(title.indexOf("list"), title.length(), " List");
+        }
+        return title.toString();
+    }
 }

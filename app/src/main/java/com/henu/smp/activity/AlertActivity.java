@@ -2,7 +2,6 @@ package com.henu.smp.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.henu.smp.Constants;
@@ -12,7 +11,6 @@ import com.henu.smp.util.IntentUtil;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
-
 /**
  * Created by leen on 10/31/15.
  */

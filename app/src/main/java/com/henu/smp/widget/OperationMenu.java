@@ -28,7 +28,7 @@ public class OperationMenu extends BaseMenu {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().showDialog(addBtn.getDialogClassName(), Constants.EMPTY_STRING);
+                getActivity().showDialog(addBtn.getDialogClassName(), addBtn.getDialogParams());
             }
         });
         delBtn.setOnClickListener(new View.OnClickListener() {

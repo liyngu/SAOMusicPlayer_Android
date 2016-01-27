@@ -13,6 +13,7 @@ public class Constants {
     public static final String ACTIVITY_PACKAGE = "com.henu.smp.activity";
     public static final String ALERT_DIALOG_PARAMS = "ALERT_DIALOG_PARAMS";
     public static final String ALERT_DIALOG_TYPE = "ALERT_DIALOG_TYPE";
+    public static final String MENU_NAME = "MENU_NAME";
     public static final int ALERT_DIALOG_TYPE_EXIT = 0;
     public static final int ALERT_DIALOG_TYPE_DELETE_ALL = 1;
 

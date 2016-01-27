@@ -1,5 +1,6 @@
 package com.henu.smp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
@@ -63,6 +64,12 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onReceivedData(Bundle bundle, int operation) {
         if (Constants.ACTION_EXIT == operation) {
+            Bundle param = new Bundle();
+            param.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_STOP);
+            IntentUtil.startService(this, PlayerService.class, param);
+            Intent intent = new Intent();
+            intent.setClass(this, PlayerService.class);
+            stopService(intent);
             finish();
         }
     }

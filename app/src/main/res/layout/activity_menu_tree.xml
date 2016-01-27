@@ -27,7 +27,7 @@
             android:id="@+id/user_info_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn"
+            android:background="@drawable/user_rect_btn"
             smp:child_menu_id="@id/user_info_menu"
             smp:name="login"
             smp:text="登录" />
@@ -36,7 +36,7 @@
             android:id="@+id/download_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn"
+            android:background="@drawable/user_rect_btn"
             smp:name="userinfo"
             smp:text="用户信息" />
 
@@ -56,12 +56,11 @@
         android:layout_height="wrap_content">
 
         <com.henu.smp.widget.RectButton
-            android:id="@+id/default_list"
+            android:id="@+id/love_list_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
             smp:dialog_activity="ShowSongsActivity"
-            smp:dialog_params="1"
             smp:name="lovelist"
             smp:text="我的收藏" />
 
@@ -108,9 +107,10 @@
         <com.henu.smp.widget.RectButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/default_rect_btn"
+            android:background="@drawable/setting_rect_btn"
             smp:dialog_activity="AlertActivity"
-            smp:dialog_params="确定要清除缓存吗？,1"
+            smp:dialog_params="确定要清除缓存吗？"
+            smp:dialog_type="1"
             smp:name="clear"
             smp:text="清除缓存" />
 
@@ -136,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/circle_button_margin"
-            android:background="@drawable/default_circle_btn"
+            android:background="@drawable/list_menu_btn"
             smp:child_menu_id="@id/list_menu"
             smp:name="list" />
 
@@ -145,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/circle_button_margin"
-            android:background="@drawable/default_circle_btn"
+            android:background="@drawable/search_menu_btn"
             smp:child_menu_id="@id/search_menu"
             smp:name="search" />
 
@@ -154,7 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/circle_button_margin"
-            android:background="@drawable/default_circle_btn"
+            android:background="@drawable/setting_menu_btn"
             smp:child_menu_id="@id/setting_menu"
             smp:name="setting" />
 
@@ -163,9 +163,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/circle_button_margin"
-            android:background="@drawable/default_circle_btn"
+            android:background="@drawable/exit_menu_btn"
             smp:dialog_activity="AlertActivity"
-            smp:dialog_params="确定要退出吗？,0"
+            smp:dialog_params="确定要退出吗？"
+            smp:dialog_type="0"
             smp:name="exit" />
     </com.henu.smp.widget.EmptyMenu>
 

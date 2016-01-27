@@ -36,6 +36,11 @@ public class PlayerService extends Service {
             if (mMediaPlayer == null) {
                 this.initMediaPlayer();
             }
+        } else if (Constants.MUSIC_STOP == operation) {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.stop();
+                mMediaPlayer = null;
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -57,6 +62,9 @@ public class PlayerService extends Service {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 isPlayed = false;
+                if (mMediaPlayer == null) {
+                    return;
+                }
                 if (Constants.MUSIC_MODE_SINGLE == mPlayMode) {
                     start();
                 } else {
@@ -197,6 +205,10 @@ public class PlayerService extends Service {
 
         public boolean isPlaying() {
             return mMediaPlayer.isPlaying();
+        }
+
+        public boolean isPlayed() {
+            return PlayerService.this.isPlayed;
         }
 
         public int getPlayMode() {

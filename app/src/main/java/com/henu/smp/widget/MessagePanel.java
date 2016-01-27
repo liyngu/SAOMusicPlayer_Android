@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.NinePatch;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +25,8 @@ import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
 import com.henu.smp.activity.MusicControlActivity;
+import com.henu.smp.background.PlayerService;
+import com.henu.smp.base.BaseButton;
 import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.util.WidgetUtil;
 
@@ -36,10 +41,15 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
     private MenuTreeActivity mActivity;
     private Animation mStartAnimation;
     private View mLastClickedView;
-    private boolean isShowDetail;
+    private PlayerService.PlayerBinder mPlayerBinder;
+    private boolean isShowDetail = false;
 
     public void setActivity(MenuTreeActivity Activity) {
         mActivity = Activity;
+    }
+
+    public void setPlayerBinder(PlayerService.PlayerBinder playerBinder) {
+        mPlayerBinder = playerBinder;
     }
 
     private TextView titleTxt;
@@ -49,9 +59,14 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
 
     @Event(R.id.info_image)
     private void showMusicControllerEvent(View v) {
+        if (!isShowDetail) {
+            return;
+        }
         Point vp = WidgetUtil.getViewPoint(v);
-        String params = String.valueOf(vp.x) + Constants.CONNECTOR + String.valueOf(vp.y);
-        mActivity.showDialog(MusicControlActivity.class, params);
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.CLICKED_POINT_X, vp.x);
+        bundle.putInt(Constants.CLICKED_POINT_Y, vp.y);
+        mActivity.showDialog(MusicControlActivity.class, bundle);
     }
 
     public MessagePanel(Context context, AttributeSet attrs) {
@@ -65,8 +80,11 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         titleTxt = (TextView) findViewById(R.id.title_txt);
         setVisibility(View.INVISIBLE);
 
-        isShowDetail = true;
+    }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, MeasureSpec.UNSPECIFIED);
     }
 
     public void setTitle(String title) {
@@ -85,6 +103,9 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         if (this.isShowed()) {
             mStartAnimation = new TranslateAnimation(0, 0, this.getOffsetY(vp), 0);
         } else {
+            if (mPlayerBinder != null) {
+                isShowDetail = mPlayerBinder.isPlayed();
+            }
             mStartAnimation = new ScaleAnimation(0, 1, 0, 1, x, y);
 //            if (isShowDetail) {
 //                final Animation showDetailAnimation = new ScaleAnimation(1, 1, 1, 1.3f, x, y);

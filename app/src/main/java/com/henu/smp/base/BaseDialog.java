@@ -9,8 +9,10 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.listener.SimpleAnimationListener;
+import com.henu.smp.util.StringUtil;
 import com.henu.smp.widget.EmptyDialog;
 
 import org.xutils.view.annotation.Event;
@@ -47,6 +49,9 @@ public abstract class BaseDialog extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getBundle();
+        String name = bundle.getString(Constants.MENU_NAME);
+        mTitleTxt.setText(StringUtil.formatToTitle(name));
         Animation startAnimation = AnimationUtils.loadAnimation(this, R.anim.dialog_start);
         mDialog.startAnimation(startAnimation);
     }

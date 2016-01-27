@@ -3,7 +3,9 @@ package com.henu.smp.activity;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.FrameLayout;
 
 import com.henu.smp.Constants;
 import com.henu.smp.R;
+import com.henu.smp.background.PlayerService;
 import com.henu.smp.base.BaseActivity;
 import com.henu.smp.base.BaseButton;
 import com.henu.smp.base.BaseMenu;
@@ -21,6 +24,7 @@ import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.User;
 import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.listener.SimpleScreenListener;
+import com.henu.smp.util.IntentUtil;
 import com.henu.smp.util.StringUtil;
 import com.henu.smp.widget.CircleButton;
 import com.henu.smp.widget.EmptyMenu;
@@ -53,11 +57,16 @@ public class MenuTreeActivity extends BaseActivity {
     @ViewInject(R.id.main_menu)
     private BaseMenu mainMenu;
 
+    @ViewInject(R.id.love_list_btn)
+    private BaseButton mLoveListBtn;
+
     @ViewInject(R.id.list_btn)
-    private BaseButton listBtn;
+    private BaseButton mistBtn;
 
     @ViewInject(R.id.user_btn)
     private BaseButton mUserBtn;
+
+    private ServiceConnection mServiceConnection;
 
     private SimpleScreenListener mScreenListener = new SimpleScreenListener() {
         @Override
@@ -72,6 +81,11 @@ public class MenuTreeActivity extends BaseActivity {
             return true;
         }
     };
+
+    @Override
+    public void onBindService(IBinder binder) {
+        messagePanel.setPlayerBinder((PlayerService.PlayerBinder) binder);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +113,8 @@ public class MenuTreeActivity extends BaseActivity {
                 showMenuByView(mUserBtn);
             }
         });
+
+        mServiceConnection = IntentUtil.bindService(this, PlayerService.class);
 
     }
 
@@ -158,6 +174,18 @@ public class MenuTreeActivity extends BaseActivity {
     }
 
     @Override
+    protected void onPause() {
+        if (!isDeleteAll) {
+            User user = getMyApplication().getUser();
+            mUserService.saveAndMergeMenuTree(user, mMenuTree);
+        } else {
+            User user = getMyApplication().getUser();
+            user.setMenus(null);
+        }
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         if (!isDeleteAll) {
             User user = getMyApplication().getUser();
@@ -166,6 +194,7 @@ public class MenuTreeActivity extends BaseActivity {
             User user = getMyApplication().getUser();
             user.setMenus(null);
         }
+        unbindService(mServiceConnection);
         super.onDestroy();
     }
 
@@ -195,13 +224,18 @@ public class MenuTreeActivity extends BaseActivity {
         mMenuTree = new MenuTree();
         mMenuTree.setRoot(mainMenu);
         this.findChildMenu(mainMenu);
-        listBtn.setType(Constants.CREATE_TYPE_MUSIC_LIST);
+        mLoveListBtn.setType(Constants.CREATE_TYPE_MUSIC_LIST);
 
         User user = getMyApplication().getUser();
         // 目前只有歌曲列表可以动态创建
         List<Menu> menuList = user.getMenus();
         if (menuList == null) {
-            mUserService.saveSongListMenu(listBtn.getData());
+            BaseButton btnWidget = mLoveListBtn;
+            Menu menu = btnWidget.getData();
+            mUserService.saveSongListMenu(menu);
+            btnWidget.setData(menu);
+            btnWidget.setDialogClassName("ShowSongsActivity");
+            btnWidget.setDialogParams(String.valueOf(menu.getId()));
             return;
         }
         for (Menu menu : menuList) {
@@ -210,7 +244,7 @@ public class MenuTreeActivity extends BaseActivity {
                 // 不再进行第一个收藏列表的初始化
                 if (listMenu != null && listMenu.size() != 0) {
                     listMenu.remove(0);
-                    this.createMenuTree(listMenu, listBtn);
+                    this.createMenuTree(listMenu, mistBtn);
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.henu.smp.base;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 
@@ -18,10 +19,11 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
     protected final String LOG_TAG = this.getClass().getSimpleName();
     private int index;
     private int type;
-    private int id;
+    private int mId;
     private String name;
     private String text;
     private int childMenuId;
+    private int mDialogType;
     private String dialogClassName;
     private String dialogParams;
 
@@ -37,6 +39,7 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
         this.dialogClassName = StringUtil.format(dialogClassName);
         String dialogParams = typedArray.getString(R.styleable.smp_dialog_params);
         this.dialogParams = StringUtil.format(dialogParams);
+        mDialogType = typedArray.getInt(R.styleable.smp_dialog_type, Constants.EMPTY_INTEGER);
         typedArray.recycle();
 
         if (StringUtil.isEmpty(text)) {
@@ -56,8 +59,15 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
         this.dialogParams = dialogParams;
     }
 
-    public String getDialogParams() {
-        return dialogParams;
+    public Bundle getDialogParams() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.MENU_NAME, name);
+        bundle.putString(Constants.ALERT_DIALOG_PARAMS, dialogParams);
+        bundle.putInt(Constants.ALERT_DIALOG_TYPE, mDialogType);
+        if (mId != Constants.EMPTY_MENU_ID) {
+            bundle.putInt(Constants.SHOW_SONGS_MENU_ID, mId);
+        }
+        return bundle;
     }
 
     public String getDialogClassName() {
@@ -90,7 +100,7 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
     }
 
     public int getMenuId() {
-        return id;
+        return mId;
     }
 
     public Menu getData() {
@@ -99,7 +109,7 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
         menu.setText(text);
         menu.setIndex(index);
         menu.setType(type);
-        menu.setId(id);
+        menu.setId(mId);
         return menu;
     }
 
@@ -108,7 +118,7 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
         this.text = menu.getText();
         this.index = menu.getIndex();
         this.type = menu.getType();
-        this.id = menu.getId();
+        this.mId = menu.getId();
     }
 
     public int getChildMenuId() {
