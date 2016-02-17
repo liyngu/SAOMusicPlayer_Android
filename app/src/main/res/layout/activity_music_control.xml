@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/control_panel"
+        android:padding="10dp"
+        android:layout_width="@dimen/message_panel_image_size"
+        android:layout_height="@dimen/message_panel_image_size">
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/mode_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/music_order_btn" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/start_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/music_start_btn"
+            android:layout_gravity="center" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/collect_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/music_collection_btn"
+            android:layout_gravity="end|top" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/previous_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:background="@drawable/music_previous_btn" />
+
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:background="@drawable/music_next_btn" />
+    </FrameLayout>
+
+</FrameLayout>

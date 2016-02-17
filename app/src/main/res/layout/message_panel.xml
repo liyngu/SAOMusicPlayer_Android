@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/message_panel_image_height"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_message_panel" />
+
+    <ImageView
+        android:id="@+id/info_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_txt"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/message_panel_image_offset"
+        android:src="@mipmap/bg_panel_info" />
+
+    <TextView
+        android:id="@+id/title_txt"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_alignEnd="@+id/info_image"
+        android:layout_alignRight="@+id/info_image"
+        android:gravity="center"
+        android:text="title" />
+
+</RelativeLayout>

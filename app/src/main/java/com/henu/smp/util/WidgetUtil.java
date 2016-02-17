@@ -1,10 +1,13 @@
 package com.henu.smp.util;
 
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.view.View;
 
+import org.xutils.x;
+
 /**
- * Created by leen on 10/31/15.
+ * Created by liyngu on 10/31/15.
  */
 public class WidgetUtil {
     public static Point getViewPoint(View v) {
@@ -12,5 +15,10 @@ public class WidgetUtil {
         v.getLocationOnScreen(location);
         Point p = new Point(location[0], location[1]);
         return p;
+    }
+
+    public static int getResourceDimen(int resource) {
+        Resources rs = x.app().getResources();
+        return rs.getDimensionPixelSize(resource);
     }
 }

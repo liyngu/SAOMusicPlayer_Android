@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:smp="http://schemas.android.com/apk/res/com.henu.smp"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.henu.smp.widget.EmptyDialog
+        android:id="@+id/dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <EditText
+            android:id="@+id/content_input"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </com.henu.smp.widget.EmptyDialog>
+
+    <com.henu.smp.widget.EmptyMenu
+        android:id="@+id/create_operation_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.henu.smp.widget.RectButton
+            android:id="@+id/create_music_list_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:text="歌曲列表" />
+
+        <com.henu.smp.widget.RectButton
+            android:id="@+id/create_menu_list_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_rect_btn"
+            smp:text="新建菜单" />
+    </com.henu.smp.widget.EmptyMenu>
+</FrameLayout>

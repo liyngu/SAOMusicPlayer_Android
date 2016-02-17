@@ -1,57 +1,143 @@
 package com.henu.smp.base;
 
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 
-import com.henu.smp.model.SmpForest;
-import com.henu.smp.widget.base.BaseButton;
+import com.henu.smp.Constants;
+import com.henu.smp.MyApplication;
+import com.henu.smp.R;
+import com.henu.smp.activity.AlertActivity;
+import com.henu.smp.activity.CreateListActivity;
+import com.henu.smp.activity.MusicControlActivity;
+import com.henu.smp.activity.ShowSongsActivity;
+import com.henu.smp.listener.SimpleAnimationListener;
+import com.henu.smp.service.MusicService;
+import com.henu.smp.service.UserService;
+import com.henu.smp.util.IntentUtil;
 
-import java.util.List;
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 /**
  * Created by liyngu on 10/31/15.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends Activity {
     protected final String LOG_TAG = this.getClass().getSimpleName();
-    protected SmpForest<SmpWidget> menuForest;
+    protected Animation mActivityExitAnimation;
+    protected UserService mUserService;
+    protected MusicService mMusicService;
+    private MyApplication myApplication;
 
-    protected void setWidgetForest(SmpForest<SmpWidget> widgetForest) {
-        this.menuForest = widgetForest;
-    }
+    @ViewInject(R.id.background)
+    private FrameLayout mBackground;
 
-    public SmpForest<SmpWidget> getWidgetForest() {
-        return menuForest;
-    }
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
-    /**
-     * 关闭所有已经打开的菜单
-     */
-    public void closeAllMenu() {
-        BaseContainer rootContainer = (BaseContainer) menuForest.getRoot();
-        closeMenu(rootContainer);
-        rootContainer.hidden();
-        rootContainer.resetStyle();
-    }
-
-    /**
-     * 通过一个Container关闭已经打开的菜单，并重置菜单的style
-     * 关闭位于这个Container级别下的所有的菜单，不包括这个Container
-     * @param root 为 Container
-     */
-    public void closeMenu(BaseContainer root) {
-        List<BaseContainer> containers = menuForest.getChildsByClass(root, BaseContainer.class);
-        for (BaseContainer container : containers) {
-            if (isOpenedMenu(container)) {
-                container.hidden();
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Constants.ACTION_NAME)) {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    int operation = bundle.getInt(Constants.ACTION_OPERATION);
+                    onReceivedData(bundle, operation);
+                }
             }
         }
+    };
+
+    protected FrameLayout getBackground() {
+        return mBackground;
     }
-    /**
-     * 判断这个菜单是否已经被打开
-     * @param menu
-     * @return 如果被打开，返回true
-     */
-    public boolean isOpenedMenu(BaseContainer menu) {
-        return menu.getVisibility() == View.VISIBLE;
+
+    protected void finishActivity() {
+        mBackground.startAnimation(mActivityExitAnimation);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册广播
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_NAME);
+        registerReceiver(mReceiver, filter);
+        // 注册控件
+        x.view().inject(this);
+
+        mUserService = getMyApplication().getUserService();
+        mMusicService = getMyApplication().getMusicService();
+
+        mActivityExitAnimation = AnimationUtils.loadAnimation(this, R.anim.activity_exit);
+        mActivityExitAnimation.setFillAfter(true);
+        mActivityExitAnimation.setAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                finish();
+            }
+        });
+    }
+
+    protected MyApplication getMyApplication() {
+        if (myApplication == null) {
+            myApplication = (MyApplication) getApplication();
+        }
+        return myApplication;
+    }
+
+    protected void onReceivedData(Bundle bundle, int operation) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mReceiver);
+        super.onDestroy();
+    }
+
+    public void showDialog(Class<?> cls, Bundle bundle) {
+//        Bundle bundle = new Bundle();
+//        if (cls.isAssignableFrom(AlertActivity.class)) {
+//            String[] paramsStr = params.split(Constants.CONNECTOR);
+//            bundle.putString(Constants.ALERT_DIALOG_PARAMS, paramsStr[0]);
+//            bundle.putInt(Constants.ALERT_DIALOG_TYPE, Integer.parseInt(paramsStr[1]));
+//        } else if (cls.isAssignableFrom(MusicControlActivity.class)) {
+//            String[] point = params.split(Constants.CONNECTOR);
+//            bundle.putInt(Constants.CLICKED_POINT_X, Integer.parseInt(point[0]));
+//            bundle.putInt(Constants.CLICKED_POINT_Y, Integer.parseInt(point[1]));
+//        } else if (cls.isAssignableFrom(ShowSongsActivity.class)) {
+//            bundle.putInt(Constants.SHOW_SONGS_MENU_ID, Integer.parseInt(params));
+//        }
+        IntentUtil.startActivity(this, cls, bundle);
+    }
+
+    public void showDialog(String dialogClassName, Bundle bundle) {
+        if (!dialogClassName.contains("Activity")) {
+            Log.i(LOG_TAG, "class error: incorrect class name, it isn't an activity");
+            return;
+        }
+        try {
+            Class<?> cls = Class.forName(Constants.ACTIVITY_PACKAGE + "." + dialogClassName);
+            this.showDialog(cls, bundle);
+        } catch (ClassNotFoundException e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
+    }
+
+    protected Bundle getBundle() {
+        return getIntent().getExtras();
+    }
+
+    public void onBindService(IBinder binder) {
+
     }
 }
