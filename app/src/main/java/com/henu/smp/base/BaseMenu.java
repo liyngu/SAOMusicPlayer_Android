@@ -1,9 +1,5 @@
 package com.henu.smp.base;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -12,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.NinePatch;
 import android.graphics.Point;
 import android.graphics.RectF;
-import android.support.v4.util.LogWriter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +20,9 @@ import android.widget.ScrollView;
 
 import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
+import com.henu.smp.util.WidgetUtil;
 import com.henu.smp.widget.CircleButton;
 import com.henu.smp.widget.SmpWidget;
-import com.henu.smp.util.WidgetUtil;
 
 /**
  * Created by liyngu on 10/14/15.

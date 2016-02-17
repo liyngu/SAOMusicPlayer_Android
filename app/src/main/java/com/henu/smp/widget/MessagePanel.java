@@ -59,6 +59,9 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
 
     @Event(R.id.info_image)
     private void showMusicControllerEvent(View v) {
+        if (mPlayerBinder != null) {
+            isShowDetail = mPlayerBinder.isPlayed();
+        }
         if (!isShowDetail) {
             return;
         }
@@ -103,9 +106,6 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         if (this.isShowed()) {
             mStartAnimation = new TranslateAnimation(0, 0, this.getOffsetY(vp), 0);
         } else {
-            if (mPlayerBinder != null) {
-                isShowDetail = mPlayerBinder.isPlayed();
-            }
             mStartAnimation = new ScaleAnimation(0, 1, 0, 1, x, y);
 //            if (isShowDetail) {
 //                final Animation showDetailAnimation = new ScaleAnimation(1, 1, 1, 1.3f, x, y);

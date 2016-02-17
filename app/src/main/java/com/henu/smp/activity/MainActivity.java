@@ -2,6 +2,7 @@ package com.henu.smp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
@@ -10,8 +11,11 @@ import com.henu.smp.R;
 import com.henu.smp.background.PlayerService;
 import com.henu.smp.base.BaseActivity;
 import com.henu.smp.entity.User;
+import com.henu.smp.listener.SimpleHttpCallBack;
 import com.henu.smp.listener.SimpleScreenListener;
+import com.henu.smp.util.HttpUtil;
 import com.henu.smp.util.IntentUtil;
+import com.henu.smp.util.JSONUtil;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -47,6 +51,18 @@ public class MainActivity extends BaseActivity {
             mUserService.save(user);
             getMyApplication().setUser(user);
         }
+        user.setId(133);
+        user.setPassword("1121");
+        user.setUsername("hhhhh");
+        String jsonStr = JSONUtil.parseToString(user);
+        Log.i("user", jsonStr);
+        HttpUtil.doGet("user/1", new SimpleHttpCallBack<String>(){
+            @Override
+            public void onSuccess(String s) {
+                Log.i("eeee", s);
+            }
+        });
+        //HttpUtil.doPost("user", jsonStr);
 
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_START);
@@ -57,13 +73,26 @@ public class MainActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.CLICKED_POINT_X, x);
         bundle.putInt(Constants.CLICKED_POINT_Y, y);
-        IntentUtil.startActivity(this, MenuTreeActivity.class, bundle);
+        IntentUtil.startActivityForResult(this, MenuTreeActivity.class, bundle);
     }
 
 
     @Override
     public void onReceivedData(Bundle bundle, int operation) {
         if (Constants.ACTION_EXIT == operation) {
+//            Bundle param = new Bundle();
+//            param.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_STOP);
+//            IntentUtil.startService(this, PlayerService.class, param);
+//            Intent intent = new Intent();
+//            intent.setClass(this, PlayerService.class);
+//            stopService(intent);
+//            finish();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (RESULT_OK == resultCode) {
             Bundle param = new Bundle();
             param.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_STOP);
             IntentUtil.startService(this, PlayerService.class, param);

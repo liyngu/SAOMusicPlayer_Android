@@ -4,6 +4,8 @@ package com.henu.smp;
  * Created by leen on 10/31/15.
  */
 public class Constants {
+    public static final String SERVICE_HOST = "http://192.168.1.109:8080/sao-player-api/ws/";
+
     public static final int EMPTY_MENU_ID = 0;
     public static final int EMPTY_INTEGER = 0;
     public static final int EMPTY_OPERATION = 0;

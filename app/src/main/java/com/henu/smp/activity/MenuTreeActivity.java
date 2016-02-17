@@ -354,8 +354,9 @@ public class MenuTreeActivity extends BaseActivity {
             // 否则取消操作菜单，因为操作菜单不存在焦点之中
             operationMenu.hidden();
             BaseButton focusBtn = menuTree.getParent(focusMenu);
-            focusMenu.setLocationByView(focusBtn);
-            focusMenu.show();
+            this.showMenuByView(focusBtn);
+//            focusMenu.setLocationByView(focusBtn);
+//            focusMenu.show();
         }
 
         // 如果回滚后的焦点为主菜单，则结束activity
@@ -427,14 +428,20 @@ public class MenuTreeActivity extends BaseActivity {
      *
      * @param btn
      */
-    public void openChildMenu(BaseButton btn) {
+    public void openChildMenu(final BaseButton btn) {
         //设置所有按钮的样式
         setClickedButtonsStyle(btn);
         //打开子菜单并设置位置
 
         final BaseMenu menu = mMenuTree.getParent(btn);
         //this.moveButtonForIndex(btn, menu.indexOfLayout(btn), 0);
-        BaseMenu childMenu = mMenuTree.getChild(btn);
+        final BaseMenu childMenu = mMenuTree.getChild(btn);
+        childMenu.setLayoutAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                childMenu.setLocationByView(btn);
+            }
+        });
         childMenu.setLocationByView(btn);
         openChildMenu(childMenu);
 
@@ -544,16 +551,11 @@ public class MenuTreeActivity extends BaseActivity {
         } else if (Constants.ACTION_CREATE_LIST == operation) {
             String displayName = bundle.getString(Constants.CREATE_LIST_NAME);
             this.createListMenu(operationMenu.getClickedBtn(), displayName, Constants.CREATE_TYPE_MUSIC_LIST);
+            this.undoOperation();
         } else if (Constants.ACTION_DELETE_ALL == operation) {
             isDeleteAll = true;
         } else if (Constants.ACTION_EXIT == operation) {
-            finish();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 1) {
+            setResult(RESULT_OK);
             finish();
         }
     }
