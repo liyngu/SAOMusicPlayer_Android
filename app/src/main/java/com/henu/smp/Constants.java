@@ -12,6 +12,7 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String CONNECTOR = ",";
 
+
     public static final String ACTIVITY_PACKAGE = "com.henu.smp.activity";
     public static final String ALERT_DIALOG_PARAMS = "ALERT_DIALOG_PARAMS";
     public static final String ALERT_DIALOG_TYPE = "ALERT_DIALOG_TYPE";
@@ -28,7 +29,9 @@ public class Constants {
     public static final int MENU_OPERATION_UPPER = 3;
     public static final int MENU_OPERATION_LOWER = 4;
 
-    public static final String[] PLAY_MODE_MAPPING = new String[] {"顺序", "单曲", "循环", "随机"};
+    public static final int[] PLAY_MODE_MAPPING = new int[] {
+            R.drawable.music_order_btn, R.drawable.music_single_btn,
+            R.drawable.music_cycle_btn, R.drawable.music_random_btn};
     public static final String MUSIC_PLAY_MODE = "MUSIC_PLAY_MODE";
     public static final int MUSIC_MODE_ORDER = 0;
     public static final int MUSIC_MODE_SINGLE = 1;
@@ -44,6 +47,9 @@ public class Constants {
     public static final int MUSIC_PAUSE = 3;
     public static final int MUSIC_CHANGE = 4;
     public static final int MUSIC_COLLECTE = 5;
+    public static final String PLAYED_MUSIC_NAME = "PLAYED_MUSIC_NAME";
+    public static final String MUSIC_PROGRESS_PERCENT = "MUSIC_PROGRESS_PERCENT";
+    public static final String MUSIC_DISPLAY_TIME = "MUSIC_DISPLAY_TIME";
 
     public static final String ACTION_NAME = "com.henu.smp.ACTION";
     public static final String ACTION_OPERATION = "ACTION_OPERATION";
@@ -51,6 +57,7 @@ public class Constants {
     public static final int ACTION_PAUSED = 2;
     public static final int ACTION_STOPPED = 3;
     public static final int ACTION_MODE_CHANGED = 4;
+    public static final int ACTION_PROGRESS_CHANGED = 5;
     public static final int ACTION_EXIT = 10;
     public static final int ACTION_CREATE_LIST = 11;
     public static final int ACTION_DELETE_ALL = 12;

@@ -361,7 +361,7 @@ public class MenuTreeActivity extends BaseActivity {
 
         // 如果回滚后的焦点为主菜单，则结束activity
         BaseMenu currentFocusMenu = menuTree.getFocus();
-        if (currentFocusMenu != null &&currentFocusMenu != mainMenu) {
+        if (currentFocusMenu != null && currentFocusMenu != mainMenu) {
             currentFocusMenu.resetStyle();
         } else {
             finishActivity();
@@ -446,6 +446,7 @@ public class MenuTreeActivity extends BaseActivity {
         openChildMenu(childMenu);
 
     }
+
     public void moveButtonForIndex(final BaseButton btn, final int index, final int targetIndex) {
         if (index < targetIndex) {
             BaseMenu childMenu = mMenuTree.getChild(btn);
@@ -454,7 +455,7 @@ public class MenuTreeActivity extends BaseActivity {
             return;
         }
         final BaseMenu menu = mMenuTree.getParent(btn);
-        Animation animation = new TranslateAnimation(0,0,0,0);
+        Animation animation = new TranslateAnimation(0, 0, 0, 0);
         animation.setDuration(30);
         animation.setAnimationListener(new SimpleAnimationListener() {
             @Override
@@ -545,9 +546,17 @@ public class MenuTreeActivity extends BaseActivity {
     @Override
     protected void onReceivedData(Bundle bundle, int operation) {
         if (operation == Constants.ACTION_PLAYED) {
-            this.messagePanel.setTitle("暂停");
-        } else if (operation == Constants.ACTION_PAUSED) {
-            this.messagePanel.setTitle("开始");
+            String title = bundle.getString(Constants.PLAYED_MUSIC_NAME, Constants.EMPTY_STRING);
+            if (!StringUtil.isEmpty(title)) {
+                this.messagePanel.setTitle(title);
+            }
+        } else if (operation == Constants.ACTION_PROGRESS_CHANGED) {
+            int percent = bundle.getInt(Constants.MUSIC_PROGRESS_PERCENT, Constants.EMPTY_INTEGER);
+            String displayTime = bundle.getString(Constants.MUSIC_DISPLAY_TIME, Constants.EMPTY_STRING);
+            this.messagePanel.setProgressPercent(percent);
+            if (!StringUtil.isEmpty(displayTime)) {
+                this.messagePanel.setDisplayTime(displayTime);
+            }
         } else if (Constants.ACTION_CREATE_LIST == operation) {
             String displayName = bundle.getString(Constants.CREATE_LIST_NAME);
             this.createListMenu(operationMenu.getClickedBtn(), displayName, Constants.CREATE_TYPE_MUSIC_LIST);

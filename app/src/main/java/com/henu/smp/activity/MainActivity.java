@@ -51,17 +51,17 @@ public class MainActivity extends BaseActivity {
             mUserService.save(user);
             getMyApplication().setUser(user);
         }
-        user.setId(133);
-        user.setPassword("1121");
-        user.setUsername("hhhhh");
-        String jsonStr = JSONUtil.parseToString(user);
-        Log.i("user", jsonStr);
-        HttpUtil.doGet("user/1", new SimpleHttpCallBack<String>(){
-            @Override
-            public void onSuccess(String s) {
-                Log.i("eeee", s);
-            }
-        });
+//        user.setId(133);
+//        user.setPassword("1121");
+//        user.setUsername("hhhhh");
+//        String jsonStr = JSONUtil.parseToString(user);
+//        Log.i("user", jsonStr);
+//        HttpUtil.doGet("user/1", new SimpleHttpCallBack<String>(){
+//            @Override
+//            public void onSuccess(String s) {
+//                Log.i("eeee", s);
+//            }
+//        });
         //HttpUtil.doPost("user", jsonStr);
 
         Bundle bundle = new Bundle();

@@ -56,12 +56,17 @@ public class PlayerService extends Service {
             public void onPrepared(MediaPlayer mp) {
                 mediaPlayer.start();
                 isPlayed = true;
+                startProgressUpdate();
             }
         });
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 isPlayed = false;
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constants.MUSIC_PROGRESS_PERCENT, 100);
+                bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_PROGRESS_CHANGED);
+                IntentUtil.sendBroadcast(PlayerService.this, bundle);
                 if (mMediaPlayer == null) {
                     return;
                 }
@@ -72,6 +77,61 @@ public class PlayerService extends Service {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return true;
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        if (isPlayed) {
+            for (Song song : mSongList) {
+                Log.i("SONG", song.getTitle());
+            }
+            Song song = mSongList.get(mPlayingIndex);
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_PLAYED);
+            bundle.putString(Constants.PLAYED_MUSIC_NAME, song.getTitle());
+            IntentUtil.sendBroadcast(PlayerService.this, bundle);
+            sendProgressUpdateData(new Bundle(), mMediaPlayer);
+        }
+    }
+
+    private void sendProgressUpdateData(Bundle bundle, MediaPlayer mediaPlayer) {
+        int currentTime = mediaPlayer.getCurrentPosition();
+        int maxTime = mediaPlayer.getDuration();
+        int percent = (int) ((double) currentTime / maxTime * 100);
+        bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_PROGRESS_CHANGED);
+        bundle.putInt(Constants.MUSIC_PROGRESS_PERCENT, percent);
+        String displayTime = parseTimeToString(currentTime) + "/" + parseTimeToString(maxTime);
+        bundle.putString(Constants.MUSIC_DISPLAY_TIME, displayTime);
+        IntentUtil.sendBroadcast(PlayerService.this, bundle);
+    }
+
+    private void startProgressUpdate() {
+        Thread thread  = new Thread() {
+            @Override
+            public synchronized void run() {
+                MediaPlayer mediaPlayer = mMediaPlayer;
+                Bundle bundle = new Bundle();
+                while (mediaPlayer.isPlaying()) {
+                    sendProgressUpdateData(bundle, mediaPlayer);
+                    try {
+                        sleep(500);
+                    } catch (InterruptedException e) {
+                        Log.i("playerservice", e.getMessage());
+                    }
+                }
+            }
+        };
+        thread.start();
+    }
+
+    private String parseTimeToString(int time) {
+        time /= 1000;
+        return time / 60 + ":" + time % 60;
     }
 
     @Nullable
@@ -93,11 +153,6 @@ public class PlayerService extends Service {
         if (songList == null) {
             return;
         }
-
-        for (Song song : songList) {
-            Log.i("SONG", song.getTitle());
-        }
-
         Bundle bundle = new Bundle();
         MediaPlayer mediaPlayer = mMediaPlayer;
         boolean isPlaying = mediaPlayer.isPlaying();
@@ -107,13 +162,15 @@ public class PlayerService extends Service {
         } else if (isPlayed) {
             mediaPlayer.start();
             bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_PLAYED);
+            this.startProgressUpdate();
         } else {
             try {
                 mediaPlayer.reset();
-                String songPath = mSongList.get(mPlayingIndex).getPath();
-                mediaPlayer.setDataSource(songPath);
+                Song song = mSongList.get(mPlayingIndex);
+                mediaPlayer.setDataSource(song.getPath());
                 mediaPlayer.prepareAsync();
                 bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_PLAYED);
+                bundle.putString(Constants.PLAYED_MUSIC_NAME, song.getTitle());
             } catch (IOException e) {
                 Log.i("player service", e.getMessage());
             }

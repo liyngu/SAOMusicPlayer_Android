@@ -4,27 +4,45 @@
     android:id="@+id/content_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/default_rect_btn"
+    android:background="@mipmap/bg_rect_btn_press"
     android:orientation="vertical">
 
     <LinearLayout
+        android:paddingTop="7dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:orientation="horizontal"
         android:background="@android:color/transparent">
         <com.henu.smp.widget.CircleButton
+            android:layout_marginLeft="20dp"
             android:id="@+id/add_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             smp:dialog_activity="CreateListActivity"
             smp:name="create"
-            android:background="@drawable/dialog_ok_btn" />
+            android:layout_marginRight="5dp"
+            android:background="@drawable/operation_new_btn" />
         <com.henu.smp.widget.CircleButton
             android:id="@+id/del_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             smp:name="delete"
-            android:background="@drawable/dialog_cancel_btn"/>
+            android:background="@drawable/operation_del_btn"/>
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/upper_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            smp:name="upper"
+            android:background="@drawable/operation_del_btn"/>
+        <com.henu.smp.widget.CircleButton
+            android:id="@+id/lower_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            smp:name="lower"
+            android:background="@drawable/operation_del_btn"/>
     </LinearLayout>
 
 

@@ -75,7 +75,7 @@ public class MusicControlActivity extends BaseActivity {
         } else {
             mStartBtn.setBackgroundResource(R.drawable.music_start_btn);
         }
-        modeBtn.setText(Constants.PLAY_MODE_MAPPING[mPlayerBinder.getPlayMode()]);
+        modeBtn.setBackgroundResource(Constants.PLAY_MODE_MAPPING[mPlayerBinder.getPlayMode()]);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class MusicControlActivity extends BaseActivity {
             mStartBtn.setBackgroundResource(R.drawable.music_start_btn);
         } else  if (Constants.ACTION_MODE_CHANGED == operation) {
             mPlayMode = bundle.getInt(Constants.MUSIC_PLAY_MODE, mPlayMode);
-            modeBtn.setText(Constants.PLAY_MODE_MAPPING[mPlayMode]);
+            modeBtn.setBackgroundResource(Constants.PLAY_MODE_MAPPING[mPlayMode]);
         }
     }
 

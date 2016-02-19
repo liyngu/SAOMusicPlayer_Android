@@ -5,9 +5,10 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/message_panel_image_height"
+        android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/bg_message_panel" />
+        android:src="@drawable/bg_message_panel"
+        android:id="@+id/imageView"/>
 
     <ImageView
         android:id="@+id/info_image"
@@ -25,6 +26,41 @@
         android:layout_alignEnd="@+id/info_image"
         android:layout_alignRight="@+id/info_image"
         android:gravity="center"
-        android:text="title" />
+        android:text="Info" />
+
+    <TextView
+        android:id="@+id/message_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to SAO!"
+        android:layout_marginTop="24dp"
+        android:layout_below="@+id/info_image"
+        android:layout_alignLeft="@+id/info_image"
+        android:layout_alignStart="@+id/info_image"/>
+
+    <ProgressBar
+        style="@style/MusicProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:max="100"
+        android:id="@+id/music_progress_bar"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignLeft="@+id/info_image"
+        android:layout_alignStart="@+id/info_image"
+        android:layout_alignRight="@+id/info_image"
+        android:layout_marginBottom="10dp"
+        android:layout_alignEnd="@+id/info_image"/>
+
+    <TextView
+        android:id="@+id/time_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textColor="@android:color/black"
+        android:text="00:00/00:00"
+        android:layout_above="@+id/music_progress_bar"
+        android:layout_alignRight="@+id/music_progress_bar"
+        android:layout_alignEnd="@+id/music_progress_bar"/>
 
 </RelativeLayout>

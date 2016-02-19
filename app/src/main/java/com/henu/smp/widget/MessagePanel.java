@@ -1,23 +1,17 @@
 package com.henu.smp.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.NinePatch;
 import android.graphics.Point;
-import android.graphics.RectF;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,8 +20,6 @@ import com.henu.smp.R;
 import com.henu.smp.activity.MenuTreeActivity;
 import com.henu.smp.activity.MusicControlActivity;
 import com.henu.smp.background.PlayerService;
-import com.henu.smp.base.BaseButton;
-import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.util.WidgetUtil;
 
 import org.xutils.view.annotation.Event;
@@ -39,7 +31,7 @@ import org.xutils.x;
  */
 public class MessagePanel extends RelativeLayout implements SmpWidget {
     private MenuTreeActivity mActivity;
-    private Animation mStartAnimation;
+    private AnimatorSet mStartAnimation = new AnimatorSet();
     private View mLastClickedView;
     private PlayerService.PlayerBinder mPlayerBinder;
     private boolean isShowDetail = false;
@@ -57,6 +49,12 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
     @ViewInject(R.id.info_image)
     private ImageView infoImage;
 
+    @ViewInject(R.id.time_txt)
+    private TextView timeTxt;
+
+    @ViewInject(R.id.music_progress_bar)
+    private ProgressBar musicProgressBar;
+
     @Event(R.id.info_image)
     private void showMusicControllerEvent(View v) {
         if (mPlayerBinder != null) {
@@ -72,6 +70,10 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         mActivity.showDialog(MusicControlActivity.class, bundle);
     }
 
+    public void setDisplayTime(String time) {
+        this.timeTxt.setText(time);
+    }
+
     public MessagePanel(Context context, AttributeSet attrs) {
         super(context, attrs);
         //获得inflater 对象
@@ -82,12 +84,10 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
 
         titleTxt = (TextView) findViewById(R.id.title_txt);
         setVisibility(View.INVISIBLE);
-
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.UNSPECIFIED);
+    public void setProgressPercent(int percent) {
+        musicProgressBar.setProgress(percent);
     }
 
     public void setTitle(String title) {
@@ -104,9 +104,12 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         // 设置菜单坐标
         this.setLocationByIndicator(x, y);
         if (this.isShowed()) {
-            mStartAnimation = new TranslateAnimation(0, 0, this.getOffsetY(vp), 0);
+            //mStartAnimation.play(ObjectAnimator.ofFloat(this, "translationY", this.getOffsetY(vp), getTranslationY()));
+            //mStartAnimation = new TranslateAnimation(0, 0, this.getOffsetY(vp), 0);
         } else {
-            mStartAnimation = new ScaleAnimation(0, 1, 0, 1, x, y);
+            Animator scaleXAnimator = ObjectAnimator.ofFloat(this, "scaleX", 0f, 1f);
+            Animator scaleYAnimator = ObjectAnimator.ofFloat(this, "scaleY", 0f, 1f);
+            mStartAnimation.play(scaleXAnimator).with(scaleYAnimator);// = ObjectAnimator.ofFloat(this, "scaleX", 0f, 1f); //new ScaleAnimation(0, 1, 0, 1, x, y);
 //            if (isShowDetail) {
 //                final Animation showDetailAnimation = new ScaleAnimation(1, 1, 1, 1.3f, x, y);
 //                showDetailAnimation.setDuration(1000);
@@ -155,9 +158,10 @@ public class MessagePanel extends RelativeLayout implements SmpWidget {
         if (mStartAnimation == null) {
             return;
         }
-        startAnimation(mStartAnimation);
+        //startAnimation(mStartAnimation);
+        mStartAnimation.start();
         setVisibility(View.VISIBLE);
-        mStartAnimation = null;
+        mStartAnimation = new AnimatorSet();
     }
 
     public void hidden() {
