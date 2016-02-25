@@ -211,7 +211,7 @@ public class MenuTreeActivity extends BaseActivity {
             btnWidget.setData(menu);
             btnWidget.setDialogClassName("ShowSongsActivity");
             btnWidget.setDialogParams(String.valueOf(menu.getId()));
-        } else {
+        } else if (Constants.CREATE_TYPE_MENU_LIST == type){
             menu.setType(Constants.CREATE_TYPE_MENU_LIST);
         }
     }
@@ -552,6 +552,7 @@ public class MenuTreeActivity extends BaseActivity {
             }
         } else if (operation == Constants.ACTION_PROGRESS_CHANGED) {
             int percent = bundle.getInt(Constants.MUSIC_PROGRESS_PERCENT, Constants.EMPTY_INTEGER);
+            int playMode = bundle.getInt(Constants.MUSIC_PLAY_MODE, Constants.EMPTY_INTEGER);
             String displayTime = bundle.getString(Constants.MUSIC_DISPLAY_TIME, Constants.EMPTY_STRING);
             this.messagePanel.setProgressPercent(percent);
             if (!StringUtil.isEmpty(displayTime)) {
@@ -559,12 +560,20 @@ public class MenuTreeActivity extends BaseActivity {
             }
         } else if (Constants.ACTION_CREATE_LIST == operation) {
             String displayName = bundle.getString(Constants.CREATE_LIST_NAME);
-            this.createListMenu(operationMenu.getClickedBtn(), displayName, Constants.CREATE_TYPE_MUSIC_LIST);
+            int type = bundle.getInt(Constants.CREATE_LIST_TYPE, Constants.EMPTY_INTEGER);
+            this.createListMenu(operationMenu.getClickedBtn(), displayName, type);
             this.undoOperation();
         } else if (Constants.ACTION_DELETE_ALL == operation) {
             isDeleteAll = true;
         } else if (Constants.ACTION_EXIT == operation) {
             setResult(RESULT_OK);
+            finish();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (RESULT_OK == resultCode) {
             finish();
         }
     }

@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
             smp:dialog_activity="ShowSongsActivity"
+            smp:menu_id="1"
             smp:name="lovelist"
             smp:text="我的收藏" />
 

@@ -32,7 +32,7 @@ public class PlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         int operation = bundle.getInt(Constants.MUSIC_OPERATION);
-        if (operation == Constants.MUSIC_START) {
+        if (Constants.MUSIC_START == operation) {
             if (mMediaPlayer == null) {
                 this.initMediaPlayer();
             }
@@ -107,6 +107,7 @@ public class PlayerService extends Service {
         bundle.putInt(Constants.MUSIC_PROGRESS_PERCENT, percent);
         String displayTime = parseTimeToString(currentTime) + "/" + parseTimeToString(maxTime);
         bundle.putString(Constants.MUSIC_DISPLAY_TIME, displayTime);
+        bundle.putInt(Constants.MUSIC_PLAY_MODE, mPlayMode);
         IntentUtil.sendBroadcast(PlayerService.this, bundle);
     }
 

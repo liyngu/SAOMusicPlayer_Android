@@ -117,7 +117,7 @@ public abstract class BaseActivity extends Activity {
 //        } else if (cls.isAssignableFrom(ShowSongsActivity.class)) {
 //            bundle.putInt(Constants.SHOW_SONGS_MENU_ID, Integer.parseInt(params));
 //        }
-        IntentUtil.startActivity(this, cls, bundle);
+        IntentUtil.startActivityForResult(this, cls, bundle);
     }
 
     public void showDialog(String dialogClassName, Bundle bundle) {

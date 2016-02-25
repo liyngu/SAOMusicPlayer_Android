@@ -63,19 +63,24 @@ public class CreateListActivity extends BaseDialog {
         mCreateMenuListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishActivity();
+                createList(Constants.CREATE_TYPE_MENU_LIST);
             }
         });
         mCreateMusicListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_CREATE_LIST);
-                bundle.putString(Constants.CREATE_LIST_NAME, mContentInput.getText().toString());
-                IntentUtil.sendBroadcast(CreateListActivity.this, bundle);
-                finishActivity();
+                createList(Constants.CREATE_TYPE_MUSIC_LIST);
             }
         });
 
+    }
+
+    private void createList(int type) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_CREATE_LIST);
+        bundle.putInt(Constants.CREATE_LIST_TYPE, type);
+        bundle.putString(Constants.CREATE_LIST_NAME, mContentInput.getText().toString());
+        IntentUtil.sendBroadcast(CreateListActivity.this, bundle);
+        finishActivity();
     }
 }

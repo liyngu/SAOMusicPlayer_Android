@@ -68,14 +68,15 @@ public class AutoSearchActivity extends BaseDialog {
                 mSelectedSong = mSongList.get(position);
                 mSongsListView.setEnabled(false);
                 view.setBackgroundColor(Color.YELLOW);
-                Animation animation = new TranslateAnimation(0, -300, 0, 0);
+                final int offsetX = mChooseListMenu.getWidth();
+                Animation animation = new TranslateAnimation(0, -offsetX, 0, 0);
                 animation.setFillAfter(true);
                 animation.setDuration(100);
                 animation.setAnimationListener(new SimpleAnimationListener() {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         mChooseListMenu.setLocationByView(getDialog());
-                        mChooseListMenu.setX(mChooseListMenu.getX() - 300);
+                        mChooseListMenu.setX(mChooseListMenu.getX() - offsetX);
                         mChooseListMenu.show();
                     }
                 });

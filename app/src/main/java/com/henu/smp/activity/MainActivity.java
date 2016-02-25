@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.coderqi.publicutil.voice.VoiceToWord;
 import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.background.PlayerService;
@@ -24,6 +27,8 @@ import org.xutils.view.annotation.ViewInject;
 public class MainActivity extends BaseActivity {
     @ViewInject(R.id.background)
     private FrameLayout background;
+    @ViewInject(R.id.speechRecognition)
+    private Button speechRecognition;
 
     private SimpleScreenListener screenListener = new SimpleScreenListener() {
         @Override
@@ -67,6 +72,14 @@ public class MainActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_START);
         IntentUtil.startService(this, PlayerService.class, bundle);
+
+        speechRecognition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VoiceToWord voice = new VoiceToWord(MainActivity.this, "534e3fe2");
+                voice.GetWordFromVoice();
+            }
+        });
     }
 
     public void startMenu(int x, int y) {
@@ -74,20 +87,6 @@ public class MainActivity extends BaseActivity {
         bundle.putInt(Constants.CLICKED_POINT_X, x);
         bundle.putInt(Constants.CLICKED_POINT_Y, y);
         IntentUtil.startActivityForResult(this, MenuTreeActivity.class, bundle);
-    }
-
-
-    @Override
-    public void onReceivedData(Bundle bundle, int operation) {
-        if (Constants.ACTION_EXIT == operation) {
-//            Bundle param = new Bundle();
-//            param.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_STOP);
-//            IntentUtil.startService(this, PlayerService.class, param);
-//            Intent intent = new Intent();
-//            intent.setClass(this, PlayerService.class);
-//            stopService(intent);
-//            finish();
-        }
     }
 
     @Override
@@ -107,4 +106,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
 }

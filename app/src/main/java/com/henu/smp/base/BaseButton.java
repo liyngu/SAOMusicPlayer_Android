@@ -40,6 +40,7 @@ public abstract class BaseButton extends ImageButton implements SmpWidget {
         String dialogParams = typedArray.getString(R.styleable.smp_dialog_params);
         this.dialogParams = StringUtil.format(dialogParams);
         mDialogType = typedArray.getInt(R.styleable.smp_dialog_type, Constants.EMPTY_INTEGER);
+        mId = typedArray.getInt(R.styleable.smp_menu_id, Constants.EMPTY_INTEGER);
         typedArray.recycle();
 
         if (StringUtil.isEmpty(text)) {

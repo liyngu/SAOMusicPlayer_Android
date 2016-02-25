@@ -23,7 +23,9 @@ public class SongDaoImpl extends BaseDao implements SongDao {
     @Override
     public void save(Song song) {
         try {
-            getDbManager().saveOrUpdate(song);
+            if (!this.exist(song)) {
+                getDbManager().save(song);
+            }
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -40,14 +42,8 @@ public class SongDaoImpl extends BaseDao implements SongDao {
 
     @Override
     public void saveAll(List<Song> songList) {
-        try {
-            for (Song song : songList) {
-                if (!this.exist(song)) {
-                    getDbManager().save(song);
-                }
-            }
-        } catch (DbException e) {
-            throw new RuntimeException(e.getMessage());
+        for (Song song : songList) {
+            this.save(song);
         }
     }
 

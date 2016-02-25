@@ -26,4 +26,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile files('libs/xUtils-2.6.2.jar')
     compile files('libs/classes.jar')
+    compile files('libs/Msc.jar')
 }

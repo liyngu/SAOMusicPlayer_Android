@@ -15,6 +15,10 @@ import com.henu.smp.util.WidgetUtil;
  * Created by leen on 10/14/15.
  */
 public class RectButton extends BaseButton {
+    private static final Paint PAINT = new Paint();
+    private static final int OFFSET_X = WidgetUtil.getResourceDimen(R.dimen.rect_button_text_offset_x);
+    private static final int OFFSET_Y = WidgetUtil.getResourceDimen(R.dimen.rect_button_text_offset_y);
+    private static final int TEXT_SIZE = WidgetUtil.getResourceDimen(R.dimen.rect_button_text_size);
     public RectButton(Context context) {
         super(context, null);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -30,11 +34,8 @@ public class RectButton extends BaseButton {
     @Override
     protected void onDraw(Canvas canvas) {
         String text = this.getText();
-        Paint paint = new Paint();
-        paint.setTextSize(40);
-        int offsetX = WidgetUtil.getResourceDimen(R.dimen.rect_button_text_offset_x);
-        int offsetY = WidgetUtil.getResourceDimen(R.dimen.rect_button_text_offset_y);
-        canvas.drawText(text, offsetX, offsetY, paint);
+        PAINT.setTextSize(TEXT_SIZE);
+        canvas.drawText(text, OFFSET_X, OFFSET_Y, PAINT);
         super.onDraw(canvas);
     }
 }

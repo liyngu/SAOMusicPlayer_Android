@@ -6,4 +6,11 @@
     android:background="@android:color/darker_gray">
 
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="语音识别"
+        android:textSize="25sp"
+        android:id="@+id/speechRecognition"
+        android:layout_gravity="center_horizontal|top" />
 </FrameLayout>

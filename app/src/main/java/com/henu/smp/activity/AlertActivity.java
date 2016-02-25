@@ -41,6 +41,7 @@ public class AlertActivity extends BaseDialog {
             mMusicService.deleteAll();
             bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_DELETE_ALL);
             IntentUtil.sendBroadcast(AlertActivity.this, bundle);
+            setResult(RESULT_OK);
         }
         finishActivity();
     }
