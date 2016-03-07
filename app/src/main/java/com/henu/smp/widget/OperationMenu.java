@@ -1,6 +1,7 @@
 package com.henu.smp.widget;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +35,9 @@ public class OperationMenu extends BaseMenu {
         delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewGroup viewGroup = (ViewGroup) mClickedBtn.getParent();
-                viewGroup.removeView(mClickedBtn);
-                hidden();
+                Bundle bundle = delBtn.getDialogParams();
+                bundle.putInt(Constants.SHOW_SONGS_MENU_ID, mClickedBtn.getMenuId());
+                getActivity().showDialog(delBtn.getDialogClassName(), bundle);
             }
         });
     }

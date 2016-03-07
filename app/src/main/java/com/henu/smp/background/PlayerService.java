@@ -32,14 +32,32 @@ public class PlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         int operation = bundle.getInt(Constants.MUSIC_OPERATION);
+        Log.i("MainActivity", operation+"");
         if (Constants.MUSIC_START == operation) {
             if (mMediaPlayer == null) {
                 this.initMediaPlayer();
             }
-        } else if (Constants.MUSIC_STOP == operation) {
+        }  else if (Constants.MUSIC_STOP == operation) {
             if (mMediaPlayer != null) {
                 mMediaPlayer.stop();
                 mMediaPlayer = null;
+            }
+        }
+        if (isPlayed) {
+            if (Constants.MUSIC_PAUSE == operation) {
+                if (mMediaPlayer.isPlaying()) {
+                    start();
+                }
+            } else if (Constants.MUSIC_CONTINUE == operation) {
+                if (!mMediaPlayer.isPlaying()) {
+                    start();
+                }
+            } else if (Constants.MUSIC_RESTART == operation) {
+                reStart();
+            } else if (Constants.MUSIC_PREVIOUS == operation) {
+                previous();
+            } else if (Constants.MUSIC_NEXT == operation) {
+                next();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -147,6 +165,9 @@ public class PlayerService extends Service {
         }
         isPlayed = false;
         this.start();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_MUSIC_CHANGED);
+        IntentUtil.sendBroadcast(PlayerService.this, bundle);
     }
 
     private void start() {
@@ -187,41 +208,33 @@ public class PlayerService extends Service {
 
     private void next() {
         int songsCount = mSongList.size();
-        if (Constants.MUSIC_MODE_ORDER == mPlayMode) {
-            if (mPlayingIndex + 1 > songsCount - 1) {
-                this.stop();
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_STOPPED);
-                IntentUtil.sendBroadcast(this, bundle);
-                return;
-            }
-            mPlayingIndex++;
-        } else if (Constants.MUSIC_MODE_CIRCLE == mPlayMode
-                || Constants.MUSIC_MODE_SINGLE == mPlayMode) {
+        if (Constants.MUSIC_MODE_CIRCLE == mPlayMode
+                || Constants.MUSIC_MODE_SINGLE == mPlayMode
+                || Constants.MUSIC_MODE_ORDER == mPlayMode) {
             mPlayingIndex = (mPlayingIndex + 1) % songsCount;
         } else if (Constants.MUSIC_MODE_RANDOM == mPlayMode) {
-            mPlayingIndex = (int) (Math.random() * songsCount);
+            mPlayingIndex = this.getRandomIndex(mPlayingIndex, songsCount);
         }
         this.reStart();
     }
 
+    private int getRandomIndex(int before, int max) {
+        int index = (int) (Math.random() * max);
+        if (index == before) {
+            index = (index + 1) % max;
+        }
+        return index;
+    }
+
     private void previous() {
         int songsCount = mSongList.size();
-        if (Constants.MUSIC_MODE_ORDER == mPlayMode) {
-            if (mPlayingIndex - 1 < Constants.MUSIC_MODE_FIRST) {
-                this.stop();
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_STOPPED);
-                IntentUtil.sendBroadcast(this, bundle);
-                return;
-            }
+        if (Constants.MUSIC_MODE_CIRCLE == mPlayMode
+                || Constants.MUSIC_MODE_SINGLE == mPlayMode
+                || Constants.MUSIC_MODE_ORDER == mPlayMode) {
             mPlayingIndex--;
-        } else if (Constants.MUSIC_MODE_CIRCLE == mPlayMode
-                || Constants.MUSIC_MODE_SINGLE == mPlayMode) {
-            mPlayingIndex--;
-            mPlayingIndex = mPlayingIndex < 0 ? Constants.MUSIC_MODE_COUNT - 1 : mPlayingIndex;
+            mPlayingIndex = mPlayingIndex < 0 ? songsCount - 1 : mPlayingIndex;
         } else if (Constants.MUSIC_MODE_RANDOM == mPlayMode) {
-            mPlayingIndex = (int) (Math.random() * songsCount);
+            mPlayingIndex = this.getRandomIndex(mPlayingIndex, songsCount);
         }
         this.reStart();
     }
@@ -267,6 +280,10 @@ public class PlayerService extends Service {
 
         public boolean isPlayed() {
             return PlayerService.this.isPlayed;
+        }
+
+        public int getPlayedSongId() {
+            return mSongList.get(mPlayingIndex).getSongId();
         }
 
         public int getPlayMode() {

@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.henu.smp.Constants;
 import com.henu.smp.base.BaseDao;
 import com.henu.smp.dao.SongDao;
 import com.henu.smp.entity.Menu;
@@ -75,6 +76,33 @@ public class SongDaoImpl extends BaseDao implements SongDao {
         }
     }
 
+    @Override
+    public Song getBySongId(int songId) {
+        try {
+            return getDbManager().selector(Song.class)
+                    .where("song_id", "=", songId).findFirst();
+        } catch (DbException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void saveHistorySong(Song song) {
+        try {
+            Song dbSong = getDbManager().selector(Song.class)
+                    .where("menu_id", "=", Constants.HISTORY_MENU_ID)
+                    .and("song_id", "=", song.getSongId()).findFirst();
+            if (dbSong == null) {
+                getDbManager().save(song);
+            } else {
+                getDbManager().delete(dbSong);
+                getDbManager().save(song);
+            }
+        } catch (DbException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     private boolean exist(Song song) throws DbException {
         return getDbManager().selector(Song.class)
                 .where("song_id", "=", song.getSongId())
@@ -104,7 +132,7 @@ public class SongDaoImpl extends BaseDao implements SongDao {
             // 文件大小
             long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
             if (time < 60 * 1000 || isMusic == 0) {
-                //continue;
+                continue;
             }
             // 文件id
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media._ID));

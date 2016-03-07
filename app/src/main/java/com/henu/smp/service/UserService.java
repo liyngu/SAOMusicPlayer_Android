@@ -50,4 +50,6 @@ public interface UserService {
      * 删除本地数据
      */
     void deleteAll();
+
+    void deleteMenu(int menuId);
 }

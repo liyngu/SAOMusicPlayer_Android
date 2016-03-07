@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:text="语音识别"
         android:textSize="25sp"
-        android:id="@+id/speechRecognition"
+        android:id="@+id/show_voice_dialog"
         android:layout_gravity="center_horizontal|top" />
 </FrameLayout>

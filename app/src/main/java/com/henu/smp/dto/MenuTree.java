@@ -117,6 +117,12 @@ public class MenuTree {
         parentNode.addChild(childNode);
     }
 
+    public void remove(SmpWidget elem) {
+        TreeNode treeNode = mDataMap.get(elem);
+        treeNode.getParent().remove(treeNode);
+        mDataMap.remove(elem);
+    }
+
     /**
      * 将一个树节点的list转换成所需要形式的list
      *

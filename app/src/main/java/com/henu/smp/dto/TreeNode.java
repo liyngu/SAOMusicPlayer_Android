@@ -44,6 +44,15 @@ public class TreeNode {
         node.setRightChild(sibling);
     }
 
+    public void remove(TreeNode child) {
+        TreeNode parent = child.getParentNode();
+        if (parent.getLeftChild() == child) {
+            parent.setLeftChild(child.getRightChild());
+        } else {
+            parent.setRightChild(child.getRightChild());
+        }
+    }
+
     /**
      * 获得这个节点的父亲节点
      * @return
@@ -160,7 +169,9 @@ public class TreeNode {
      */
     private void setLeftChild(TreeNode leftChild) {
         mLeftChild = leftChild;
-        leftChild.setParentNode(this);
+        if (leftChild != null) {
+            leftChild.setParentNode(this);
+        }
     }
 
     /**
@@ -170,7 +181,9 @@ public class TreeNode {
      */
     private void setRightChild(TreeNode rightChild) {
         mRightChild = rightChild;
-        rightChild.setParentNode(this);
+        if (rightChild != null) {
+            rightChild.setParentNode(this);
+        }
     }
 
     private TreeNode getParentNode() {

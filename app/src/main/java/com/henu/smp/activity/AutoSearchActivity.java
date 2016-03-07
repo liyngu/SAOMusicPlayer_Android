@@ -1,6 +1,7 @@
 package com.henu.smp.activity;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.base.BaseAsyncResult;
 import com.henu.smp.base.BaseButton;
@@ -56,6 +58,9 @@ public class AutoSearchActivity extends BaseDialog {
         super.onCreate(savedInstanceState);
         List<Menu> menuList = mUserService.getSongListMenus();
         for (Menu menu : menuList) {
+            if (Constants.HISTORY_MENU_ID == menu.getId()) {
+                continue;
+            }
             RectButton rb = new RectButton(this);
             rb.setData(menu);
             mChooseListMenu.addView(rb);

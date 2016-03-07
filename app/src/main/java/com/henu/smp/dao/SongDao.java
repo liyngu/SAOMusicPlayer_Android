@@ -51,4 +51,8 @@ public interface SongDao {
      * @return
      */
     List<Song> findAll();
+
+    Song getBySongId(int songId);
+
+    void saveHistorySong(Song song);
 }

@@ -5,30 +5,64 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.coderqi.publicutil.voice.VoiceToWord;
 import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.background.PlayerService;
 import com.henu.smp.base.BaseActivity;
 import com.henu.smp.entity.User;
 import com.henu.smp.listener.SimpleHttpCallBack;
+import com.henu.smp.listener.SimpleRecognizerListener;
 import com.henu.smp.listener.SimpleScreenListener;
 import com.henu.smp.util.HttpUtil;
 import com.henu.smp.util.IntentUtil;
 import com.henu.smp.util.JSONUtil;
+import com.henu.smp.util.StringUtil;
+import com.henu.smp.voice.VoiceDialog;
+import com.iflytek.cloud.speech.RecognizerResult;
 
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
     @ViewInject(R.id.background)
     private FrameLayout background;
-    @ViewInject(R.id.speechRecognition)
-    private Button speechRecognition;
+
+    @Event(R.id.show_voice_dialog)
+    private void showVoiceDialogEvent(View v) {
+        VoiceDialog voiceDialog = new VoiceDialog(MainActivity.this,"534e3fe2", new SimpleRecognizerListener() {
+            @Override
+            public void onResult(RecognizerResult recognizerResult, boolean b) {
+                String text = JSONUtil.parseIatResult(recognizerResult.getResultString());
+                Log.i(LOG_TAG, text);
+                if(StringUtil.isEmpty(text) || text.length() < 2) {
+                    return;
+                }
+                Bundle bundle = new Bundle();
+                if (text.contains("重新")) {
+                    bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_RESTART);
+                } else if (text.contains("暂停")){
+                    bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_PAUSE);
+                } else if (text.contains("下一")){
+                    bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_NEXT);
+                } else if (text.contains("上一")){
+                    bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_PREVIOUS);
+                } else if (text.contains("循环")){
+                    bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_MODE_CIRCLE);
+                } else {
+                    bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_CONTINUE);
+                }
+                IntentUtil.startService(MainActivity.this, PlayerService.class, bundle);
+            }
+        });
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_PAUSE);
+        IntentUtil.startService(MainActivity.this, PlayerService.class, bundle);
+        voiceDialog.GetWordFromVoice();
+    }
 
     private SimpleScreenListener screenListener = new SimpleScreenListener() {
         @Override
@@ -61,25 +95,17 @@ public class MainActivity extends BaseActivity {
 //        user.setUsername("hhhhh");
 //        String jsonStr = JSONUtil.parseToString(user);
 //        Log.i("user", jsonStr);
-//        HttpUtil.doGet("user/1", new SimpleHttpCallBack<String>(){
-//            @Override
-//            public void onSuccess(String s) {
-//                Log.i("eeee", s);
-//            }
-//        });
+////        HttpUtil.doGet("user/1", new SimpleHttpCallBack<String>() {
+////            @Override
+////            public void onSuccess(String s) {
+////                Log.i("eeee", s);
+////            }
+////        });
         //HttpUtil.doPost("user", jsonStr);
 
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.MUSIC_OPERATION, Constants.MUSIC_START);
         IntentUtil.startService(this, PlayerService.class, bundle);
-
-        speechRecognition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VoiceToWord voice = new VoiceToWord(MainActivity.this, "534e3fe2");
-                voice.GetWordFromVoice();
-            }
-        });
     }
 
     public void startMenu(int x, int y) {

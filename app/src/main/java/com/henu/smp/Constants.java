@@ -4,7 +4,8 @@ package com.henu.smp;
  * Created by leen on 10/31/15.
  */
 public class Constants {
-    public static final String SERVICE_HOST = "http://192.168.1.109:8080/sao-player-api/ws/";
+    public static final String SERVICE_HOST = "http://192.168.1.121:8080/sao-player-api/ws/";
+    public static final String MUSIC_HOST = "http://192.168.1.121:8080/sao-player-api/";
 
     public static final int EMPTY_MENU_ID = 0;
     public static final int EMPTY_INTEGER = 0;
@@ -19,6 +20,7 @@ public class Constants {
     public static final String MENU_NAME = "MENU_NAME";
     public static final int ALERT_DIALOG_TYPE_EXIT = 0;
     public static final int ALERT_DIALOG_TYPE_DELETE_ALL = 1;
+    public static final int ALERT_DIALOG_TYPE_DELETE_MENU = 2;
 
     public static final String CLICKED_POINT_X = "CLICKED_POINT_X";
     public static final String CLICKED_POINT_Y = "CLICKED_POINT_Y";
@@ -28,6 +30,8 @@ public class Constants {
     public static final int MENU_OPERATION_DEL = 2;
     public static final int MENU_OPERATION_UPPER = 3;
     public static final int MENU_OPERATION_LOWER = 4;
+    public static final int COLLECTED_MENU_ID = 1;
+    public static final int HISTORY_MENU_ID = 2;
 
     public static final int[] PLAY_MODE_MAPPING = new int[] {
             R.drawable.music_order_btn, R.drawable.music_single_btn,
@@ -45,8 +49,11 @@ public class Constants {
     public static final int MUSIC_START = 1;
     public static final int MUSIC_STOP = 2;
     public static final int MUSIC_PAUSE = 3;
-    public static final int MUSIC_CHANGE = 4;
+    public static final int MUSIC_CONTINUE = 4;
     public static final int MUSIC_COLLECTE = 5;
+    public static final int MUSIC_NEXT = 6;
+    public static final int MUSIC_PREVIOUS = 7;
+    public static final int MUSIC_RESTART = 8;
     public static final String PLAYED_MUSIC_NAME = "PLAYED_MUSIC_NAME";
     public static final String MUSIC_PROGRESS_PERCENT = "MUSIC_PROGRESS_PERCENT";
     public static final String MUSIC_DISPLAY_TIME = "MUSIC_DISPLAY_TIME";
@@ -58,9 +65,11 @@ public class Constants {
     public static final int ACTION_STOPPED = 3;
     public static final int ACTION_MODE_CHANGED = 4;
     public static final int ACTION_PROGRESS_CHANGED = 5;
+    public static final int ACTION_MUSIC_CHANGED = 6;
     public static final int ACTION_EXIT = 10;
     public static final int ACTION_CREATE_LIST = 11;
     public static final int ACTION_DELETE_ALL = 12;
+    public static final int ACTION_DELETE_MENU = 13;
 
     public static final String CREATE_LIST_NAME = "CREATE_LIST_NAME";
     public static final String CREATE_LIST_POSITION = "CREATE_LIST_POSITION";

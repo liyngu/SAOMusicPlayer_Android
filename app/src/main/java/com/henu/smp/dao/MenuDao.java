@@ -38,9 +38,9 @@ public interface MenuDao {
 
     /**
      * 只是删除歌曲某个列表而已
-     * @param menu
+     * @param menuId
      */
-    void delete(Menu menu);
+    void delete(int menuId);
 
     /**
      * 删除所有的菜单信息，包括本地存储的json菜单

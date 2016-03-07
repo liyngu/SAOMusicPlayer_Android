@@ -1,5 +1,8 @@
 package com.henu.smp.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -20,5 +23,14 @@ public class EmptyDialog extends FrameLayout implements SmpWidget {
         inflater.inflate(R.layout.dialog_empty, this);
 
         setOnClickListener(null);
+    }
+
+    public void show() {
+        Animator scaleXAnimator = ObjectAnimator.ofFloat(this, "scaleX", 0f, 1f);
+        Animator scaleYAnimator = ObjectAnimator.ofFloat(this, "scaleY", 0f, 1f);
+        AnimatorSet startAnimation = new AnimatorSet();
+        startAnimation.setDuration(300);
+        startAnimation.play(scaleXAnimator).with(scaleYAnimator);
+        setVisibility(VISIBLE);
     }
 }

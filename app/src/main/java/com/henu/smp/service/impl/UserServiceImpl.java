@@ -74,20 +74,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveAndMergeMenuTree(final User user, final MenuTree menuTree) {
-        final BaseAsyncResult<String> result = new BaseAsyncResult<>();
-        result.execute(new Runnable() {
-            @Override
-            public void run() {
-                mUserDao.save(user);
-                user.setMenus(menuTree.parseData());
-                mMenuDao.saveAll(menuTree);
-            }
-        });
+        mUserDao.save(user);
+        user.setMenus(menuTree.parseData());
+        mMenuDao.saveAll(menuTree);
     }
 
     @Override
     public void deleteAll() {
         mUserDao.delete();
         mMenuDao.deleteAll();
+    }
+
+    @Override
+    public void deleteMenu(int menuId) {
+        mMenuDao.delete(menuId);
     }
 }

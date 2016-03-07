@@ -24,7 +24,7 @@
         android:layout_height="wrap_content">
 
         <com.henu.smp.widget.RectButton
-            android:id="@+id/user_info_btn"
+            android:id="@+id/login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/user_rect_btn"
@@ -33,7 +33,7 @@
             smp:text="登录" />
 
         <com.henu.smp.widget.RectButton
-            android:id="@+id/download_btn"
+            android:id="@+id/user_info_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/user_rect_btn"
@@ -41,10 +41,12 @@
             smp:text="用户信息" />
 
         <com.henu.smp.widget.RectButton
-            android:id="@+id/local_btn"
+            android:id="@+id/history_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
+            smp:dialog_activity="ShowSongsActivity"
+            smp:menu_id="2"
             smp:name="history"
             smp:text="播放历史" />
 
@@ -84,7 +86,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/default_rect_btn"
-            smp:name="default" />
+            smp:dialog_activity="InternetSearchActivity"
+            smp:name="internet"
+            smp:text="网络搜索" />
 
         <com.henu.smp.widget.RectButton
             android:layout_width="wrap_content"

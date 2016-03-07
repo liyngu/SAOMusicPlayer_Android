@@ -39,6 +39,9 @@ public class MusicControlActivity extends BaseActivity {
     @ViewInject(R.id.mode_btn)
     private BaseButton  modeBtn;
 
+    @ViewInject(R.id.collect_btn)
+    private BaseButton mCollectBtn;
+
     @ViewInject(R.id.control_panel)
     private FrameLayout mControlPanel;
 
@@ -67,6 +70,14 @@ public class MusicControlActivity extends BaseActivity {
         mPlayerBinder.changePlayMode();
     }
 
+    @Event(R.id.collect_btn)
+    private void collectMusicEvent(View v) {
+        int songId = mPlayerBinder.getPlayedSongId();
+        mMusicService.changeCollectedStatus(songId);
+        boolean isSelected = mCollectBtn.isSelected();
+        mCollectBtn.setSelected(!isSelected);
+    }
+
     @Override
     public void onBindService(IBinder binder) {
         mPlayerBinder = (PlayerService.PlayerBinder) binder;
@@ -76,6 +87,11 @@ public class MusicControlActivity extends BaseActivity {
             mStartBtn.setBackgroundResource(R.drawable.music_start_btn);
         }
         modeBtn.setBackgroundResource(Constants.PLAY_MODE_MAPPING[mPlayerBinder.getPlayMode()]);
+        int songId = mPlayerBinder.getPlayedSongId();
+        boolean isCollected = mMusicService.isCollectedSong(songId);
+        if (isCollected) {
+            mCollectBtn.setSelected(true);
+        }
     }
 
     @Override
@@ -113,7 +129,11 @@ public class MusicControlActivity extends BaseActivity {
             mStartBtn.setBackgroundResource(R.drawable.music_pause_btn);
         } else if (operation == Constants.ACTION_PAUSED) {
             mStartBtn.setBackgroundResource(R.drawable.music_start_btn);
-        } else  if (Constants.ACTION_MODE_CHANGED == operation) {
+        } else if (operation == Constants.ACTION_MUSIC_CHANGED) {
+            int songId = mPlayerBinder.getPlayedSongId();
+            boolean isCollected = mMusicService.isCollectedSong(songId);
+            mCollectBtn.setSelected(isCollected);
+        }  else if (Constants.ACTION_MODE_CHANGED == operation) {
             mPlayMode = bundle.getInt(Constants.MUSIC_PLAY_MODE, mPlayMode);
             modeBtn.setBackgroundResource(Constants.PLAY_MODE_MAPPING[mPlayMode]);
         }

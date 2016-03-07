@@ -1,11 +1,10 @@
 package com.henu.smp.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +64,9 @@ public class MenuTreeActivity extends BaseActivity {
 
     @ViewInject(R.id.user_btn)
     private BaseButton mUserBtn;
+
+    @ViewInject(R.id.history_btn)
+    private BaseButton mHistoryBtn;
 
     private ServiceConnection mServiceConnection;
 
@@ -174,11 +176,19 @@ public class MenuTreeActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onPause() {
+        Log.i(LOG_TAG, "pause");
         if (!isDeleteAll) {
+            Log.i(LOG_TAG, "pause no deleted");
             User user = getMyApplication().getUser();
             mUserService.saveAndMergeMenuTree(user, mMenuTree);
         } else {
+            Log.i(LOG_TAG, "pause deleted");
             User user = getMyApplication().getUser();
             user.setMenus(null);
         }
@@ -211,9 +221,18 @@ public class MenuTreeActivity extends BaseActivity {
             btnWidget.setData(menu);
             btnWidget.setDialogClassName("ShowSongsActivity");
             btnWidget.setDialogParams(String.valueOf(menu.getId()));
-        } else if (Constants.CREATE_TYPE_MENU_LIST == type){
+        } else if (Constants.CREATE_TYPE_MENU_LIST == type) {
             menu.setType(Constants.CREATE_TYPE_MENU_LIST);
         }
+    }
+
+    private void initMusicList(BaseButton btnWidget) {
+        btnWidget.setType(Constants.CREATE_TYPE_MUSIC_LIST);
+        Menu menu = btnWidget.getData();
+        mUserService.saveSongListMenu(menu);
+        btnWidget.setData(menu);
+        btnWidget.setDialogClassName("ShowSongsActivity");
+        btnWidget.setDialogParams(String.valueOf(menu.getId()));
     }
 
     /**
@@ -224,18 +243,13 @@ public class MenuTreeActivity extends BaseActivity {
         mMenuTree = new MenuTree();
         mMenuTree.setRoot(mainMenu);
         this.findChildMenu(mainMenu);
-        mLoveListBtn.setType(Constants.CREATE_TYPE_MUSIC_LIST);
 
         User user = getMyApplication().getUser();
         // 目前只有歌曲列表可以动态创建
         List<Menu> menuList = user.getMenus();
         if (menuList == null) {
-            BaseButton btnWidget = mLoveListBtn;
-            Menu menu = btnWidget.getData();
-            mUserService.saveSongListMenu(menu);
-            btnWidget.setData(menu);
-            btnWidget.setDialogClassName("ShowSongsActivity");
-            btnWidget.setDialogParams(String.valueOf(menu.getId()));
+            this.initMusicList(mLoveListBtn);
+            this.initMusicList(mHistoryBtn);
             return;
         }
         for (Menu menu : menuList) {
@@ -565,10 +579,20 @@ public class MenuTreeActivity extends BaseActivity {
             this.undoOperation();
         } else if (Constants.ACTION_DELETE_ALL == operation) {
             isDeleteAll = true;
+        } else if (Constants.ACTION_DELETE_MENU == operation) {
+            this.deleteMenu(operationMenu.getClickedBtn());
+            this.undoOperation();
         } else if (Constants.ACTION_EXIT == operation) {
             setResult(RESULT_OK);
             finish();
         }
+    }
+
+    private void deleteMenu(BaseButton btnWidget) {
+        mUserService.deleteMenu(btnWidget.getMenuId());
+        BaseMenu baseMenu = mMenuTree.getParent(btnWidget);
+        baseMenu.removeLayoutView(btnWidget);
+        mMenuTree.remove(btnWidget);
     }
 
     @Override

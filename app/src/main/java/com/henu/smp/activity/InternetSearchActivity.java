@@ -6,38 +6,65 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.henu.smp.Constants;
 import com.henu.smp.R;
 import com.henu.smp.background.PlayerService;
+import com.henu.smp.base.BaseAsyncResult;
 import com.henu.smp.base.BaseDialog;
-import com.henu.smp.entity.Menu;
 import com.henu.smp.entity.Song;
+import com.henu.smp.listener.SimpleAnimationListener;
 import com.henu.smp.util.IntentUtil;
+import com.henu.smp.util.StringUtil;
+import com.henu.smp.widget.EmptyDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by liyngu on 12/23/15.
+ * Created by hp on 2016/2/29.
  */
-@ContentView(R.layout.activity_show_songs)
-public class ShowSongsActivity extends BaseDialog {
+@ContentView(R.layout.activity_internet_search)
+public class InternetSearchActivity extends BaseDialog {
     private PlayerService.PlayerBinder mPlayerBinder;
     private ServiceConnection mServiceConnection;
     private List<Song> mSongList;
 
+    @ViewInject(R.id.content_input)
+    private EditText mContentInput;
+
     @ViewInject(R.id.songs_list_view)
     private ListView mSongsListView;
+
+    @ViewInject(R.id.result_dialog)
+    private EmptyDialog mResultDialog;
+
+
+    public void setAdapterData(String searchStr){
+        if (mSongList != null) {
+            return;
+        }
+
+        mMusicService.findByNet(new BaseAsyncResult<List<Song>>() {
+            @Override
+            public void onSuccess(List<Song> result) {
+                if (result == null || result.size() == 0) {
+                    return;
+                }
+                mSongList = result;
+                BaseAdapter adapter = new ListViewAdapter(mSongList);
+                mSongsListView.setAdapter(adapter);
+            }
+        }, searchStr);
+    }
 
     @Override
     public void onBindService(IBinder binder) {
@@ -45,22 +72,37 @@ public class ShowSongsActivity extends BaseDialog {
     }
 
     @Override
+    protected void okBtnOnclickListener(View v) {
+        String text = mContentInput.getText().toString();
+        if (StringUtil.isEmpty(text)) {
+            return;
+        }
+        setAdapterData(text);
+
+        final int offsetX = 300;
+        Animation animation = new TranslateAnimation(0, -offsetX, 0, 0);
+        animation.setDuration(100);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mResultDialog.show();
+            }
+        });
+        getDialog().startAnimation(animation);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getBundle();
-        int menuId = bundle.getInt(Constants.SHOW_SONGS_MENU_ID);
-        this.setAdapterData(menuId);
 
         mSongsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mPlayerBinder.start(position, mSongList);
-                Song song = mSongList.get(position);
-                mMusicService.save(song, Constants.HISTORY_MENU_ID);
                 finish();
             }
         });
-
         mServiceConnection = IntentUtil.bindService(this, PlayerService.class);
     }
 
@@ -70,25 +112,13 @@ public class ShowSongsActivity extends BaseDialog {
         super.onDestroy();
     }
 
-    public void setAdapterData(int menuId) {
-        mSongList = mMusicService.getByMenuId(menuId);
-        if (mSongList == null || mSongList.size() == 0) {
-            return;
-        }
-        if (Constants.HISTORY_MENU_ID == menuId) {
-            Collections.reverse(mSongList);
-        }
-        ListViewAdapter adapter = new ListViewAdapter(mSongList);
-        mSongsListView.setAdapter(adapter);
-    }
-
     private class ListViewAdapter extends BaseAdapter {
         private LayoutInflater mLayoutInflater;
         private List<Song> mItems;
 
         public ListViewAdapter(List<Song> items) {
             mItems = items;
-            mLayoutInflater = LayoutInflater.from(ShowSongsActivity.this);
+            mLayoutInflater = LayoutInflater.from(InternetSearchActivity.this);
         }
 
         @Override

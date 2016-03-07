@@ -27,6 +27,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
+            smp:dialog_activity="AlertActivity"
+            smp:dialog_params="确定要删除吗？"
+            smp:dialog_type="2"
             smp:name="delete"
             android:background="@drawable/operation_del_btn"/>
         <com.henu.smp.widget.CircleButton
@@ -35,14 +38,14 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             smp:name="upper"
-            android:background="@drawable/operation_del_btn"/>
+            android:background="@drawable/operation_up_btn"/>
         <com.henu.smp.widget.CircleButton
             android:id="@+id/lower_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             smp:name="lower"
-            android:background="@drawable/operation_del_btn"/>
+            android:background="@drawable/operation_low_btn"/>
     </LinearLayout>
 
 

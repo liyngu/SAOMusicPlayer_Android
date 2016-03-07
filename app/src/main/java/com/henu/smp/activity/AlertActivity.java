@@ -17,6 +17,7 @@ import org.xutils.view.annotation.ViewInject;
 @ContentView(R.layout.activity_alert_dialog)
 public class AlertActivity extends BaseDialog {
     private int mDialogConfirmType;
+    private int mMenuId;
 
     @ViewInject(R.id.content_txt)
     private TextView mContentTxt;
@@ -26,6 +27,7 @@ public class AlertActivity extends BaseDialog {
         super.onCreate(savedInstanceState);
         Bundle bundle = getBundle();
         mDialogConfirmType = bundle.getInt(Constants.ALERT_DIALOG_TYPE, Constants.EMPTY_INTEGER);
+        mMenuId = bundle.getInt(Constants.SHOW_SONGS_MENU_ID, Constants.EMPTY_INTEGER);
         String text = bundle.getString(Constants.ALERT_DIALOG_PARAMS, Constants.EMPTY_STRING);
         mContentTxt.setText(text);
     }
@@ -42,6 +44,12 @@ public class AlertActivity extends BaseDialog {
             bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_DELETE_ALL);
             IntentUtil.sendBroadcast(AlertActivity.this, bundle);
             setResult(RESULT_OK);
+        } else if (Constants.ALERT_DIALOG_TYPE_DELETE_MENU == mDialogConfirmType) {
+            if (Constants.EMPTY_MENU_ID != mMenuId) {
+                mMusicService.delete(mMenuId);
+            }
+            bundle.putInt(Constants.ACTION_OPERATION, Constants.ACTION_DELETE_MENU);
+            IntentUtil.sendBroadcast(AlertActivity.this, bundle);
         }
         finishActivity();
     }

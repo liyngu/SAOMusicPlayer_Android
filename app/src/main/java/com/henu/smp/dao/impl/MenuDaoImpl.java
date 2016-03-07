@@ -56,9 +56,9 @@ public class MenuDaoImpl extends BaseDao implements MenuDao {
     }
 
     @Override
-    public void delete(Menu menu) {
+    public void delete(int menuId) {
         try {
-            getDbManager().delete(menu);
+            getDbManager().deleteById(Menu.class, menuId);
         } catch (DbException e) {
             throw new RuntimeException(e.getMessage());
         }
